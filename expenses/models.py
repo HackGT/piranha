@@ -43,6 +43,7 @@ class Requisition(TimestampedModel):
     description = TextField()
     status = CharField(choices=RequisitionStatus.choices, max_length=50)
     point_of_contact = ForeignKey('seaport.User', on_delete=models.PROTECT)
+    # TODO: add creator field
     project = ForeignKey('Project', on_delete=models.CASCADE)
     vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     project_requisition_id = PositiveIntegerField()

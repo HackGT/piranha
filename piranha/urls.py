@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.decorators.csrf import csrf_exempt
 
+from piranha.views import index
 from seaport.views import PrivateGraphQLView
 
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
-    path('', include('expenses.urls')),
+    path('api', include('expenses.urls')),
     path('admin/', admin.site.urls),
-    path("graphql", csrf_exempt(PrivateGraphQLView.as_view(graphiql=True)))  # FIXME: Don't leave csrf_exempt here
+    path("graphql", csrf_exempt(PrivateGraphQLView.as_view(graphiql=True))),  # FIXME: Don't leave csrf_exempt here,
+    path("", index, name="index")
 ]
