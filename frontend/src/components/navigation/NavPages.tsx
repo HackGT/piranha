@@ -30,8 +30,11 @@ const NavPages = (props: NavPagesProps) => {
         <img src="https://react.semantic-ui.com/logo.png" alt="Semantic UI logo"/>
     </Menu.Item>;
 
+    const appName = <Menu.Item><strong>Piranha</strong></Menu.Item>;
+
     return <>
         {logo}
+        {appName}
         {props.children}
         {!props.mobile && routes.map(route => <Menu.Item key={route.link} as={Link}
                                                          onClick={props.inSidebar ? props.onClick : () => null}

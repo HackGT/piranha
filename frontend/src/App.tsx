@@ -1,9 +1,8 @@
 import React from 'react';
-import './App.css';
 import Navigation from "./components/navigation/Navigation";
 import {Sidebar} from 'semantic-ui-react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Test from "./components/Test";
+import Home from "./components/Home";
 
 function App() {
     return (
@@ -12,7 +11,7 @@ function App() {
                 width: "100%",
                 maxWidth: "960px",
                 margin: "0 auto",
-                padding: "0 5px",
+                padding: "0 10px",
                 minHeight: "100vh" // We need the page height to match the screen/window height so the mobile
                                    // hamburger menu appears correctly.  This method of doing that is from https://github.com/ctrlplusb/react-sizeme/issues/111#issuecomment-295166102
             }}>
@@ -20,7 +19,7 @@ function App() {
                     <div>
                         <Navigation/>
                         <Switch>
-                            <Route exact path="/" component={Test}/>
+                            <Route exact path="/" component={Home}/>
                         </Switch>
                     </div>
                 </Router>

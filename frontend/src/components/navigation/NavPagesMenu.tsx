@@ -3,7 +3,7 @@ import NavPages from "./NavPages";
 import {Menu} from "semantic-ui-react";
 
 const NavPagesMenu = (props: any) => {
-    return <Menu>
+    return <Menu inverted>
         <NavPages mobile={props.mobile}>
             {props.children}
         </NavPages>
