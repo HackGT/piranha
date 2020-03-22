@@ -9,18 +9,24 @@ function App() {
         <div className="App">
             <Sidebar.Pushable as={"div"} style={{
                 width: "100%",
-                maxWidth: "960px",
                 margin: "0 auto",
                 padding: "0 10px",
-                minHeight: "100vh" // We need the page height to match the screen/window height so the mobile
-                                   // hamburger menu appears correctly.  This method of doing that is from https://github.com/ctrlplusb/react-sizeme/issues/111#issuecomment-295166102
+                minHeight: "100vh", // We need the page height to match the screen/window height so the mobile
+                // hamburger menu appears correctly.  This method of doing that is from https://github.com/ctrlplusb/react-sizeme/issues/111#issuecomment-295166102
+                backgroundColor: "#f8f9fa"
             }}>
                 <Router>
                     <div>
                         <Navigation/>
-                        <Switch>
-                            <Route exact path="/" component={Home}/>
-                        </Switch>
+                        <div style={{
+                            maxWidth: "960px",
+                            marginLeft: "auto",
+                            marginRight: "auto"
+                        }}>
+                            <Switch>
+                                <Route exact path="/" component={Home}/>
+                            </Switch>
+                        </div>
                     </div>
                 </Router>
             </Sidebar.Pushable>
