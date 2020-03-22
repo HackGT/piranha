@@ -1,3 +1,4 @@
+import os
 from urllib.parse import urlencode
 
 from social_core.backends.oauth import BaseOAuth2
@@ -8,8 +9,7 @@ from piranha import settings
 class GroundTruthOAuth2(BaseOAuth2):
     """HackGT Ground Truth OAuth2 authentication backend"""
     name = 'ground_truth'
-    url = "https://login.hack.gt"
-    # url = os.environ["GROUND_TRUTH_URL"]
+    url = os.getenv("GROUND_TRUTH_URL")
     AUTHORIZATION_URL = "{}/oauth/authorize".format(url)
     ACCESS_TOKEN_URL = "{}/oauth/token".format(url)
     ACCESS_TOKEN_METHOD = "POST"
