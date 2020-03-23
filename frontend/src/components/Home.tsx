@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Grid, Header} from "semantic-ui-react";
-import ProjectsList from "./projects/ProjectsList";
-import RequisitionTableHome from "./requisition/RequisitionTableHome";
+import {Grid, Header, Label, Table} from "semantic-ui-react";
+import {useQuery} from "@apollo/client";
+import {FISCAL_YEARS_QUERY} from "../util/types/FiscalYear";
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
@@ -23,25 +23,52 @@ export function pickRandomElement<T>(arr: T[]): T {
 }
 
 function Home(props: any) {
-    const randomPhrase = useState(pickRandomElement(funPhrases));
+    const {loading, error, data} = useQuery(FISCAL_YEARS_QUERY);
 
+    const randomPhrase = useState(pickRandomElement(funPhrases));
     return (
-        <Grid stackable>
+        <Grid stackable columns={2} style={{paddingLeft: 10, paddingRight: 10}}>
             <Grid.Row>
-                <Grid.Column>
-                    <Header size="huge" content="Home" subheader={randomPhrase}/>
+                <Grid.Column width={12}>
+                    <Header size={"huge"} content="Home" subheader={randomPhrase}/>
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column>
-                    <Header textAlign="center" size="large">My Open Requisitions</Header>
-                    <RequisitionTableHome/>
+                    <Header textAlign={"center"} size="huge">My Open Requisitions</Header>
+                    <Table basic={"very"}>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>Requisition</Table.HeaderCell>
+                                <Table.HeaderCell>Headline</Table.HeaderCell>
+                                <Table.HeaderCell>Status</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            <Table.Row>
+                                <Table.Cell>2020-HOR-01</Table.Cell>
+                                <Table.Cell>Photobooth phones</Table.Cell>
+                                <Table.Cell><Label>Draft</Label></Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell>2020-HOR-03</Table.Cell>
+                                <Table.Cell>Lunch - Moe's</Table.Cell>
+                                <Table.Cell><Label color={"red"}>Pending Changes</Label></Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell>2020-HOR-05</Table.Cell>
+                                <Table.Cell>Horizons badges</Table.Cell>
+                                <Table.Cell><Label color={"green"}>Ready to Order</Label></Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table>
+                    <Header size="huge" textAlign={"center"}>My Expenses</Header>
                 </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
                 <Grid.Column>
-                    <Header textAlign="center" size="large">Projects</Header>
-                    <ProjectsList/>
+                    <Header size="huge" textAlign={"center"}>Fiscal Years</Header>
+                    {loading ? "Loading" : ""}
+                    {error ? "Error" : ""}
+                    {data && data.fiscalYears ? data.fiscalYears.map((fy: any) => <p>{fy.friendlyName}</p>) : ""}
                 </Grid.Column>
             </Grid.Row>
         </Grid>
