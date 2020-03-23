@@ -62,4 +62,9 @@ The frontend lives in the [/frontend](/frontend) directory.
 2. Run the frontend for local development using `npm start`.
 2. That's it for the frontend!
 
+# Utilities
+## GraphQL
+
+- To generate a new schema.graphql for the frontend: from the root of this repository, run `python manage.py graphql_schema --schema piranha.schema.schema --out schema.graphql`
+
 

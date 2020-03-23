@@ -1,0 +1,18 @@
+schema {
+  query: Query
+}
+
+scalar Date
+
+type FiscalYearType {
+  id: ID!
+  friendlyName: String!
+  startDate: Date!
+  endDate: Date!
+  archived: Boolean!
+}
+
+type Query {
+  fiscalYear(id: Int): FiscalYearType
+  fiscalYears: [FiscalYearType]
+}
