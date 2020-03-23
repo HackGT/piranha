@@ -2,105 +2,17 @@ schema {
   query: Query
 }
 
-scalar DateTime
+scalar Date
 
-type Project {
+type FiscalYearType {
   id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
+  friendlyName: String!
+  startDate: Date!
+  endDate: Date!
   archived: Boolean!
-  leads: [User]
-  shortCode: String!
-  year: Int!
-  requisitionSet: [Requisition!]!
-  referenceString: String
-}
-
-input ProjectWhereInput {
-  archived: Boolean
 }
 
 type Query {
-  user: User
-  users(where: UserWhereInput): [User]
-  project(year: Int, shortCode: String): Project
-  projects(where: ProjectWhereInput): [Project]
-  vendor(id: ID): Vendor
-  vendors(where: VendorWhereInput): [Vendor]
-  requisition(year: Int, shortCode: String, projectRequisitionId: Int): Requisition
-  requisitions: [Requisition]
-  requisitionItem(id: ID): RequisitionItem
-}
-
-type Requisition {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  id: ID!
-  headline: String!
-  description: String!
-  status: RequisitionStatus!
-  createdBy: User!
-  project: Project!
-  vendor: Vendor!
-  projectRequisitionId: Int!
-  paymentRequiredBy: DateTime!
-  requisitionitemSet: [RequisitionItem!]!
-  canEdit: Boolean
-  referenceString: String
-}
-
-type RequisitionItem {
-  id: ID!
-  name: String!
-  requisition: Requisition!
-  quantity: Int!
-  unitPrice: Float!
-  link: String!
-  notes: String!
-}
-
-enum RequisitionStatus {
-  DRAFT
-  SUBMITTED
-  PENDING_CHANGES
-  READY_TO_ORDER
-  ORDERED
-  RECEIVED
-  CANCELLED
-}
-
-scalar UUID
-
-type User {
-  lastLogin: DateTime
-  isSuperuser: Boolean!
-  firstName: String!
-  lastName: String!
-  isStaff: Boolean!
-  isActive: Boolean!
-  dateJoined: DateTime!
-  id: UUID!
-  email: String!
-  preferredName: String!
-  createdBy: [Requisition!]!
-  projectSet: [Project!]!
-}
-
-input UserWhereInput {
-  id: UUID
-  isActive: Boolean
-}
-
-type Vendor {
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  id: ID!
-  name: String!
-  isActive: Boolean!
-  requisitionSet: [Requisition!]!
-}
-
-input VendorWhereInput {
-  isActive: Boolean
+  fiscalYear(id: Int): FiscalYearType
+  fiscalYears: [FiscalYearType]
 }
