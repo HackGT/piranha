@@ -22,8 +22,9 @@ from seaport.views import PrivateGraphQLView
 
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
+    path("api/graphql", csrf_exempt(PrivateGraphQLView.as_view(graphiql=True))),
+    # FIXME: Don't leave csrf_exempt here (something like https://docs.djangoproject.com/en/3.0/ref/csrf/#setting-the-token-on-the-ajax-request)
     path('api', include('expenses.urls')),
     path('admin/', admin.site.urls),
-    path("graphql", csrf_exempt(PrivateGraphQLView.as_view(graphiql=True))),  # FIXME: Don't leave csrf_exempt here,
     path("", index, name="index")
 ]
