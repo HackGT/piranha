@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 aniso8601 = "==7.0.0"
-asgiref = "==3.2.5"
+asgiref = "==3.2.6"
 certifi = "==2019.11.28"
 cffi = "==1.14.0"
 chardet = "==3.0.4"
