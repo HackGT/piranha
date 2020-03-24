@@ -3,6 +3,7 @@ import Navigation from "./components/navigation/Navigation";
 import {Sidebar} from 'semantic-ui-react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
+import ProjectsContainer from "./components/projects/ProjectsContainer";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                             marginRight: "auto"
                         }}>
                             <Switch>
+                                <Route exact path="/projects" component={ProjectsContainer}/>
                                 <Route exact path="/" component={Home}/>
                             </Switch>
                         </div>

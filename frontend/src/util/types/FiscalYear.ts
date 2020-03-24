@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-type FiscalYear = {
+export type FiscalYear = {
     id: number,
     startDate: string,
     endDate: string,

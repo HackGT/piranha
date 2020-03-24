@@ -15,14 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.decorators.csrf import csrf_exempt
 
 from piranha.views import index
 from seaport.views import PrivateGraphQLView
 
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
-    path("api/graphql", csrf_exempt(PrivateGraphQLView.as_view(graphiql=True))),
+    path("api/graphql", PrivateGraphQLView.as_view(graphiql=True)),
     # FIXME: Don't leave csrf_exempt here (something like https://docs.djangoproject.com/en/3.0/ref/csrf/#setting-the-token-on-the-ajax-request)
     path('api', include('expenses.urls')),
     path('admin/', admin.site.urls),

@@ -1,18 +1,33 @@
 schema {
-  query: Query
+    query: Query
 }
 
 scalar Date
 
+scalar DateTime
+
 type FiscalYearType {
-  id: ID!
-  friendlyName: String!
-  startDate: Date!
-  endDate: Date!
-  archived: Boolean!
+    id: ID!
+    friendlyName: String!
+    startDate: Date!
+    endDate: Date!
+    archived: Boolean!
+    projectSet: [ProjectType!]!
+}
+
+type ProjectType {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    name: String!
+    fiscalYear: FiscalYearType!
+    archived: Boolean!
+    shortCode: String!
 }
 
 type Query {
-  fiscalYear(id: Int): FiscalYearType
-  fiscalYears: [FiscalYearType]
+    fiscalYear(id: Int): FiscalYearType
+    fiscalYears: [FiscalYearType]
+    project(id: Int): ProjectType
+    projects: [ProjectType]
 }
