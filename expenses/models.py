@@ -9,8 +9,8 @@ from expenses.rules import is_member, requisition_is_unlocked, can_edit_locked_r
 
 
 class TimestampedModel(RulesModelMixin, models.Model, metaclass=RulesModelBase):
-    created_at = DateTimeField(auto_now_add=True, name="Created at")
-    updated_at = DateTimeField(auto_now=True, name="Updated at")
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True

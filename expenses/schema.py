@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from expenses.models import FiscalYear
+from expenses.models import FiscalYear, Project
 
 
 class FiscalYearType(DjangoObjectType):
@@ -10,9 +10,17 @@ class FiscalYearType(DjangoObjectType):
         filter_fields = ['friendly_name']
 
     @classmethod
-    def permission_check(self, info):
+    def permission_check(cls, info):
         return info.context.user.has_perm("expenses.view_fiscalyear")
 
+
+class ProjectType(DjangoObjectType):
+    class Meta:
+        model = Project
+
+    @classmethod
+    def permission_check(cls, info):
+        return info.context.user.has_perm("expenses.view_project") and FiscalYearType.permission_check(info)
 
 class Query(graphene.ObjectType):
     fiscal_year = graphene.Field(FiscalYearType, id=graphene.Int())
@@ -27,4 +35,18 @@ class Query(graphene.ObjectType):
     def resolve_fiscal_years(self, info, **kwargs):
         if FiscalYearType.permission_check(info):
             return FiscalYear.objects.all()
+        return None
+
+    project = graphene.Field(ProjectType, id=graphene.Int())
+    projects = graphene.List(ProjectType)
+
+    def resolve_project(self, info, **kwargs):
+        id = kwargs.get("id")
+
+        if ProjectType.permission_check(info):
+            return Project.objects.get(id=id)
+
+    def resolve_projects(self, info, **kwargs):
+        if ProjectType.permission_check(info):
+            return Project.objects.all()
         return None
