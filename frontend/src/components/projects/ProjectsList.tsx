@@ -1,8 +1,9 @@
 import React from 'react';
 import {useQuery} from "@apollo/client";
 import {Project, PROJECTS_QUERY} from "../../util/types/Project";
-import {Message, Table} from "semantic-ui-react";
+import {Card, Header, Icon, Message} from "semantic-ui-react";
 import LoadingSpinner from "../../util/LoadingSpinner";
+import {User} from "../../util/types/User";
 
 function ProjectsList(props: any) {
     const {loading, data, error} = useQuery(PROJECTS_QUERY);
@@ -20,21 +21,34 @@ function ProjectsList(props: any) {
     }
 
     return (
-        <Table basic={"very"}>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Project</Table.HeaderCell>
-                    <Table.HeaderCell>Fiscal Year</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {data && data.projects.map((project: Project) =>
-                    <Table.Row>
-                        <Table.Cell content={project.name}/>
-                        <Table.Cell content={project.fiscalYear.friendlyName}/>
-                    </Table.Row>)}
-            </Table.Body>
-        </Table>
+        <Card.Group>
+            {data && data.projects.map((project: Project) =>
+                <Card key={project.id}>
+                    <Card.Content as={Header} content={project.name}/>
+                    {project.leads.map((lead: User) => <Card.Content key={lead.id}>
+                        <Icon name={"user"}/> {lead.preferredName} {lead.lastName}
+                    </Card.Content>)}
+                </Card>
+            )}
+
+            {/*    <Table basic={"very"}>*/}
+            {/*    <Table.Header>*/}
+            {/*        <Table.Row>*/}
+            {/*            <Table.HeaderCell>Project</Table.HeaderCell>*/}
+            {/*            <Table.HeaderCell>Fiscal Year</Table.HeaderCell>*/}
+            {/*        </Table.Row>*/}
+            {/*    </Table.Header>*/}
+            {/*    <Table.Body>*/}
+            {/*        {data && data.projects.map((project: Project) =>*/}
+            {/*            <Table.Row>*/}
+            {/*                <Table.Cell content={project.name}/>*/}
+            {/*                <Table.Cell content={project.fiscalYear.friendlyName}/>*/}
+            {/*            </Table.Row>)}*/}
+            {/*    </Table.Body>*/}
+            {/*</Table>*/}
+        </Card.Group>
+
+
     );
 }
 

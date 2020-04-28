@@ -1,5 +1,5 @@
 schema {
-    query: Query
+  query: Query
 }
 
 scalar Date
@@ -22,6 +22,7 @@ type ProjectType {
     name: String!
     fiscalYear: FiscalYearType!
     archived: Boolean!
+    leads: [UserType]
     shortCode: String!
 }
 
@@ -30,4 +31,20 @@ type Query {
     fiscalYears: [FiscalYearType]
     project(id: Int): ProjectType
     projects: [ProjectType]
+}
+
+scalar UUID
+
+type UserType {
+    lastLogin: DateTime
+    isSuperuser: Boolean!
+    firstName: String!
+    lastName: String!
+    isStaff: Boolean!
+    isActive: Boolean!
+    dateJoined: DateTime!
+    id: UUID!
+    email: String!
+    preferredName: String!
+    projectSet: [ProjectType!]!
 }
