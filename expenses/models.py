@@ -74,7 +74,6 @@ class RequisitionItem(models.Model):
     link = URLField()
     notes = TextField()
 
-
 class Project(TimestampedModel):
     name = CharField(max_length=150)
     fiscal_year = ForeignKey('FiscalYear', on_delete=models.PROTECT)

@@ -1,4 +1,5 @@
 import graphene
+from django.contrib import auth
 from graphene_django import DjangoObjectType
 
 from expenses.models import FiscalYear, Project
@@ -14,7 +15,20 @@ class FiscalYearType(DjangoObjectType):
         return info.context.user.has_perm("expenses.view_fiscalyear")
 
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = auth.get_user_model()
+        exclude_fields = ["password"]
+
+
 class ProjectType(DjangoObjectType):
+    leads = graphene.List(UserType)
+
+    @graphene.resolve_only_args
+    def resolve_leads(self):
+        # TODO: permissions
+        return self.leads.all()
+
     class Meta:
         model = Project
 
