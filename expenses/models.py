@@ -1,3 +1,5 @@
+from django.contrib import auth
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 # Create your models here.
 from django.db.models import CharField, ForeignKey, DateTimeField, BooleanField, DateField, TextField, ManyToManyField, \
@@ -42,17 +44,20 @@ class Requisition(TimestampedModel):
     headline = CharField(max_length=150)
     description = TextField()
     status = CharField(choices=RequisitionStatus.choices, max_length=50)
-    point_of_contact = ForeignKey('seaport.User', on_delete=models.PROTECT)
-    # TODO: add creator field
+    point_of_contact = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="point_of_contact",
+                                  related_query_name="point_of_contact")
+    created_by = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="created_by",
+                            related_query_name="created_by")
     project = ForeignKey('Project', on_delete=models.CASCADE)
     vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     project_requisition_id = PositiveIntegerField()
+    payment_required_by = DateTimeField()
 
     class Meta:
         rules_permissions = {
             "add": is_member,
             "change": (requisition_is_unlocked & can_edit_unlocked_requisition) | (
-                        ~requisition_is_unlocked & can_edit_locked_requisition),
+                    ~requisition_is_unlocked & can_edit_locked_requisition),
             "view": is_member,
             "delete": is_exec
         }
@@ -73,6 +78,7 @@ class RequisitionItem(models.Model):
     unit_price = DecimalField(max_digits=15, decimal_places=4)
     link = URLField()
     notes = TextField()
+
 
 class Project(TimestampedModel):
     name = CharField(max_length=150)
@@ -100,10 +106,10 @@ class FiscalYear(models.Model):
         return self.friendly_name
 
 
-class Approval(models.Model):
+class Approval(TimestampedModel):
     is_approving = BooleanField(null=True)
     notes = TextField()
-    approver = ForeignKey('seaport.User', on_delete=models.PROTECT)
+    approver = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT)
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
 
 
@@ -113,3 +119,21 @@ class Vendor(TimestampedModel):
 
     def __str__(self):
         return self.name
+
+
+class PaymentMethod(models.Model):
+    friendly_name = CharField(max_length=150, unique=True)
+    is_active = BooleanField(default=True)
+
+    def __str__(self):
+        return self.friendly_name
+
+
+class Payment(TimestampedModel):
+    requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
+    recipient = ForeignKey('Vendor', on_delete=models.PROTECT)
+    amount = DecimalField(max_digits=15, decimal_places=4)
+    funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
+
+    def __str__(self):
+        return "{} from {} to {}".format(self.amount, self.funding_source, self.recipient.name)
