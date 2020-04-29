@@ -30,22 +30,6 @@ function ProjectsList(props: any) {
                     </Card.Content>)}
                 </Card>
             )}
-
-            {/*    <Table basic={"very"}>*/}
-            {/*    <Table.Header>*/}
-            {/*        <Table.Row>*/}
-            {/*            <Table.HeaderCell>Project</Table.HeaderCell>*/}
-            {/*            <Table.HeaderCell>Fiscal Year</Table.HeaderCell>*/}
-            {/*        </Table.Row>*/}
-            {/*    </Table.Header>*/}
-            {/*    <Table.Body>*/}
-            {/*        {data && data.projects.map((project: Project) =>*/}
-            {/*            <Table.Row>*/}
-            {/*                <Table.Cell content={project.name}/>*/}
-            {/*                <Table.Cell content={project.fiscalYear.friendlyName}/>*/}
-            {/*            </Table.Row>)}*/}
-            {/*    </Table.Body>*/}
-            {/*</Table>*/}
         </Card.Group>
 
 
