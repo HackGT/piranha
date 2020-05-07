@@ -64,7 +64,7 @@ class Requisition(TimestampedModel):
 
     @property
     def reference_id(self):
-        return "{}-{}-{:02}".format(self.project.fiscal_year.short_code, self.project.short_code,
+        return "{}-{}-{:02}".format(self.project.year, self.project.short_code,
                                     self.project_requisition_id)
 
     def __str__(self):
@@ -82,28 +82,13 @@ class RequisitionItem(models.Model):
 
 class Project(TimestampedModel):
     name = CharField(max_length=150)
-    fiscal_year = ForeignKey('FiscalYear', on_delete=models.PROTECT)
     archived = BooleanField(default=False)
     leads = ManyToManyField('seaport.User')
     short_code = CharField(max_length=25, help_text="A short, 2-5 character code to represent this project")
+    year = PositiveIntegerField()
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.fiscal_year)
-
-
-class FiscalYear(models.Model):
-    friendly_name = CharField(max_length=150, unique=True)
-    start_date = DateField()
-    end_date = DateField(help_text="The year of the end date will be used to abbreviate this fiscal year in requisition \
-    reference IDs")
-    archived = BooleanField(default=False)
-
-    @property
-    def short_code(self):
-        return self.end_date.year
-
-    def __str__(self):
-        return self.friendly_name
+        return "{} ({})".format(self.name, self.year)
 
 
 class Approval(TimestampedModel):
@@ -134,6 +119,7 @@ class Payment(TimestampedModel):
     recipient = ForeignKey('Vendor', on_delete=models.PROTECT)
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
+    date = DateField()
 
     def __str__(self):
-        return "{} from {} to {}".format(self.amount, self.funding_source, self.recipient.name)
+        return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)
