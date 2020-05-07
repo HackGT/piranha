@@ -1,4 +1,3 @@
-import {FiscalYear} from "./FiscalYear";
 import {gql} from "@apollo/client";
 import {User} from "./User";
 
@@ -7,7 +6,7 @@ export type Project = {
     createdAt: string,
     updatedAt: string,
     name: string,
-    fiscalYear: FiscalYear,
+    year: number,
     archived: boolean,
     shortCode: string,
     leads: [User]
@@ -18,13 +17,7 @@ export const PROJECTS_QUERY = gql`
         projects {
             id
             name
-            fiscalYear {
-                id
-                friendlyName
-                startDate
-                endDate
-                archived
-            }
+            year
             leads {
                 preferredName
                 lastName

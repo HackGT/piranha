@@ -2,49 +2,40 @@ schema {
   query: Query
 }
 
-scalar Date
-
 scalar DateTime
 
-type FiscalYearType {
-    id: ID!
-    friendlyName: String!
-    startDate: Date!
-    endDate: Date!
-    archived: Boolean!
-    projectSet: [ProjectType!]!
+type Project {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  archived: Boolean!
+  leads: [User]
+  shortCode: String!
+  year: Int!
 }
 
-type ProjectType {
-    id: ID!
-    createdAt: DateTime!
-    updatedAt: DateTime!
-    name: String!
-    fiscalYear: FiscalYearType!
-    archived: Boolean!
-    leads: [UserType]
-    shortCode: String!
+input ProjectWhereInput {
+  archived: Boolean
 }
 
 type Query {
-    fiscalYear(id: Int): FiscalYearType
-    fiscalYears: [FiscalYearType]
-    project(id: Int): ProjectType
-    projects: [ProjectType]
+  project(id: Int): Project
+  projects(where: ProjectWhereInput): [Project]
 }
 
 scalar UUID
 
-type UserType {
-    lastLogin: DateTime
-    isSuperuser: Boolean!
-    firstName: String!
-    lastName: String!
-    isStaff: Boolean!
-    isActive: Boolean!
-    dateJoined: DateTime!
-    id: UUID!
-    email: String!
-    preferredName: String!
-    projectSet: [ProjectType!]!
+type User {
+  lastLogin: DateTime
+  isSuperuser: Boolean!
+  firstName: String!
+  lastName: String!
+  isStaff: Boolean!
+  isActive: Boolean!
+  dateJoined: DateTime!
+  id: UUID!
+  email: String!
+  preferredName: String!
+  projectSet: [Project!]!
 }
