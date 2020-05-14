@@ -13,6 +13,7 @@ type Project {
   leads: [User]
   shortCode: String!
   year: Int!
+  requisitionSet: [Requisition!]!
 }
 
 input ProjectWhereInput {
@@ -20,8 +21,61 @@ input ProjectWhereInput {
 }
 
 type Query {
-  project(id: Int): Project
+  user(id: ID): User
+  users(where: UserWhereInput): [User]
+  project(id: ID): Project
   projects(where: ProjectWhereInput): [Project]
+  vendor(id: ID): Vendor
+  vendors(where: VendorWhereInput): [Vendor]
+  requisition(id: ID): Requisition
+  requisitions(where: RequisitionWhereInput): [Requisition]
+  requisitionItem(id: ID): RequisitionItem
+  requisitionItems(where: RequisitionItemWhereInput): [RequisitionItem]
+}
+
+type Requisition {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  id: ID!
+  headline: String!
+  description: String!
+  status: RequisitionStatus!
+  pointOfContact: User!
+  createdBy: User!
+  project: Project!
+  vendor: Vendor!
+  projectRequisitionId: Int!
+  paymentRequiredBy: DateTime!
+  requisitionitemSet: [RequisitionItem!]!
+}
+
+type RequisitionItem {
+  id: ID!
+  shortName: String!
+  requisition: Requisition!
+  quantity: Int!
+  unitPrice: Float!
+  link: String!
+  notes: String!
+}
+
+input RequisitionItemWhereInput {
+  requisition: RequisitionWhereInput
+}
+
+enum RequisitionStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_CHANGES
+  READY_TO_ORDER
+  ORDERED
+  RECEIVED
+  CANCELLED
+}
+
+input RequisitionWhereInput {
+  id: ID
+  createdBy: UserWhereInput
 }
 
 scalar UUID
@@ -37,5 +91,25 @@ type User {
   id: UUID!
   email: String!
   preferredName: String!
+  pointOfContact: [Requisition!]!
+  createdBy: [Requisition!]!
   projectSet: [Project!]!
+}
+
+input UserWhereInput {
+  id: UUID
+  isActive: Boolean
+}
+
+type Vendor {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  id: ID!
+  name: String!
+  isActive: Boolean!
+  requisitionSet: [Requisition!]!
+}
+
+input VendorWhereInput {
+  isActive: Boolean
 }
