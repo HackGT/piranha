@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Grid, Header, Label, Table} from "semantic-ui-react";
-import {useQuery} from "@apollo/client";
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
