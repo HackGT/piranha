@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f164a4fee617896bf36611232e12f2269f5a12ba28d1f3050ef6a809c07511ef"
+            "sha256": "4892658b46e9bfbdc529a7991f702ebda85bd9448cea17cc02f030c9ab78bf0e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -302,12 +302,11 @@
         },
         "social-auth-app-django": {
             "hashes": [
-                "sha256:6d0dd18c2d9e71ca545097d57b44d26f59e624a12833078e8e52f91baf849778",
-                "sha256:9237e3d7b6f6f59494c3b02e0cce6efc69c9d33ad9d1a064e3b2318bcbe89ae3",
-                "sha256:f151396e5b16e2eee12cd2e211004257826ece24fc4ae97a147df386c1cd7082"
+                "sha256:6badcf5a689cdc031f716c735802eb80edf0d5fd1f36ac7fdf4717930a8456c3",
+                "sha256:91a971b33429c5fbd15649b0222b7fae16380ee87c4ba9a42de455a3525d334a"
             ],
             "index": "pypi",
-            "version": "==3.1.0"
+            "version": "==3.3.0"
         },
         "social-auth-core": {
             "hashes": [
