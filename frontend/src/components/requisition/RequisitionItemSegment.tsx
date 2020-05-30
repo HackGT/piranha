@@ -1,7 +1,16 @@
 import React, {Fragment} from "react";
 import {Button, Form, Header, Segment} from "semantic-ui-react";
+import {RequisitionItem} from "../../util/types/RequisitionItem";
 
-function RequisitionItemSegment(props: any) {
+interface RequisitionItemSegmentProps {
+    id: number,
+    data: RequisitionItem,
+    deleteItem: (item: number) => void,
+    onChange: (event: any, data: any) => void,
+    deleteDisabled: boolean
+}
+
+const RequisitionItemSegment: React.FunctionComponent<RequisitionItemSegmentProps> = (props: RequisitionItemSegmentProps) => {
     return (
         <Fragment>
             <Header as='h4' attached='top'>

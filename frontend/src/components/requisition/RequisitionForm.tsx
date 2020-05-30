@@ -1,18 +1,32 @@
-import React, {ChangeEventHandler, EventHandler, FormEvent, SyntheticEvent} from 'react';
-import {Button, Divider, Form, Header, Segment} from 'semantic-ui-react';
+import React, {ChangeEvent, FormEvent, SyntheticEvent} from 'react';
+import {Button, Divider, Form, DropdownProps, FormProps} from 'semantic-ui-react';
 import {DateInput} from 'semantic-ui-calendar-react';
 import RequisitionItemSegment from "./RequisitionItemSegment";
+import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
+import {TextAreaProps} from "semantic-ui-react/dist/commonjs/addons/TextArea/TextArea";
+import {RequisitionItem} from "../../util/types/RequisitionItem";
 
-type RequisitionItem = {
-    name: string,
-    price: number,
-    quantity: number,
-    link: string,
-    notes: string
+type RequisitionFormEvent = ChangeEvent<HTMLInputElement> | FormEvent<HTMLTextAreaElement> | SyntheticEvent<HTMLElement>;
+type RequisitionFormData = InputOnChangeData | TextAreaProps | DropdownProps | any;
+
+interface RequisitionFormProps {
+    projectOptions: [{
+        text: string,
+        value: string
+    }]
 }
 
-class RequisitionForm extends React.Component<any, any> {
-    constructor(props: any) {
+interface RequisitionFormState {
+    name: string,
+    description: string,
+    project: string,
+    paymentRequiredBy: string,
+    vendor: string,
+    items: [RequisitionItem]
+}
+
+class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionFormState> {
+    constructor(props: RequisitionFormProps) {
         super(props);
 
         this.state = {
@@ -21,25 +35,33 @@ class RequisitionForm extends React.Component<any, any> {
             project: '',
             paymentRequiredBy: '',
             vendor: '',
+            // @ts-ignore
             items: [{}]
         }
     }
 
-    handleChange = (event: any, {name, value}: any) => {
-        this.setState({[name]: value});
+    handleChange = (event: RequisitionFormEvent, data: RequisitionFormData) => {
+        // @ts-ignore
+        this.setState({ [data.name]: data.value });
     }
 
+    handleItemChange = (event: RequisitionFormEvent, data: RequisitionFormData, index: number) => {
+        if (index >= 0 && index < this.state.items.length) {
+            let newItems = this.state.items;
+            // @ts-ignore
+            newItems[index][data.name] = data.value;
 
-    handleSubmit = (event: FormEvent) => {
-        console.log(this.state);
+            this.setState({
+                items: newItems
+            })
+        }
     }
 
     addItem = (event: any) => {
         event.preventDefault();
 
-        this.setState({
-            items: [...this.state.items, {}]
-        })
+        // @ts-ignore
+        this.setState({ items: [...this.state.items, {}] })
     }
 
     deleteItem = (index: number) => {
@@ -53,15 +75,8 @@ class RequisitionForm extends React.Component<any, any> {
         }
     }
 
-    handleItemChange = (event: any, {name, value}: any, index: number) => {
-        if (index >= 0 && index < this.state.items.length) {
-            let newItems = this.state.items;
-            newItems[index][name] = value;
-
-            this.setState({
-                items: newItems
-            })
-        }
+    handleSubmit = (event: FormEvent<HTMLFormElement>, data: FormProps) => {
+        console.log(this.state);
     }
 
     render() {
@@ -81,21 +96,23 @@ class RequisitionForm extends React.Component<any, any> {
                     label='Description'
                     placeholder='Description...'
                 />
-                <Form.Select
+                <Form.Dropdown
                     name='project'
                     label='Project'
                     value={this.state.project}
                     onChange={this.handleChange}
                     options={this.props.projectOptions}
                     placeholder='Select...'
+                    selection
                 />
-                <Form.Select
+                <Form.Dropdown
                     name='vendor'
                     label='Vendor'
                     value={this.state.vendor}
                     onChange={this.handleChange}
                     options={[{text: 'Amazon', value: 'Amazon'}]}
                     placeholder='Select...'
+                    selection
                 />
                 <Form.Field>
                     <label>Payment Required By</label>
@@ -117,8 +134,8 @@ class RequisitionForm extends React.Component<any, any> {
                             id={index}
                             data={item}
                             deleteItem={this.deleteItem}
-                            onChange={(event: any, data: any) => this.handleItemChange(event, data, index)}
-                            deleteDisabled={this.state.items.length == 1}
+                            onChange={(event: RequisitionFormEvent, data: RequisitionFormData) => this.handleItemChange(event, data, index)}
+                            deleteDisabled={this.state.items.length === 1}
                         />
                     )
                 }

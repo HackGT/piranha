@@ -5,7 +5,7 @@ import {useQuery} from "@apollo/client";
 import {Project, PROJECTS_QUERY} from "../../util/types/Project";
 import LoadingSpinner from "../../util/LoadingSpinner";
 
-function Requisition(props: any) {
+const Requisition: React.FunctionComponent<{}> = (props) => {
 
     const {loading, data, error} = useQuery(PROJECTS_QUERY);
 
