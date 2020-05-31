@@ -15,7 +15,6 @@ function App() {
                 padding: "0 10px",
                 minHeight: "100vh", // We need the page height to match the screen/window height so the mobile
                 // hamburger menu appears correctly.  This method of doing that is from https://github.com/ctrlplusb/react-sizeme/issues/111#issuecomment-295166102
-                backgroundColor: "#f8f9fa"
             }}>
                 <Router>
                     <div>
