@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FormEvent, SyntheticEvent} from 'react';
-import {Button, Divider, Form, DropdownProps, FormProps, Grid} from 'semantic-ui-react';
+import {Button, Divider, Form, DropdownProps, FormProps, Grid, Icon, Popup} from 'semantic-ui-react';
 import {DateInput} from 'semantic-ui-calendar-react';
 import RequisitionItemSegment from "./RequisitionItemSegment";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
@@ -105,56 +105,89 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={8}>
-                            <Form.Input
-                                name='name'
-                                value={this.state.name}
-                                onChange={this.handleChange}
-                                label='Name'
-                                placeholder='Name...'
-                                required
-                            />
+                            <Form.Field required>
+                                <label>Name</label>
+                                <Popup
+                                    content='The general name of the item.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
+                                <Form.Input
+                                    name='name'
+                                    value={this.state.name}
+                                    onChange={this.handleChange}
+                                    placeholder='Name...'
+                                    required
+                                />
+                            </Form.Field>
                         </Grid.Column>
                         <Grid.Column width={8}>
-                            <Form.Dropdown
-                                name='project'
-                                label='Project'
-                                value={this.state.project}
-                                onChange={this.handleChange}
-                                options={this.props.projectOptions}
-                                placeholder='Select...'
-                                selection
-                                required
-                            />
+                            <Form.Field required>
+                                <label>Project</label>
+                                <Popup
+                                    content='The project this requisition is associated with.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
+                                <Form.Dropdown
+                                    name='project'
+                                    value={this.state.project}
+                                    onChange={this.handleChange}
+                                    options={this.props.projectOptions}
+                                    placeholder='Select...'
+                                    selection
+                                    required
+                                />
+                            </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={16}>
-                            <Form.TextArea
-                                name='description'
-                                value={this.state.description}
-                                onChange={this.handleChange}
-                                label='Description'
-                                placeholder='Description...'
-                                required
-                            />
+                            <Form.Field required>
+                                <label>Description</label>
+                                <Popup
+                                    content='The description of what you want to order and why you need it.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
+                                <Form.TextArea
+                                    name='description'
+                                    value={this.state.description}
+                                    onChange={this.handleChange}
+                                    placeholder='Description...'
+                                    required
+                                />
+                            </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={8}>
-                            <Form.Dropdown
-                                name='vendor'
-                                label='Vendor'
-                                value={this.state.vendor}
-                                onChange={this.handleChange}
-                                options={[{text: 'Amazon', value: 'Amazon'}]}
-                                placeholder='Select...'
-                                selection
-                                required
-                            />
+                            <Form.Field required>
+                                <label>Vendor</label>
+                                <Popup
+                                    content='The vendor you are ordering the item from.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
+                                <Form.Dropdown
+                                    name='vendor'
+                                    value={this.state.vendor}
+                                    onChange={this.handleChange}
+                                    options={[{text: 'Amazon', value: 'Amazon'}]}
+                                    placeholder='Select...'
+                                    required
+                                    selection
+                                />
+                            </Form.Field>
                         </Grid.Column>
                         <Grid.Column width={8}>
                             <Form.Field required>
                                 <label>Payment Required By</label>
+                                <Popup
+                                    content='The date you need the payment by. Should be at least 3 days from today.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
                                 <DateInput
                                     name='paymentRequiredBy'
                                     value={this.state.paymentRequiredBy}
