@@ -15,7 +15,6 @@ class Page {
 
 export const routes = [
     new Page("Home", "/"),
-    new Page("Projects", "/projects"),
     new Page("Requisition", "/requisition")
 ];
 

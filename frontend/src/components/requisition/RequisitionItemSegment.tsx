@@ -17,7 +17,7 @@ const RequisitionItemSegment: React.FunctionComponent<RequisitionItemSegmentProp
                 Item {props.id + 1}
             </Header>
             <Segment attached='bottom'>
-                <Grid>
+                <Grid stackable>
                     <Grid.Row>
                         <Grid.Column width={8}>
                             <Form.Field required>
