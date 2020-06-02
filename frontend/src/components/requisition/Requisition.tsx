@@ -1,5 +1,5 @@
-import React from "react";
-import {Container, Message} from "semantic-ui-react";
+import React, {Fragment} from "react";
+import {Message, Header, Divider} from "semantic-ui-react";
 import RequisitionForm from "./RequisitionForm";
 import {useQuery} from "@apollo/client";
 import {Project, PROJECTS_QUERY} from "../../util/types/Project";
@@ -25,11 +25,13 @@ const Requisition: React.FunctionComponent<{}> = (props) => {
     })
 
     return (
-        <Container text>
+        <Fragment>
+            <Header as='h1'>Create New Requisition</Header>
+            <Divider />
             <RequisitionForm
                 projectOptions={options}
             />
-        </Container>
+        </Fragment>
     )
 }
 

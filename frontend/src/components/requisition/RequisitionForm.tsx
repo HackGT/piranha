@@ -102,8 +102,8 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
     render() {
         return (
             <Form onSubmit={this.handleSubmit} autoComplete='off'>
-                <Grid>
-                    <Grid.Row>
+                <Grid stackable>
+                    <Grid.Row columns={2}>
                         <Grid.Column width={8}>
                             <Form.Field required>
                                 <label>Name</label>
@@ -141,7 +141,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row columns={1}>
                         <Grid.Column width={16}>
                             <Form.Field required>
                                 <label>Description</label>
@@ -160,7 +160,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row columns={2}>
                         <Grid.Column width={8}>
                             <Form.Field required>
                                 <label>Vendor</label>

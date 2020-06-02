@@ -3,7 +3,6 @@ import Navigation from "./components/navigation/Navigation";
 import {Sidebar} from 'semantic-ui-react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
-import ProjectsContainer from "./components/projects/ProjectsContainer";
 import Requisition from "./components/requisition/Requisition";
 
 function App() {
@@ -22,11 +21,12 @@ function App() {
                         <div style={{
                             maxWidth: "960px",
                             marginLeft: "auto",
-                            marginRight: "auto"
+                            marginRight: "auto",
+                            paddingLeft: 10,
+                            paddingRight: 10
                         }}>
                             <Switch>
                                 <Route exact path="/requisition" component={Requisition}/>
-                                <Route exact path="/projects" component={ProjectsContainer}/>
                                 <Route exact path="/" component={Home}/>
                             </Switch>
                         </div>

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Grid, Header, Label, Table} from "semantic-ui-react";
+import {Divider, Grid, Header, Label, Table} from "semantic-ui-react";
+import ProjectsList from "./projects/ProjectsList";
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
@@ -24,16 +25,17 @@ function Home(props: any) {
 
     const randomPhrase = useState(pickRandomElement(funPhrases));
     return (
-        <Grid stackable columns={2} style={{paddingLeft: 10, paddingRight: 10}}>
+        <Grid stackable>
             <Grid.Row>
-                <Grid.Column width={12}>
-                    <Header size={"huge"} content="Home" subheader={randomPhrase}/>
+                <Grid.Column>
+                    <Header size="huge" content="Home" subheader={randomPhrase}/>
+                    <Divider />
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column>
-                    <Header textAlign={"center"} size="huge">My Open Requisitions</Header>
-                    <Table basic={"very"}>
+                    <Header textAlign="center" size="large">My Open Requisitions</Header>
+                    <Table basic="very">
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>Requisition</Table.HeaderCell>
@@ -59,7 +61,12 @@ function Home(props: any) {
                             </Table.Row>
                         </Table.Body>
                     </Table>
-                    <Header size="huge" textAlign={"center"}>My Expenses</Header>
+                </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+                <Grid.Column>
+                    <Header textAlign="center" size="large">Projects</Header>
+                    <ProjectsList/>
                 </Grid.Column>
             </Grid.Row>
         </Grid>
