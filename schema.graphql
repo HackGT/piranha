@@ -28,9 +28,8 @@ type Query {
   vendor(id: ID): Vendor
   vendors(where: VendorWhereInput): [Vendor]
   requisition(id: ID): Requisition
-  requisitions(where: RequisitionWhereInput): [Requisition]
+  requisitions: [Requisition]
   requisitionItem(id: ID): RequisitionItem
-  requisitionItems(where: RequisitionItemWhereInput): [RequisitionItem]
 }
 
 type Requisition {
@@ -40,13 +39,13 @@ type Requisition {
   headline: String!
   description: String!
   status: RequisitionStatus!
-  pointOfContact: User!
   createdBy: User!
   project: Project!
   vendor: Vendor!
   projectRequisitionId: Int!
   paymentRequiredBy: DateTime!
   requisitionitemSet: [RequisitionItem!]!
+  canEdit: Boolean
 }
 
 type RequisitionItem {
@@ -59,10 +58,6 @@ type RequisitionItem {
   notes: String!
 }
 
-input RequisitionItemWhereInput {
-  requisition: RequisitionWhereInput
-}
-
 enum RequisitionStatus {
   DRAFT
   SUBMITTED
@@ -71,11 +66,6 @@ enum RequisitionStatus {
   ORDERED
   RECEIVED
   CANCELLED
-}
-
-input RequisitionWhereInput {
-  id: ID
-  createdBy: UserWhereInput
 }
 
 scalar UUID
@@ -91,7 +81,6 @@ type User {
   id: UUID!
   email: String!
   preferredName: String!
-  pointOfContact: [Requisition!]!
   createdBy: [Requisition!]!
   projectSet: [Project!]!
 }
