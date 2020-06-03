@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Divider, Grid, Header, Label, Table} from "semantic-ui-react";
+import {Divider, Grid, Header} from "semantic-ui-react";
 import ProjectsList from "./projects/ProjectsList";
+import RequisitionTableHome from "./requisition/RequisitionTableHome";
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
@@ -22,45 +23,19 @@ export function pickRandomElement<T>(arr: T[]): T {
 }
 
 function Home(props: any) {
-
     const randomPhrase = useState(pickRandomElement(funPhrases));
+
     return (
         <Grid stackable>
             <Grid.Row>
                 <Grid.Column>
                     <Header size="huge" content="Home" subheader={randomPhrase}/>
-                    <Divider />
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column>
                     <Header textAlign="center" size="large">My Open Requisitions</Header>
-                    <Table basic="very">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Requisition</Table.HeaderCell>
-                                <Table.HeaderCell>Headline</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            <Table.Row>
-                                <Table.Cell>2020-HOR-01</Table.Cell>
-                                <Table.Cell>Photobooth phones</Table.Cell>
-                                <Table.Cell><Label>Draft</Label></Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>2020-HOR-03</Table.Cell>
-                                <Table.Cell>Lunch - Moe's</Table.Cell>
-                                <Table.Cell><Label color={"red"}>Pending Changes</Label></Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>2020-HOR-05</Table.Cell>
-                                <Table.Cell>Horizons badges</Table.Cell>
-                                <Table.Cell><Label color={"green"}>Ready to Order</Label></Table.Cell>
-                            </Table.Row>
-                        </Table.Body>
-                    </Table>
+                    <RequisitionTableHome/>
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>

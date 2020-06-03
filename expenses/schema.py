@@ -81,6 +81,11 @@ class RequisitionType(DjangoObjectType):
     def resolve_can_edit(self, info):
         return info.context.user.has_perm("expenses.change_requisition", self)
 
+    reference_id = graphene.String()
+
+    def resolve_reference_id(self, info):
+        return self.reference_id
+
     class Meta:
         model = Requisition
         name = "Requisition"
@@ -106,10 +111,9 @@ class Query(graphene.ObjectType):
 
     def resolve_user(self, info, **kwargs):
         print([group.name for group in info.context.user.groups.all()])
-        id = kwargs.get("id")
 
         if UserType.permission_check(info):
-            return auth.get_user_model().objects.get(id=id)
+            return info.context.user
 
     def resolve_users(self, info, **kwargs):
         where = process_where_input(kwargs.get("where", {}))
