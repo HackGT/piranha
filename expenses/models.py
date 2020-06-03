@@ -44,8 +44,6 @@ class Requisition(TimestampedModel):
     headline = CharField(max_length=150)
     description = TextField()
     status = CharField(choices=RequisitionStatus.choices, max_length=50)
-    point_of_contact = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="point_of_contact",
-                                  related_query_name="point_of_contact")
     created_by = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="created_by",
                             related_query_name="created_by")
     project = ForeignKey('Project', on_delete=models.CASCADE)

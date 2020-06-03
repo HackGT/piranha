@@ -76,6 +76,11 @@ class VendorWhereInput(InputObjectType):
 
 
 class RequisitionType(DjangoObjectType):
+    can_edit = graphene.Boolean()
+
+    def resolve_can_edit(self, info):
+        return info.context.user.has_perm("expenses.change_requisition", self)
+
     class Meta:
         model = Requisition
         name = "Requisition"
@@ -83,11 +88,6 @@ class RequisitionType(DjangoObjectType):
     @classmethod
     def permission_check(cls, info):
         return info.context.user.has_perm("expenses.view_requisition")
-
-
-class RequisitionWhereInput(InputObjectType):
-    id = graphene.ID()
-    created_by = UserWhereInput()
 
 
 class RequisitionItemType(DjangoObjectType):
@@ -100,15 +100,12 @@ class RequisitionItemType(DjangoObjectType):
         return info.context.user.has_perm("expenses.view_requisition_item")
 
 
-class RequisitionItemWhereInput(InputObjectType):
-    requisition = RequisitionWhereInput()
-
-
 class Query(graphene.ObjectType):
     user = graphene.Field(UserType, id=graphene.ID())
     users = graphene.List(UserType, where=UserWhereInput())
 
     def resolve_user(self, info, **kwargs):
+        print([group.name for group in info.context.user.groups.all()])
         id = kwargs.get("id")
 
         if UserType.permission_check(info):
@@ -153,8 +150,8 @@ class Query(graphene.ObjectType):
             return Vendor.objects.filter(**where)
         return None
 
-    requisition = graphene.Field(RequisitionType, id=graphene.ID())
-    requisitions = graphene.List(RequisitionType, where=RequisitionWhereInput())
+    requisition = graphene.Field(RequisitionType, id=graphene.ID(), description="Get requisition by ID")
+    requisitions = graphene.List(RequisitionType, description="Get requisitions created by this user for active projects")
 
     def resolve_requisition(self, info, **kwargs):
         id = kwargs.get("id")
@@ -163,24 +160,14 @@ class Query(graphene.ObjectType):
             return Requisition.objects.get(id=id)
 
     def resolve_requisitions(self, info, **kwargs):
-        where = process_where_input(kwargs.get("where", {}))
-
         if RequisitionType.permission_check(info):
-            return Requisition.objects.filter(**where)
+            return Requisition.objects.filter(created_by=info.context.user, project__archived=False)
         return None
 
-    requisitionItem = graphene.Field(RequisitionItemType, id=graphene.ID())
-    requisitionItems = graphene.List(RequisitionItemType, where=RequisitionItemWhereInput())
+    requisitionItem = graphene.Field(RequisitionItemType, id=graphene.ID(), description="Get requisition item by ID")
 
     def resolve_requisitionItem(self, info, **kwargs):
         id = kwargs.get("id")
 
         if RequisitionItemType.permission_check(info):
             return RequisitionItem.objects.get(id=id)
-
-    def resolve_requisitionItems(self, info, **kwargs):
-        where = process_where_input(kwargs.get("where", {}))
-
-        if RequisitionItemType.permission_check(info):
-            return RequisitionItem.objects.filter(**where)
-        return None
