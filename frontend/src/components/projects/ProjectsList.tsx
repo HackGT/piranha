@@ -12,7 +12,7 @@ function ProjectsList(props: any) {
         return <LoadingSpinner active={true} message={"Loading projects..."}/>;
     }
 
-    if (error) {
+    if (error || (data && !data.projects)) {
         return <Message error>Unable to display projects</Message>;
     }
 

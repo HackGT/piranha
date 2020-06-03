@@ -4,7 +4,7 @@ import {DateInput} from 'semantic-ui-calendar-react';
 import RequisitionItemSegment from "./RequisitionItemSegment";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
 import {TextAreaProps} from "semantic-ui-react/dist/commonjs/addons/TextArea/TextArea";
-import {RequisitionItem} from "../../util/types/RequisitionItem";
+import {RequisitionItem} from "../../util/types/Requisition";
 
 type RequisitionFormEvent =
     ChangeEvent<HTMLInputElement>
@@ -20,7 +20,7 @@ interface RequisitionFormProps {
 }
 
 interface RequisitionFormState {
-    name: string,
+    headline: string,
     description: string,
     project: string,
     paymentRequiredBy: string,
@@ -33,7 +33,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
         super(props);
 
         this.state = {
-            name: '',
+            headline: '',
             description: '',
             project: '',
             paymentRequiredBy: '',
@@ -106,15 +106,15 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                     <Grid.Row columns={2}>
                         <Grid.Column width={8}>
                             <Form.Field required>
-                                <label>Name</label>
+                                <label>Headline</label>
                                 <Popup
-                                    content='The general name of the item.'
+                                    content='The general headline of the item.'
                                     trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
                                     basic
                                 />
                                 <Form.Input
                                     name='name'
-                                    value={this.state.name}
+                                    value={this.state.headline}
                                     onChange={this.handleChange}
                                     placeholder='Name...'
                                     required

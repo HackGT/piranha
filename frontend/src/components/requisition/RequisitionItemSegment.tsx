@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import {Button, Form, Grid, Header, Segment, Popup, Icon} from "semantic-ui-react";
-import {RequisitionItem} from "../../util/types/RequisitionItem";
+import {RequisitionItem} from "../../util/types/Requisition";
 
 interface RequisitionItemSegmentProps {
     id: number,
