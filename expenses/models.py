@@ -61,12 +61,12 @@ class Requisition(TimestampedModel):
         }
 
     @property
-    def reference_id(self):
+    def reference_string(self):
         return "{}-{}-{:02}".format(self.project.year, self.project.short_code,
                                     self.project_requisition_id)
 
     def __str__(self):
-        return self.reference_id
+        return self.reference_string
 
 
 class RequisitionItem(models.Model):
@@ -84,6 +84,10 @@ class Project(TimestampedModel):
     leads = ManyToManyField('seaport.User')
     short_code = CharField(max_length=25, help_text="A short, 2-5 character code to represent this project")
     year = PositiveIntegerField()
+
+    @property
+    def reference_string(self):
+        return "{}-{}".format(self.year, self.short_code)
 
     def __str__(self):
         return "{} ({})".format(self.name, self.year)

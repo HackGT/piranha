@@ -48,6 +48,11 @@ class ProjectType(DjangoObjectType):
         # TODO: permissions
         return self.leads.all()
 
+    reference_string = graphene.String()
+
+    def resolve_reference_string(self, info):
+        return self.reference_string
+
     class Meta:
         model = Project
         name = "Project"
@@ -81,10 +86,10 @@ class RequisitionType(DjangoObjectType):
     def resolve_can_edit(self, info):
         return info.context.user.has_perm("expenses.change_requisition", self)
 
-    reference_id = graphene.String()
+    reference_string = graphene.String()
 
-    def resolve_reference_id(self, info):
-        return self.reference_id
+    def resolve_reference_string(self, info):
+        return self.reference_string
 
     class Meta:
         model = Requisition
@@ -122,14 +127,15 @@ class Query(graphene.ObjectType):
             return auth.get_user_model().objects.filter(**where)
         return None
 
-    project = graphene.Field(ProjectType, id=graphene.ID())
+    project = graphene.Field(ProjectType, year=graphene.Int(), short_code=graphene.String())
     projects = graphene.List(ProjectType, where=ProjectWhereInput())
 
     def resolve_project(self, info, **kwargs):
-        id = kwargs.get("id")
+        year = kwargs.get("year")
+        short_code = kwargs.get("short_code")
 
         if ProjectType.permission_check(info):
-            return Project.objects.get(id=id)
+            return Project.objects.get(year=year, short_code=short_code)
 
     def resolve_projects(self, info, **kwargs):
         where = process_where_input(kwargs.get("where", {}))
