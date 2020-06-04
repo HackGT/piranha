@@ -70,12 +70,15 @@ class Requisition(TimestampedModel):
 
 
 class RequisitionItem(models.Model):
-    short_name = CharField(max_length=150)
+    name = CharField(max_length=150)
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
     quantity = PositiveIntegerField(default=1)
     unit_price = DecimalField(max_digits=15, decimal_places=4)
     link = URLField()
     notes = TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class Project(TimestampedModel):

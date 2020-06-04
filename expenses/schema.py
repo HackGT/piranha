@@ -160,14 +160,18 @@ class Query(graphene.ObjectType):
             return Vendor.objects.filter(**where)
         return None
 
-    requisition = graphene.Field(RequisitionType, id=graphene.ID(), description="Get requisition by ID")
+    requisition = graphene.Field(RequisitionType, year=graphene.Int(), short_code=graphene.String(), project_requisition_id=graphene.Int())
     requisitions = graphene.List(RequisitionType, description="Get requisitions created by this user for active projects")
 
     def resolve_requisition(self, info, **kwargs):
-        id = kwargs.get("id")
+        year = kwargs.get("year")
+        short_code = kwargs.get("short_code")
+        project_requisition_id = kwargs.get("project_requisition_id")
+
+        print(year, short_code, project_requisition_id)
 
         if RequisitionType.permission_check(info):
-            return Requisition.objects.get(id=id)
+            return Requisition.objects.get(project__year=year, project__short_code=short_code, project_requisition_id=project_requisition_id)
 
     def resolve_requisitions(self, info, **kwargs):
         if RequisitionType.permission_check(info):

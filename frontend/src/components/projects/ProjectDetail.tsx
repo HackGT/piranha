@@ -1,18 +1,18 @@
 import React from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
-import {Project, PROJECT_DETAIL} from "../../util/types/Project";
+import {Project, PROJECT_DETAIL_QUERY} from "../../util/types/Project";
 import LoadingSpinner from "../../util/LoadingSpinner";
 import {Grid, Header, Message, Table} from "semantic-ui-react";
 import {Requisition} from "../../util/types/Requisition";
 import RequisitionTableRow from "../requisition/RequisitionTableRow";
 
 const ProjectDetail: React.FC<{}> = (props) => {
-    let {referenceString} = useParams();
+    let {projectReference} = useParams();
 
-    let [year, shortCode] = (referenceString || "").split("-");
+    let [year, shortCode] = (projectReference || "").split("-");
 
-    const {loading, data, error} = useQuery(PROJECT_DETAIL, {
+    const {loading, data, error} = useQuery(PROJECT_DETAIL_QUERY, {
         variables: {year, shortCode}
     });
 

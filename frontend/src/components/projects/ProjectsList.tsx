@@ -4,6 +4,7 @@ import {Project, PROJECTS_QUERY} from "../../util/types/Project";
 import {Card, Header, Icon, Message} from "semantic-ui-react";
 import LoadingSpinner from "../../util/LoadingSpinner";
 import {User} from "../../util/types/User";
+import {Link} from "react-router-dom";
 
 function ProjectsList(props: any) {
     const {loading, data, error} = useQuery(PROJECTS_QUERY);
@@ -23,12 +24,14 @@ function ProjectsList(props: any) {
     return (
         <Card.Group>
             {data && data.projects.map((project: Project) =>
-                <Card key={project.id}>
-                    <Card.Content as={Header} content={project.name}/>
-                    {project.leads.map((lead: User) => <Card.Content key={lead.id}>
-                        <Icon name={"user"}/> {lead.preferredName} {lead.lastName}
-                    </Card.Content>)}
-                </Card>
+                <Link to={"/project/" + project.referenceString}>
+                    <Card href="#" key={project.id}>
+                        <Card.Content as={Header} content={project.name}/>
+                        {project.leads.map((lead: User) => <Card.Content key={lead.id} style={{color: "black"}}>
+                            <Icon color="black" name={"user"}/> {lead.preferredName} {lead.lastName}
+                        </Card.Content>)}
+                    </Card>
+                </Link>
             )}
         </Card.Group>
 

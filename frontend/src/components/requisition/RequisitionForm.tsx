@@ -40,7 +40,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
             vendor: '',
             items: [{
                 name: '',
-                price: 0,
+                unitPrice: 0,
                 quantity: 0,
                 link: '',
                 notes: ''
@@ -73,7 +73,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                 ...this.state.items,
                 {
                     name: '',
-                    price: 0,
+                    unitPrice: 0,
                     quantity: 0,
                     link: '',
                     notes: ''
