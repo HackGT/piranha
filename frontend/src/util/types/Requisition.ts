@@ -48,13 +48,13 @@ export type Requisition = {
     vendor: Vendor,
     projectRequisitionId: number,
     paymentRequiredBy: Date,
-    items: RequisitionItem[],
+    requisitionitemSet: RequisitionItem[],
     referenceString: string
 }
 
 export type RequisitionItem = {
     name: string,
-    price: number,
+    unitPrice: number,
     quantity: number,
     link: string,
     notes: string
@@ -73,3 +73,36 @@ export const OPEN_REQUISITIONS_QUERY = gql`
             }
         }
     }`;
+
+export const REQUISITION_DETAIL_QUERY = gql`
+    query requisition($year: Int!, $shortCode: String!, $projectRequisitionId: Int!) {
+        requisition(year: $year, shortCode: $shortCode, projectRequisitionId: $projectRequisitionId) {
+            id
+            headline
+            description
+            status
+            createdBy {
+                preferredName
+                lastName
+            }
+            project {
+                name
+            }
+            vendor {
+                id
+                name
+            }
+            projectRequisitionId
+            paymentRequiredBy
+            requisitionitemSet {
+                id
+                name
+                quantity
+                unitPrice
+                link
+                notes
+            }
+            canEdit
+            referenceString
+        }
+    }`

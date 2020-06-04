@@ -29,7 +29,7 @@ export const PROJECTS_QUERY = gql`
         }
     }`;
 
-export const PROJECT_DETAIL = gql`
+export const PROJECT_DETAIL_QUERY = gql`
     query project($year: Int!, $shortCode: String!) {
         project(year: $year, shortCode: $shortCode) {
             id

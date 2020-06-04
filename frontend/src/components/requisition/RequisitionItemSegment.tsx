@@ -58,15 +58,15 @@ const RequisitionItemSegment: React.FunctionComponent<RequisitionItemSegmentProp
                     <Grid.Row>
                         <Grid.Column width={8}>
                             <Form.Field required>
-                                <label>Price</label>
+                                <label>Unit Price</label>
                                 <Popup
-                                    content='The price of the item.'
+                                    content='The unit price of the item.'
                                     trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
                                     basic
                                 />
                                 <Form.Input
-                                    name='price'
-                                    value={props.data.price || ''}
+                                    name='unitPrice'
+                                    value={props.data.unitPrice || ''}
                                     placeholder='Price...'
                                     onChange={props.onChange}
                                     type="number"
