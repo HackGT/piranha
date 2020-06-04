@@ -1,15 +1,12 @@
 import React from "react";
-import {OPEN_REQUISITIONS_QUERY} from "../../util/types/Requisition";
+import {OPEN_REQUISITIONS_QUERY, Requisition} from "../../util/types/Requisition";
 import LoadingSpinner from "../../util/LoadingSpinner";
 import {Message, Table} from "semantic-ui-react";
 import {useQuery} from "@apollo/client";
 import RequisitionTableRow from "./RequisitionTableRow";
 
-interface RequisitionTableHomeProps {
 
-}
-
-const RequisitionTableHome: React.FC<RequisitionTableHomeProps> = (props) => {
+const RequisitionTableHome: React.FC<{}> = (props) => {
 
     const {loading, data, error} = useQuery(OPEN_REQUISITIONS_QUERY);
 
@@ -35,7 +32,7 @@ const RequisitionTableHome: React.FC<RequisitionTableHomeProps> = (props) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {data.requisitions.map((rek: any) => <RequisitionTableRow data={rek}/>)}
+                {data.requisitions.map((rek: Requisition) => <RequisitionTableRow key={rek.id} data={rek}/>)}
             </Table.Body>
         </Table>
     )
