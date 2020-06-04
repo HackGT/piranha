@@ -4,6 +4,7 @@ import {Sidebar} from 'semantic-ui-react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
 import Requisition from "./components/requisition/Requisition";
+import ProjectDetail from "./components/projects/ProjectDetail";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                             paddingRight: 10
                         }}>
                             <Switch>
+                                <Route path="/project/:referenceString" component={ProjectDetail} />
                                 <Route exact path="/requisition" component={Requisition}/>
                                 <Route exact path="/" component={Home}/>
                             </Switch>

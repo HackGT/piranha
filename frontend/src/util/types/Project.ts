@@ -1,5 +1,6 @@
 import {gql} from "@apollo/client";
 import {User} from "./User";
+import {Requisition} from "./Requisition";
 
 export type Project = {
     id: number,
@@ -9,21 +10,47 @@ export type Project = {
     year: number,
     archived: boolean,
     shortCode: string,
-    leads: [User]
+    leads: [User],
+    requisitionSet: Requisition[],
+    referenceString: string
 }
 
 export const PROJECTS_QUERY = gql`
     query projects {
-        projects {
+        projects(where: {archived: false}) {
             id
             name
-            year
+            referenceString
             leads {
                 preferredName
                 lastName
                 id
             }
+        }
+    }`;
+
+export const PROJECT_DETAIL = gql`
+    query project($year: Int!, $shortCode: String!) {
+        project(year: $year, shortCode: $shortCode) {
+            id
+            name
             archived
-            shortCode
+            referenceString
+            year
+            requisitionSet {
+                id
+                referenceString
+                projectRequisitionId
+                headline
+                status
+                project {
+                    referenceString
+                }
+            }
+            leads {
+                preferredName
+                lastName
+                id
+            }
         }
     }`;

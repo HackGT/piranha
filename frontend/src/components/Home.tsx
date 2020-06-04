@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Divider, Grid, Header} from "semantic-ui-react";
+import {Grid, Header} from "semantic-ui-react";
 import ProjectsList from "./projects/ProjectsList";
 import RequisitionTableHome from "./requisition/RequisitionTableHome";
 

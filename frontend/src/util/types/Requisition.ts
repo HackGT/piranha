@@ -4,29 +4,41 @@ import {Vendor} from "./Vendor";
 import {gql} from "@apollo/client";
 import {SemanticCOLORS} from "semantic-ui-react/dist/commonjs/generic";
 
-export enum RequisitionStatus {
-    DRAFT = "Draft",
-    SUBMITTED = "Submitted",
-    PENDING_CHANGES = "Pending Changes",
-    READY_TO_ORDER = "Ready to Order",
-    ORDERED = "Ordered",
-    RECEIVED = "Received",
-    CANCELLED = "Cancelled"
-}
+export type RequisitionStatus =
+    "DRAFT" |
+    "SUBMITTED" |
+    "PENDING_CHANGES" |
+    "READY_TO_ORDER" |
+    "ORDERED" |
+    "RECEIVED" |
+    "CANCELLED";
 
 export const StatusToColor = (status: RequisitionStatus): SemanticCOLORS => {
     switch (status) {
-        case RequisitionStatus.DRAFT: return "grey"
-        case RequisitionStatus.SUBMITTED: return "yellow"
-        case RequisitionStatus.PENDING_CHANGES: return "orange"
-        case RequisitionStatus.READY_TO_ORDER: return "green"
-        case RequisitionStatus.ORDERED: return "blue"
-        case RequisitionStatus.RECEIVED: return "blue"
-        case RequisitionStatus.CANCELLED: return "red"
+        case "DRAFT": return "grey"
+        case "SUBMITTED": return "yellow"
+        case "PENDING_CHANGES": return "orange"
+        case "READY_TO_ORDER": return "green"
+        case "ORDERED": return "blue"
+        case "RECEIVED": return "blue"
+        case "CANCELLED": return "red"
+    }
+}
+
+export const StatusToString = (status: RequisitionStatus): string => {
+    switch (status) {
+        case "DRAFT": return "Draft"
+        case "SUBMITTED": return "Submitted"
+        case "PENDING_CHANGES": return "Pending Changes"
+        case "READY_TO_ORDER": return "Ready to Order"
+        case "ORDERED": return "Ordered"
+        case "RECEIVED": return "Received"
+        case "CANCELLED": return "Cancelled"
     }
 }
 
 export type Requisition = {
+    id: number,
     headline: string,
     description: string,
     status: RequisitionStatus,
@@ -36,7 +48,8 @@ export type Requisition = {
     vendor: Vendor,
     projectRequisitionId: number,
     paymentRequiredBy: Date,
-    items: RequisitionItem[]
+    items: RequisitionItem[],
+    referenceString: string
 }
 
 export type RequisitionItem = {
@@ -51,11 +64,12 @@ export const OPEN_REQUISITIONS_QUERY = gql`
     query requisitions {
         requisitions {
             id
-            referenceId
+            projectRequisitionId
+            referenceString
             headline
             status
             project {
-                id
+                referenceString
             }
         }
     }`;
