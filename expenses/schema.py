@@ -5,6 +5,11 @@ from graphene import InputObjectType
 
 from expenses.models import Project, Vendor, Requisition, RequisitionItem
 
+from expenses.controllers.UserController import UserController
+from expenses.controllers.RequisitionController import RequisitionController
+from expenses.controllers.RequisitionItemController import RequisitionItemController
+from expenses.controllers.VendorController import VendorController
+from expenses.controllers.ProjectController import ProjectController
 
 # Processes where input ex. changes {'a': 2, 'b': 3, 'c': {'b': 2, 'd': {'e': 5}}}
 # to {'a': 2, 'b': 3, 'c__b': 2, 'c__d__e': 5} to account for Django foreign key queryset
@@ -30,10 +35,6 @@ class UserType(DjangoObjectType):
         name = "User"
         exclude_fields = ["password"]
 
-    @classmethod
-    def permission_check(cls, info):
-        return info.context.user.has_perm("seaport.view_user")
-
 
 class UserWhereInput(InputObjectType):
     id = graphene.UUID()
@@ -57,10 +58,6 @@ class ProjectType(DjangoObjectType):
         model = Project
         name = "Project"
 
-    @classmethod
-    def permission_check(cls, info):
-        return info.context.user.has_perm("expenses.view_project")
-
 
 class ProjectWhereInput(InputObjectType):
     archived = graphene.Boolean()
@@ -70,10 +67,6 @@ class VendorType(DjangoObjectType):
     class Meta:
         model = Vendor
         name = "Vendor"
-
-    @classmethod
-    def permission_check(cls, info):
-        return info.context.user.has_perm("expenses.view_vendor")
 
 
 class VendorWhereInput(InputObjectType):
@@ -95,37 +88,24 @@ class RequisitionType(DjangoObjectType):
         model = Requisition
         name = "Requisition"
 
-    @classmethod
-    def permission_check(cls, info):
-        return info.context.user.has_perm("expenses.view_requisition")
-
 
 class RequisitionItemType(DjangoObjectType):
     class Meta:
         model = RequisitionItem
         name = "RequisitionItem"
 
-    @classmethod
-    def permission_check(cls, info):
-        return info.context.user.has_perm("expenses.view_requisition_item")
-
 
 class Query(graphene.ObjectType):
-    user = graphene.Field(UserType, id=graphene.ID())
+    user = graphene.Field(UserType, description="Get information about the current logged in user")
     users = graphene.List(UserType, where=UserWhereInput())
 
     def resolve_user(self, info, **kwargs):
-        print([group.name for group in info.context.user.groups.all()])
-
-        if UserType.permission_check(info):
-            return info.context.user
+        return UserController.get_user(info)
 
     def resolve_users(self, info, **kwargs):
         where = process_where_input(kwargs.get("where", {}))
 
-        if UserType.permission_check(info):
-            return auth.get_user_model().objects.filter(**where)
-        return None
+        return UserController.get_users(info, where)
 
     project = graphene.Field(ProjectType, year=graphene.Int(), short_code=graphene.String())
     projects = graphene.List(ProjectType, where=ProjectWhereInput())
@@ -134,15 +114,12 @@ class Query(graphene.ObjectType):
         year = kwargs.get("year")
         short_code = kwargs.get("short_code")
 
-        if ProjectType.permission_check(info):
-            return Project.objects.get(year=year, short_code=short_code)
+        return ProjectController.get_project(info, year, short_code)
 
     def resolve_projects(self, info, **kwargs):
         where = process_where_input(kwargs.get("where", {}))
 
-        if ProjectType.permission_check(info):
-            return Project.objects.filter(**where)
-        return None
+        return ProjectController.get_projects(info, where)
 
     vendor = graphene.Field(VendorType, id=graphene.ID())
     vendors = graphene.List(VendorType, where=VendorWhereInput())
@@ -150,15 +127,12 @@ class Query(graphene.ObjectType):
     def resolve_vendor(self, info, **kwargs):
         id = kwargs.get("id")
 
-        if VendorType.permission_check(info):
-            return Vendor.objects.get(id=id)
+        return VendorController.get_vendor(info, id)
 
     def resolve_vendors(self, info, **kwargs):
         where = process_where_input(kwargs.get("where", {}))
 
-        if VendorType.permission_check(info):
-            return Vendor.objects.filter(**where)
-        return None
+        return VendorController.get_vendors(info, where)
 
     requisition = graphene.Field(RequisitionType, year=graphene.Int(), short_code=graphene.String(), project_requisition_id=graphene.Int())
     requisitions = graphene.List(RequisitionType, description="Get requisitions created by this user for active projects")
@@ -168,20 +142,14 @@ class Query(graphene.ObjectType):
         short_code = kwargs.get("short_code")
         project_requisition_id = kwargs.get("project_requisition_id")
 
-        print(year, short_code, project_requisition_id)
-
-        if RequisitionType.permission_check(info):
-            return Requisition.objects.get(project__year=year, project__short_code=short_code, project_requisition_id=project_requisition_id)
+        return RequisitionController.get_requisition(info, year, short_code, project_requisition_id)
 
     def resolve_requisitions(self, info, **kwargs):
-        if RequisitionType.permission_check(info):
-            return Requisition.objects.filter(created_by=info.context.user, project__archived=False)
-        return None
+        return RequisitionController.get_requisitions(info)
 
     requisitionItem = graphene.Field(RequisitionItemType, id=graphene.ID(), description="Get requisition item by ID")
 
     def resolve_requisitionItem(self, info, **kwargs):
         id = kwargs.get("id")
 
-        if RequisitionItemType.permission_check(info):
-            return RequisitionItem.objects.get(id=id)
+        return RequisitionItemController.get_requisition_item(info, id)

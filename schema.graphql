@@ -14,6 +14,7 @@ type Project {
   shortCode: String!
   year: Int!
   requisitionSet: [Requisition!]!
+  referenceString: String
 }
 
 input ProjectWhereInput {
@@ -21,13 +22,13 @@ input ProjectWhereInput {
 }
 
 type Query {
-  user(id: ID): User
+  user: User
   users(where: UserWhereInput): [User]
-  project(id: ID): Project
+  project(year: Int, shortCode: String): Project
   projects(where: ProjectWhereInput): [Project]
   vendor(id: ID): Vendor
   vendors(where: VendorWhereInput): [Vendor]
-  requisition(id: ID): Requisition
+  requisition(year: Int, shortCode: String, projectRequisitionId: Int): Requisition
   requisitions: [Requisition]
   requisitionItem(id: ID): RequisitionItem
 }
@@ -46,11 +47,12 @@ type Requisition {
   paymentRequiredBy: DateTime!
   requisitionitemSet: [RequisitionItem!]!
   canEdit: Boolean
+  referenceString: String
 }
 
 type RequisitionItem {
   id: ID!
-  shortName: String!
+  name: String!
   requisition: Requisition!
   quantity: Int!
   unitPrice: Float!
