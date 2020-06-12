@@ -25,6 +25,7 @@ interface RequisitionFormState {
     project: string,
     paymentRequiredBy: string,
     vendor: string,
+    otherFees: number,
     items: RequisitionItem[]
 }
 
@@ -38,6 +39,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
             project: '',
             paymentRequiredBy: '',
             vendor: '',
+            otherFees: 0,
             items: [{
                 name: '',
                 unitPrice: 0,
@@ -113,7 +115,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                                     basic
                                 />
                                 <Form.Input
-                                    name='name'
+                                    name='headline'
                                     value={this.state.headline}
                                     onChange={this.handleChange}
                                     placeholder='Name...'
@@ -160,8 +162,8 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row columns={2}>
-                        <Grid.Column width={8}>
+                    <Grid.Row columns={3}>
+                        <Grid.Column>
                             <Form.Field required>
                                 <label>Vendor</label>
                                 <Popup
@@ -180,7 +182,7 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column width={8}>
+                        <Grid.Column>
                             <Form.Field required>
                                 <label>Payment Required By</label>
                                 <Popup
@@ -197,6 +199,24 @@ class RequisitionForm extends React.Component<RequisitionFormProps, RequisitionF
                                     dateFormat='M-DD-YYYY'
                                     // @ts-ignore - gets rid of flicker https://github.com/arfedulov/semantic-ui-calendar-react/issues/152
                                     animation={'none'}
+                                    required
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Form.Field required>
+                                <label>Other Fees</label>
+                                <Popup
+                                    content='Any other fees associated with this requisition. Such as shipping and handling, processing fees, etc.'
+                                    trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
+                                    basic
+                                />
+                                <Form.Input
+                                    name='otherFees'
+                                    value={this.state.otherFees || ''}
+                                    onChange={this.handleChange}
+                                    placeholder='Other fees...'
+                                    type="number"
                                     required
                                 />
                             </Form.Field>

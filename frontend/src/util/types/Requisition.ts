@@ -49,7 +49,31 @@ export type Requisition = {
     projectRequisitionId: number,
     paymentRequiredBy: Date,
     requisitionitemSet: RequisitionItem[],
-    referenceString: string
+    referenceString: string,
+    canEdit: boolean,
+    otherFees: number
+}
+
+// Sums up total costs for requisition items
+export const getTotalItemsCost = (requisition: Requisition): string => {
+    let total = 0;
+    for (const requisitionItem of requisition.requisitionitemSet) {
+        total += requisitionItem.quantity * requisitionItem.unitPrice
+    }
+
+    return total.toFixed(2);
+}
+
+// Sums up total costs for requisition items plus other fees
+export const getTotalCost = (requisition: Requisition): string => {
+    let total = 0;
+    for (const requisitionItem of requisition.requisitionitemSet) {
+        total += requisitionItem.quantity * requisitionItem.unitPrice
+    }
+
+    total += requisition.otherFees;
+
+    return total.toFixed(2)
 }
 
 export type RequisitionItem = {
@@ -71,6 +95,12 @@ export const OPEN_REQUISITIONS_QUERY = gql`
             project {
                 referenceString
             }
+            requisitionitemSet {
+                id
+                quantity
+                unitPrice
+            }
+            otherFees
         }
     }`;
 
@@ -104,5 +134,6 @@ export const REQUISITION_DETAIL_QUERY = gql`
             }
             canEdit
             referenceString
+            otherFees
         }
     }`

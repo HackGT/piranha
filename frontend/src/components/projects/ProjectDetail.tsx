@@ -38,9 +38,10 @@ const ProjectDetail: React.FC<{}> = (props) => {
                     <Table basic="very">
                         <Table.Header>
                             <Table.Row>
-                                <Table.HeaderCell textAlign='center' width={5}>Requisition</Table.HeaderCell>
+                                <Table.HeaderCell textAlign='center' width={4}>Requisition</Table.HeaderCell>
                                 <Table.HeaderCell textAlign='center' width={6}>Headline</Table.HeaderCell>
-                                <Table.HeaderCell textAlign='center' width={5}>Status</Table.HeaderCell>
+                                <Table.HeaderCell textAlign='center' width={3}>Overall Cost</Table.HeaderCell>
+                                <Table.HeaderCell textAlign='center' width={3}>Status</Table.HeaderCell>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
