@@ -1,9 +1,11 @@
 import React, {Fragment} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, Link, useLocation} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import LoadingSpinner from "../../util/LoadingSpinner";
-import {Grid, Header, Item, Label, Message, Segment} from "semantic-ui-react";
+import {Divider, Grid, Header, Item, Label, Message, Segment, Table} from "semantic-ui-react";
 import {
+    getTotalCost,
+    getTotalItemsCost,
     Requisition,
     REQUISITION_DETAIL_QUERY,
     RequisitionItem,
@@ -19,6 +21,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
 
     let projectRequisitionId: number = parseInt(requisitionReference || "");
 
+    const location = useLocation();
     const {loading, data, error} = useQuery(REQUISITION_DETAIL_QUERY, {
         variables: {year, shortCode, projectRequisitionId}
     });
@@ -38,10 +41,21 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     return (
         <Fragment>
             <Grid stackable>
-                <Grid.Row>
+                <Grid.Row columns={requisitionData.canEdit ? 2 : 1}>
                     <Grid.Column>
-                        <Label color={StatusToColor(requisitionData.status)}>{StatusToString(requisitionData.status)}</Label>
+                        <Label
+                            size="large"
+                            color={StatusToColor(requisitionData.status)}>{StatusToString(requisitionData.status)}</Label>
                     </Grid.Column>
+                    {requisitionData.canEdit ?
+                        <Grid.Column textAlign="right">
+                            <Link to={location.pathname.replace(/\/+$/, '') + "/edit"}>
+                                <Label as="a" color="blue" size="large">Edit Requisition</Label>
+                            </Link>
+                        </Grid.Column>
+                        : ""
+                    }
+                    <Grid.Column></Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={2}>
                     <Grid.Column>
@@ -54,12 +68,17 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                 <Grid.Row>
                     <Grid.Column>
                         <Item>
-                            <Item.Header as="h4">Description</Item.Header>
                             <Item.Description>{requisitionData.description}</Item.Description>
                         </Item>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row columns={2} textAlign={"center"} divided>
+                <Grid.Row columns={3} textAlign={"center"} divided>
+                    <Grid.Column>
+                        <Item>
+                            <Item.Header as="h4">Vendor</Item.Header>
+                            <Item.Description>{requisitionData.vendor.name}</Item.Description>
+                        </Item>
+                    </Grid.Column>
                     <Grid.Column>
                         <Item>
                             <Item.Header as="h4">Payment Required By</Item.Header>
@@ -68,19 +87,42 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                     </Grid.Column>
                     <Grid.Column>
                         <Item>
-                            <Item.Header as="h4">Vendor</Item.Header>
-                            <Item.Description>{requisitionData.vendor.name}</Item.Description>
+                            <Item.Header as="h4">Submitted By</Item.Header>
+                            <Item.Description>{requisitionData.createdBy.preferredName} {requisitionData.createdBy.lastName}</Item.Description>
                         </Item>
                     </Grid.Column>
+                </Grid.Row>
+                <Divider />
+                <Grid.Row>
+                    <Grid.Column width={3} />
+                    <Grid.Column width={10} textAlign="center">
+                        <Table textAlign="center" celled>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>Total Item Costs</Table.HeaderCell>
+                                    <Table.HeaderCell>Other Fees</Table.HeaderCell>
+                                    <Table.HeaderCell>Overall Cost</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>${getTotalItemsCost(requisitionData)}</Table.Cell>
+                                    <Table.Cell>${requisitionData.otherFees.toFixed(2)}</Table.Cell>
+                                    <Table.Cell>${getTotalCost(requisitionData)}</Table.Cell>
+                                </Table.Row>
+                            </Table.Body>
+                        </Table>
+                    </Grid.Column>
+                    <Grid.Column width={3} />
                 </Grid.Row>
             </Grid>
             {requisitionData.requisitionitemSet.map((item: RequisitionItem) =>
                 <Fragment>
                     <Header as="h3" attached="top">
-                        {item.name}
+                        {item.name} - <a href={item.link} target="_blank" rel="noopener noreferrer">View</a>
                     </Header>
-                    <Segment attached="bottom">
-                        <Grid>
+                    <Segment attached>
+                        <Grid stackable>
                             <Grid.Row columns={3} textAlign="center" divided>
                                 <Grid.Column>
                                     <Item>
@@ -91,32 +133,27 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                                 <Grid.Column>
                                     <Item>
                                         <Item.Header as="h4">Unit Price</Item.Header>
-                                        <Item.Description>${item.unitPrice}</Item.Description>
+                                        <Item.Description>${item.unitPrice.toFixed(2)}</Item.Description>
                                     </Item>
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Item>
-                                        <Item.Header as="h4">Link</Item.Header>
-                                        <Item.Description>{item.link}</Item.Description>
+                                        <Item.Header as="h4">Subtotal</Item.Header>
+                                        <Item.Description>${(item.quantity * item.unitPrice).toFixed(2)}</Item.Description>
                                     </Item>
                                 </Grid.Column>
                             </Grid.Row>
-                            {item.notes ?
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        <Item>
-                                            <Item.Header as="h4">Notes</Item.Header>
-                                            <Item.Description>{item.notes}</Item.Description>
-                                        </Item>
-                                    </Grid.Column>
-                                </Grid.Row>
-                                : ""
-                            }
                         </Grid>
+                    </Segment>
+                    <Segment attached="bottom">
+                        <Item>
+                            <Item.Header as="h4">Notes</Item.Header>
+                            <Item.Description>{item.notes}</Item.Description>
+                        </Item>
                     </Segment>
                 </Fragment>
             )}
-            <div style={{height: "30px"}} />
+            <div style={{height: "30px"}}/>
         </Fragment>
     )
 }

@@ -95,8 +95,8 @@ const RequisitionItemSegment: React.FunctionComponent<RequisitionItemSegmentProp
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={16}>
-                            <Form.Field>
-                                <label>Notes </label>
+                            <Form.Field required>
+                                <label>Notes</label>
                                 <Popup
                                     content='Any notes about the item such as specific colors or sizes.'
                                     trigger={<Icon style={{cursor: 'help'}} name='question circle outline' />}
@@ -107,6 +107,7 @@ const RequisitionItemSegment: React.FunctionComponent<RequisitionItemSegmentProp
                                     value={props.data.notes}
                                     placeholder='Notes...'
                                     onChange={props.onChange}
+                                    required
                                 />
                             </Form.Field>
                         </Grid.Column>

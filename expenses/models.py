@@ -50,6 +50,7 @@ class Requisition(TimestampedModel):
     vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     project_requisition_id = PositiveIntegerField()
     payment_required_by = DateTimeField()
+    other_fees = DecimalField(max_digits=15, decimal_places=4)
 
     class Meta:
         rules_permissions = {
