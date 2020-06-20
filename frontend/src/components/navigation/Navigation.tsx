@@ -1,38 +1,72 @@
-import React, {useState} from "react";
-import {Button, Menu, Responsive, Sidebar} from "semantic-ui-react";
-import NavPages from "./NavPages";
-import NavPagesMenu from "./NavPagesMenu";
+import React, {useEffect, useState} from "react";
+import {Drawer, Menu, Button, Typography} from "antd";
+import {MenuOutlined} from "@ant-design/icons/lib";
+import {Link} from "react-router-dom";
 
-// Partially inspired by https://stackoverflow.com/a/46316014
+class Page {
+    name: string;
+    link: string;
+
+    constructor(name: string, link: string) {
+        this.name = name;
+        this.link = link;
+    }
+}
+
+export const routes = [
+    new Page("Home", "/"),
+    new Page("Requisition", "/requisition")
+];
+
 const Navigation = (props: any) => {
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [width, setWidth] = useState(window.innerWidth);
 
-    return <>
-        <Sidebar
-            as={Menu}
-            animation="overlay"
-            direction="left"
-            icon="labeled"
-            inverted
-            onHide={() => setSidebarVisible(false)}
-            vertical
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    });
+
+    return <div style={{direction: "rtl"}}>
+        <Drawer
+            title="Menu"
+            placement="left"
+            closable={true}
+            onClose={() => setSidebarVisible(false)}
             visible={sidebarVisible}
-            width="thin"
         >
-            <NavPages inSidebar onClick={() => setSidebarVisible(false)}/>
-        </Sidebar>
+            <Menu mode="vertical" style={{borderRight: "None"}} selectable={false}>
+                {routes.map((route: Page) =>
+                    <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)
+                }
+            </Menu>
+        </Drawer>
 
-        <Sidebar.Pusher style={{marginBottom: 30}} dimmed={sidebarVisible}>
-            <Responsive maxWidth={767}>
-                <NavPagesMenu mobile>
-                    <Menu.Item as={Button} link onClick={() => setSidebarVisible(!sidebarVisible)}>Menu</Menu.Item>
-                </NavPagesMenu>
-            </Responsive>
-            <Responsive minWidth={768}>
-                <NavPagesMenu/>
-            </Responsive>
-        </Sidebar.Pusher>
-    </>;
+        <div id="logo" style={{
+            float: 'left'
+        }}>
+            <Typography.Title level={3} style={{
+                marginBottom: '2px',
+                display: 'inline-block',
+                color: 'white',
+                verticalAlign: 'middle',
+                letterSpacing: '7px'
+            }}>PIRANHA</Typography.Title>
+        </div>
+
+        {width < 768 ?
+            <Button style={{textAlign: "right"}} icon={<MenuOutlined/>} type="link"
+                    onClick={() => setSidebarVisible(true)}/>
+            : <Menu theme="dark" mode="horizontal" selectable={false}>
+                {routes.slice().reverse().map((route: Page) =>
+                    <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)
+                }
+            </Menu>
+        }
+    </div>;
 };
 
 export default Navigation;
