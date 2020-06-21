@@ -6,18 +6,21 @@ import Requisition from "./components/requisition/Requisition";
 import ProjectDetail from "./components/projects/ProjectDetail";
 import RequisitionDetail from "./components/requisition/RequisitionDetail";
 
+import './App.css';
+
 import {Layout} from 'antd';
 import {HeartOutlined} from "@ant-design/icons";
+
 const {Header, Content, Footer} = Layout;
 
 function App() {
     return (
         <Router>
             <Layout className="App" style={{minHeight: '100vh'}}>
-                <Header>
+                <Header style={{padding: '0px 30px'}}>
                     <Navigation/>
                 </Header>
-                <Content style={{padding: '30px 30px 0 30px', display: 'flex', flexDirection: 'column'}}>
+                <Content id='wrapper'>
                     <div style={{background: '#fff', padding: '24px', flexGrow: 1}}>
                         <Switch>
                             <Route path="/project/:projectReference/requisition/:requisitionReference"
