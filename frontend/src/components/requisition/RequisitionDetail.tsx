@@ -3,14 +3,8 @@ import {useParams, Link, useLocation} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import LoadingSpinner from "../../util/LoadingSpinner";
 import {Divider, Grid, Header, Item, Label, Message, Segment, Table} from "semantic-ui-react";
-import {
-    getTotalCost,
-    getTotalItemsCost,
-    Requisition,
-    REQUISITION_DETAIL_QUERY,
-    RequisitionItem,
-    StatusToString
-} from "../../util/types/Requisition";
+import {Requisition, REQUISITION_DETAIL_QUERY, RequisitionItem} from "../../util/types/Requisition";
+import {formatPrice, getTotalCost, StatusToString} from "../../util/util";
 import moment from "moment";
 
 const RequisitionDetail: React.FC<{}> = (props) => {
@@ -44,7 +38,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                     <Grid.Column>
                         <Label
                             size="large"
-                            >{StatusToString(requisitionData.status)}</Label>
+                        >{StatusToString(requisitionData.status)}</Label>
                     </Grid.Column>
                     {requisitionData.canEdit ?
                         <Grid.Column textAlign="right">
@@ -91,9 +85,9 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                         </Item>
                     </Grid.Column>
                 </Grid.Row>
-                <Divider />
+                <Divider/>
                 <Grid.Row>
-                    <Grid.Column width={3} />
+                    <Grid.Column width={3}/>
                     <Grid.Column width={10} textAlign="center">
                         <Table textAlign="center" celled>
                             <Table.Header>
@@ -105,14 +99,14 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                             </Table.Header>
                             <Table.Body>
                                 <Table.Row>
-                                    <Table.Cell>${getTotalItemsCost(requisitionData)}</Table.Cell>
-                                    <Table.Cell>${requisitionData.otherFees.toFixed(2)}</Table.Cell>
-                                    <Table.Cell>${getTotalCost(requisitionData)}</Table.Cell>
+                                    <Table.Cell>${formatPrice(getTotalCost(requisitionData, false))}</Table.Cell>
+                                    <Table.Cell>${formatPrice(requisitionData.otherFees)}</Table.Cell>
+                                    <Table.Cell>${formatPrice(getTotalCost(requisitionData, true))}</Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table>
                     </Grid.Column>
-                    <Grid.Column width={3} />
+                    <Grid.Column width={3}/>
                 </Grid.Row>
             </Grid>
             {requisitionData.requisitionitemSet.map((item: RequisitionItem) =>
@@ -132,13 +126,13 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                                 <Grid.Column>
                                     <Item>
                                         <Item.Header as="h4">Unit Price</Item.Header>
-                                        <Item.Description>${item.unitPrice.toFixed(2)}</Item.Description>
+                                        <Item.Description>{formatPrice(item.unitPrice)}</Item.Description>
                                     </Item>
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Item>
                                         <Item.Header as="h4">Subtotal</Item.Header>
-                                        <Item.Description>${(item.quantity * item.unitPrice).toFixed(2)}</Item.Description>
+                                        <Item.Description>{formatPrice(item.quantity * item.unitPrice)}</Item.Description>
                                     </Item>
                                 </Grid.Column>
                             </Grid.Row>
