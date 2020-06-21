@@ -1,8 +1,6 @@
 import React from "react";
-import {
-    getTotalCost, getTotalItemsCost,
-    Requisition, RequisitionItem,
-} from "../../util/types/Requisition";
+import {Requisition, RequisitionItem} from "../../util/types/Requisition";
+import {formatPrice, getTotalCost} from "../../util/util";
 
 import {Typography, Table} from 'antd';
 
@@ -36,7 +34,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
             title: 'Quantity',
             render: (text: number, record: RequisitionItem, index: number) => {
                 if (index % 2 === 0) {
-                    return record.quantity + ' @ $' + record.unitPrice.toFixed(2);
+                    return record.quantity + ' @ ' + formatPrice(record.unitPrice);
                 }
                 return {
                     props: {
@@ -49,7 +47,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
             title: 'Subtotal',
             render: (text: string, record: RequisitionItem, index: number) => {
                 if (index % 2 === 0) {
-                    return '$' + (record.quantity * record.unitPrice).toFixed(2)
+                    return formatPrice(record.quantity * record.unitPrice)
                 }
                 return {
                     props: {
@@ -81,7 +79,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                                 <Text strong>Subtotal</Text>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell index={2}>
-                                <Text strong>{getTotalItemsCost(props.data)}</Text>
+                                <Text strong>{formatPrice(getTotalCost(props.data, false))}</Text>
                             </Table.Summary.Cell>
                         </Table.Summary.Row>
                         <Table.Summary.Row>
@@ -89,7 +87,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                                 <Text>Other Fees</Text>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell index={2}>
-                                <Text>{'$' + props.data.otherFees.toFixed(2)}</Text>
+                                <Text>{formatPrice(props.data.otherFees)}</Text>
                             </Table.Summary.Cell>
                         </Table.Summary.Row>
                         <Table.Summary.Row>
@@ -97,7 +95,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                                 <Text strong>Total</Text>
                             </Table.Summary.Cell>
                             <Table.Summary.Cell index={2}>
-                                <Text strong>{getTotalCost(props.data)}</Text>
+                                <Text strong>{formatPrice(getTotalCost(props.data, true))}</Text>
                             </Table.Summary.Cell>
                         </Table.Summary.Row>
                     </>

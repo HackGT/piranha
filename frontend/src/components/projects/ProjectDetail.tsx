@@ -2,13 +2,8 @@ import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import {PROJECT_DETAIL_QUERY} from "../../util/types/Project";
-import {
-    getTotalCost,
-    Requisition,
-    RequisitionStatus,
-    StatusToColor, StatusToStep,
-    StatusToString
-} from "../../util/types/Requisition";
+import {Requisition, RequisitionStatus,} from "../../util/types/Requisition";
+import {formatPrice, getTotalCost, StatusToColor, StatusToStep, StatusToString} from "../../util/util";
 
 import {Typography, Row, Col, Table, Tag, Button, Steps} from 'antd';
 import moment from "moment";
@@ -60,7 +55,7 @@ const ProjectDetail: React.FC<{}> = (props) => {
         },
         {
             title: 'Total Cost',
-            render: (record: Requisition) => getTotalCost(record),
+            render: (record: Requisition) => formatPrice(getTotalCost(record, true)),
             responsive: ['md'] as Breakpoint[]
         },
         {

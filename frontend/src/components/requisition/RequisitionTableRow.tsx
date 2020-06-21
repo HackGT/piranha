@@ -1,6 +1,7 @@
 import React from "react";
 import {Label, Table} from "semantic-ui-react";
-import {getTotalCost, Requisition, StatusToString} from "../../util/types/Requisition";
+import {Requisition} from "../../util/types/Requisition";
+import {formatPrice, getTotalCost, StatusToString} from "../../util/util";
 import {Link} from "react-router-dom";
 
 interface RequisitionTableRowProps {
@@ -20,7 +21,7 @@ const RequisitionTableRow: React.FC<RequisitionTableRowProps> = (props) => {
                 </Link>
             </Table.Cell>
             <Table.Cell textAlign='center' width={6}>{props.data.headline}</Table.Cell>
-            <Table.Cell textAlign='center' width={3}>${getTotalCost(props.data)}</Table.Cell>
+            <Table.Cell textAlign='center' width={3}>${formatPrice(getTotalCost(props.data, true))}</Table.Cell>
             <Table.Cell textAlign='center' width={3}><Label>{statusString}</Label></Table.Cell>
         </Table.Row>
 

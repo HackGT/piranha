@@ -10,7 +10,7 @@ const Requisition: React.FunctionComponent<{}> = (props) => {
     const {loading, data, error} = useQuery(PROJECTS_QUERY);
 
     if (loading) {
-        return <LoadingSpinner active={true} message={"Loading data..."}/>;
+        return <LoadingSpinner active message={"Loading data..."}/>;
     }
 
     if (error) {
