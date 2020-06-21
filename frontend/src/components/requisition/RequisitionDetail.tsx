@@ -9,7 +9,6 @@ import {
     Requisition,
     REQUISITION_DETAIL_QUERY,
     RequisitionItem,
-    StatusToColor,
     StatusToString
 } from "../../util/types/Requisition";
 import moment from "moment";
@@ -45,7 +44,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                     <Grid.Column>
                         <Label
                             size="large"
-                            color={StatusToColor(requisitionData.status)}>{StatusToString(requisitionData.status)}</Label>
+                            >{StatusToString(requisitionData.status)}</Label>
                     </Grid.Column>
                     {requisitionData.canEdit ?
                         <Grid.Column textAlign="right">

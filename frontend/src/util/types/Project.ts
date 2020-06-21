@@ -43,15 +43,29 @@ export const PROJECT_DETAIL_QUERY = gql`
                 projectRequisitionId
                 headline
                 status
+                description
+                canEdit
+                otherFees
+                paymentRequiredBy
+                createdBy {
+                    preferredName
+                    lastName
+                }
+                vendor {
+                    id
+                    name
+                }
                 project {
                     referenceString
                 }
                 requisitionitemSet {
                     id
+                    name
                     quantity
                     unitPrice
+                    link
+                    notes
                 }
-                otherFees
             }
             leads {
                 preferredName

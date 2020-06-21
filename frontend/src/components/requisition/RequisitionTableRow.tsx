@@ -1,6 +1,6 @@
 import React from "react";
 import {Label, Table} from "semantic-ui-react";
-import {getTotalCost, Requisition, StatusToColor, StatusToString} from "../../util/types/Requisition";
+import {getTotalCost, Requisition, StatusToString} from "../../util/types/Requisition";
 import {Link} from "react-router-dom";
 
 interface RequisitionTableRowProps {
@@ -9,7 +9,6 @@ interface RequisitionTableRowProps {
 
 const RequisitionTableRow: React.FC<RequisitionTableRowProps> = (props) => {
     let statusString = StatusToString(props.data.status);
-    let color = StatusToColor(props.data.status);
 
     let navigationUrl = `/project/${props.data.project.referenceString}/requisition/${props.data.projectRequisitionId}`
 
@@ -22,7 +21,7 @@ const RequisitionTableRow: React.FC<RequisitionTableRowProps> = (props) => {
             </Table.Cell>
             <Table.Cell textAlign='center' width={6}>{props.data.headline}</Table.Cell>
             <Table.Cell textAlign='center' width={3}>${getTotalCost(props.data)}</Table.Cell>
-            <Table.Cell textAlign='center' width={3}><Label color={color}>{statusString}</Label></Table.Cell>
+            <Table.Cell textAlign='center' width={3}><Label>{statusString}</Label></Table.Cell>
         </Table.Row>
 
     )
