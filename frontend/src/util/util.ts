@@ -38,7 +38,7 @@ export const StatusToStep = (status: RequisitionStatus) => {
 }
 
 export const formatPrice = (num: number) => {
-    return '$' + num.toFixed(2);
+    return '$' + num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean) => {

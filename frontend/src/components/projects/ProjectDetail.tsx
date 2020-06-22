@@ -1,18 +1,26 @@
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
-import {PROJECT_DETAIL_QUERY} from "../../util/types/Project";
-import {Requisition, RequisitionStatus,} from "../../util/types/Requisition";
-import {formatPrice, getTotalCost, StatusToColor, StatusToStep, StatusToString} from "../../util/util";
-
-import {Typography, Row, Col, Table, Tag, Button, Steps} from 'antd';
-import moment from "moment";
+import {Typography, Table, Tag, Button} from "antd";
 import {Breakpoint} from "antd/es/_util/responsiveObserve";
-import RequisitionItemsTable from "./RequisitionItemsTable";
-import {Gutter} from "antd/es/grid/row";
 
-const {Title, Text, Link} = Typography;
-const {Step} = Steps;
+import {PROJECT_DETAIL_QUERY} from "../../util/types/Project";
+import {Requisition} from "../../util/types/Requisition";
+import {formatPrice, getTotalCost, StatusToColor, StatusToString} from "../../util/util";
+
+import './Projects.css';
+
+const {Text, Link} = Typography;
+
+type RequisitionTableData = {
+    key: number,
+    children: {
+        key: string,
+        nameElement: any,
+        cost: string,
+        isChild: true // Dummy value to check if record is child or header
+    }[]
+} & Requisition;
 
 const ProjectDetail: React.FC<{}> = (props) => {
     let [expandedRows, setExpandedRows] = useState<number[]>([]);
@@ -45,95 +53,97 @@ const ProjectDetail: React.FC<{}> = (props) => {
     const columns = [
         {
             title: 'Id',
-            dataIndex: 'projectRequisitionId',
-            responsive: ['md'] as Breakpoint[]
+            responsive: ['md'] as Breakpoint[],
+            render: (record: any) => "isChild" in record ?  null : record.projectRequisitionId
         },
         {
-            title: 'Headline',
-            dataIndex: 'headline',
-            ellipsis: true
-        },
-        {
-            title: 'Total Cost',
-            render: (record: Requisition) => formatPrice(getTotalCost(record, true)),
-            responsive: ['md'] as Breakpoint[]
+            title: 'Name',
+            ellipsis: true,
+            render: (record: any) => {
+                if ("isChild" in record) {
+                    return {
+                        children: record.nameElement,
+                        props: {
+                            colSpan: 2
+                        }
+                    }
+                }
+                return <Link href={`/requisition/${record.referenceString}`} strong>{record.headline}</Link>
+            }
         },
         {
             title: 'Status',
-            dataIndex: 'status',
-            render: (status: RequisitionStatus) => (
-                <Tag color={StatusToColor(status)}>{StatusToString(status)}</Tag>
-            ),
+            render: (record: any) => {
+                if ("isChild" in record) {
+                    return {
+                        props: {
+                            colSpan: 0
+                        }
+                    }
+                }
+                return <Tag color={StatusToColor(record.status)}>{StatusToString(record.status)}</Tag>
+            }
+        },
+        {
+            title: 'Total Cost',
+            render: (record: any) => "isChild" in record ? record.cost : formatPrice(getTotalCost(record, true))
         },
         {
             title: 'Action',
-            dataIndex: 'canEdit',
-            render: (canEdit: boolean, record: Requisition) => canEdit ? (
-                <Link href={'/requisition/' + record.referenceString}>Edit</Link>
-            ) : null,
+            render: (record: any) => "isChild" in record || !record.canEdit ? null : <Link href={`/requisition/${record.referenceString}/edit`}>Edit</Link>
         }
     ];
 
-    const rows: Requisition[] = data ? data.project.requisitionSet.concat().sort((first: Requisition, second: Requisition) => {
+    const sortedData: Requisition[] = data ? data.project.requisitionSet.concat().sort((first: Requisition, second: Requisition) => {
         return first.projectRequisitionId - second.projectRequisitionId
     }) : [];
+
+    const rows: RequisitionTableData[] = sortedData.map(requisition => {
+        let row: RequisitionTableData = {
+            key: requisition.projectRequisitionId,
+            children: requisition.requisitionitemSet.map((item, index) => {
+                return {
+                    key: requisition.projectRequisitionId.toString() + '-' + index,
+                    nameElement: (
+                        <>
+                            <Link className="table-first-element" href={item.link} target="_blank">{item.name}</Link>
+                            <Text>: {item.quantity} @ {formatPrice(item.unitPrice)}</Text>
+                        </>
+                    ),
+                    cost: formatPrice(item.quantity * item.unitPrice),
+                    isChild: true
+                }
+            }),
+            ...requisition
+        };
+
+        if (requisition.otherFees !== 0) {
+            row.children.push({
+                key: requisition.projectRequisitionId + '-otherFees',
+                nameElement: <Text className="table-first-element">Other Fees</Text>,
+                cost: formatPrice(requisition.otherFees),
+                isChild: true
+            })
+        }
+
+        return row;
+    })
 
     const handleRowsButton = () => {
         if (expandedRows.length === rows.length) {
             setExpandedRows([]);
         } else {
-            const rowKeys = rows.map((data: Requisition) => data.projectRequisitionId)
+            const rowKeys = rows.map(data => data.projectRequisitionId)
             setExpandedRows(rowKeys);
         }
     }
 
-    const onRowExpand = (expanded: boolean, record: Requisition) => {
+    const onRowExpand = (expanded: boolean, record: RequisitionTableData) => {
         if (expanded) {
             setExpandedRows(expandedRows.concat([record.projectRequisitionId]))
         } else {
             setExpandedRows(expandedRows.filter(item => item !== record.projectRequisitionId))
         }
-    }
-
-    const expandRow = (data: Requisition) => {
-        const gutter = [{xs: 8, sm: 16, md: 24, lg: 32}, {xs: 4, sm: 8, md: 12, lg: 16}] as [Gutter, Gutter];
-
-        return (
-            <div>
-                <Row gutter={gutter}>
-                    <Col span={21} offset={1}>
-                        <Steps current={StatusToStep(data.status)} progressDot>
-                            <Step title="Draft"/>
-                            <Step title="Submitted"/>
-                            <Step title="Ready to Order"/>
-                            <Step title="Ordered"/>
-                            <Step title="Received"/>
-                        </Steps>
-                    </Col>
-                </Row>
-                <Row gutter={gutter}>
-                    <Col offset={1}>
-                        <Text strong>{data.description}</Text>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={14} offset={1}>
-                        <Text/>
-                        <RequisitionItemsTable data={data}/>
-                    </Col>
-                    <Col span={9}>
-                        <Typography style={{textAlign: 'center'}}>
-                            <Title level={4} style={{fontSize: '15px'}}>Payment Required By</Title>
-                            <Text>{moment(data.paymentRequiredBy).format('dddd, MMMM Do, YYYY')}</Text>
-                            <Title level={4} style={{fontSize: '15px'}}>Created By</Title>
-                            <Text>{data.createdBy.preferredName} {data.createdBy.lastName}</Text>
-                            <Title level={4} style={{fontSize: '15px'}}>Vendor</Title>
-                            <Text>{data.vendor.name}</Text>
-                        </Typography>
-                    </Col>
-                </Row>
-            </div>
-        )
     }
 
     return (
@@ -144,21 +154,21 @@ const ProjectDetail: React.FC<{}> = (props) => {
                 dataSource={rows}
                 pagination={false}
                 loading={loading}
-                expandedRowKeys={expandedRows}
-                rowKey={(record: Requisition) => record.projectRequisitionId}
                 footer={() => (
                     <Button
-                        onClick={handleRowsButton}>{expandedRows.length === rows.length ? "Collapse All" : "Expand All"}</Button>
+                        onClick={handleRowsButton}>{expandedRows.length === rows.length ? "Hide" : "Show"} Details</Button>
                 )}
+                expandedRowKeys={expandedRows}
                 expandable={{
-                    expandedRowRender: expandRow,
                     expandRowByClick: true,
                     onExpand: onRowExpand,
+                    indentSize: 1
                 }}
                 scroll={{
                     x: true
                 }}
                 size={mobileWidth ? "small" : undefined}
+                id="project-detail-table"
             />
         </>
     )
