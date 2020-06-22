@@ -8,23 +8,3 @@
         padding: 30px 30px 0 30px;
     }
 }
-
-@media screen and (max-width: 425px) {
-    .ant-table-cell.ant-table-row-expand-icon-cell {
-        display: none;
-    }
-
-    /* Force table to not be like tables anymore */
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    td, th {
-        border-bottom: none !important;
-        text-align: center !important;
-    }
-
-    tr {
-        border-bottom: 1px solid #eee;
-    }
-}
