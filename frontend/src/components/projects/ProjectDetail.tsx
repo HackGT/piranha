@@ -6,7 +6,7 @@ import {Breakpoint} from "antd/es/_util/responsiveObserve";
 
 import {PROJECT_DETAIL_QUERY} from "../../util/types/Project";
 import {Requisition} from "../../util/types/Requisition";
-import {formatPrice, getTotalCost, StatusToColor, StatusToString} from "../../util/util";
+import {formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook} from "../../util/util";
 
 import './Projects.css';
 
@@ -24,15 +24,9 @@ type RequisitionTableData = {
 
 const ProjectDetail: React.FC<{}> = (props) => {
     let [expandedRows, setExpandedRows] = useState<number[]>([]);
-    let [mobileWidth, setMobileWidth] = useState(window.innerWidth < 768);
+    let [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-    useEffect(() => {
-        const handleResize = () => setMobileWidth(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    });
+    useEffect(screenWidthHook(setScreenWidth));
 
     let {projectReference} = useParams();
     let [year, shortCode] = (projectReference || "").split("-");
@@ -68,7 +62,7 @@ const ProjectDetail: React.FC<{}> = (props) => {
                         }
                     }
                 }
-                return <Link href={`/requisition/${record.referenceString}`} strong>{record.headline}</Link>
+                return <Link href={`/project/${projectReference}/requisition/${record.projectRequisitionId}`} strong>{record.headline}</Link>
             }
         },
         {
@@ -90,7 +84,12 @@ const ProjectDetail: React.FC<{}> = (props) => {
         },
         {
             title: 'Action',
-            render: (record: any) => "isChild" in record || !record.canEdit ? null : <Link href={`/requisition/${record.referenceString}/edit`}>Edit</Link>
+            render: (record: any) => {
+                if ("isChild" in record || !record.canEdit) {
+                    return null;
+                }
+                return <Link href={`/project/${projectReference}/requisition/${record.projectRequisitionId}/edit`}>Edit</Link>
+            }
         }
     ];
 
@@ -167,7 +166,7 @@ const ProjectDetail: React.FC<{}> = (props) => {
                 scroll={{
                     x: true
                 }}
-                size={mobileWidth ? "small" : undefined}
+                size={screenWidth < 768 ? "small" : undefined}
                 id="project-detail-table"
             />
         </>

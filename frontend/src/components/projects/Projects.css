@@ -3,21 +3,23 @@
 }
 
 #project-detail-table tr.ant-table-row-level-1 > td {
+    /* Make requisition items look smaller */
     padding-top: 8px;
     padding-bottom: 8px;
 }
 
 @media screen and (max-width: 525px) {
+    /* Hide expand/collapse icon */
     #project-detail-table .ant-table-row-expand-icon {
         display: none;
     }
 
     /* Force table to not be like tables anymore */
-    #project-detail-table thead, tbody, th, td, tr {
+    #project-detail-table thead, #project-detail-table tbody, #project-detail-table th, #project-detail-table td, #project-detail-table tr {
         display: block;
     }
 
-    #project-detail-table td, th {
+    #project-detail-table td, #project-detail-table th {
         border-bottom: none !important;
         text-align: center !important;
     }
@@ -32,6 +34,7 @@
 }
 
 @media screen and (min-width: 525px) {
+    /* Add indent margin for requisition items */
     #project-detail-table tr.ant-table-row-level-1 .table-first-element {
         margin-left: 15px;
     }

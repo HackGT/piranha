@@ -70,6 +70,9 @@ export const REQUISITION_DETAIL_QUERY = gql`
             }
             project {
                 name
+                requisitionSet {
+                    projectRequisitionId
+                }
             }
             vendor {
                 id
