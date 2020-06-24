@@ -1,0 +1,15 @@
+#requisition-detail-list {
+    margin-top: 15px;
+    margin-right: 15px;
+}
+
+#requisition-detail-list .ant-card-head-title {
+    overflow: auto;
+    white-space: unset;
+    text-overflow: unset;
+}
+
+.requisition-action-button {
+    margin-right: 15px;
+    margin-bottom: 15px;
+}

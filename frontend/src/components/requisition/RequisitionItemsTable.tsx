@@ -8,6 +8,7 @@ const {Text, Link} = Typography;
 
 interface Props {
     data: Requisition;
+    loading: boolean;
 }
 
 const RequisitionItemsTable: React.FC<Props> = (props) => {
@@ -59,20 +60,22 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
     ]
 
     // Duplicates the rows so every other row can be used for the notes
-    const rows = props.data.requisitionitemSet.flatMap(item => [item, item])
+    const rows = props.loading ? [] : props.data.requisitionitemSet.flatMap(item => [item, item])
 
     return (
         <Table
             columns={columns}
             dataSource={rows}
             pagination={false}
+            loading={props.loading}
             size="small"
             bordered={true}
             scroll={{
                 x: true
             }}
             summary={(items: RequisitionItem[]) => {
-                return (
+                return props.loading ? null :
+                (
                     <>
                         <Table.Summary.Row>
                             <Table.Summary.Cell index={1} colSpan={2}>

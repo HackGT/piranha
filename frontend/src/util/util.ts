@@ -1,5 +1,6 @@
 import {Requisition, RequisitionStatus} from "./types/Requisition";
 import {PresetColorType} from "antd/es/_util/colors";
+import React from "react";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType => {
     switch (status) {
@@ -22,6 +23,7 @@ export const StatusToString = (status: RequisitionStatus) => {
         case "ORDERED": return "Ordered"
         case "RECEIVED": return "Received"
         case "CANCELLED": return "Cancelled"
+        default: return "Unknown"
     }
 }
 
@@ -45,4 +47,12 @@ export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean
     let total = requisition.requisitionitemSet.map(item => item.quantity * item.unitPrice).reduce((prev, curr) => prev + curr, 0);
 
     return includeOtherFees ? total + requisition.otherFees : total;
+}
+
+export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAction<number>>) => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
 }
