@@ -10,7 +10,7 @@ import {formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHoo
 
 import './Projects.css';
 
-const {Text, Link} = Typography;
+const {Text, Title, Link} = Typography;
 
 type RequisitionTableData = {
     key: number,
@@ -147,7 +147,7 @@ const ProjectDetail: React.FC<{}> = (props) => {
 
     return (
         <>
-            <Typography.Title>{data ? data.project.name : "Loading..."}</Typography.Title>
+            <Title>{data ? data.project.name : "Loading..."}</Title>
             <Table
                 columns={columns}
                 dataSource={rows}

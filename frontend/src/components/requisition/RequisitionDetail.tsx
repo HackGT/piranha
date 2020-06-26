@@ -31,7 +31,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     if (error || (data && !data.requisition)) {
         return (
             <>
-                <Text type="danger">Error: Unable to display this project</Text>
+                <Text type="danger">Error: Unable to display this requisition.</Text>
                 <Text>{error?.message}</Text>
             </>
         )
