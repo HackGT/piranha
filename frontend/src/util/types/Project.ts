@@ -15,7 +15,7 @@ export type Project = {
     referenceString: string
 }
 
-export const PROJECTS_QUERY = gql`
+export const PROJECTS_LIST_QUERY = gql`
     query projects {
         projects(where: {archived: false}) {
             id
@@ -26,6 +26,15 @@ export const PROJECTS_QUERY = gql`
                 lastName
                 id
             }
+        }
+    }`;
+
+export const PROJECTS_QUERY = gql`
+    query projects {
+        projects(where: {archived: false}) {
+            id
+            name
+            referenceString
         }
         
         vendors(where: {isActive: true}) {

@@ -10,6 +10,7 @@ import './App.css';
 
 import {Layout} from 'antd';
 import {HeartOutlined} from "@ant-design/icons";
+import ProjectsList from "./components/projects/ProjectsList";
 
 const {Header, Content, Footer} = Layout;
 
@@ -23,6 +24,7 @@ function App() {
                 <Content id='wrapper'>
                     <div style={{background: '#fff', padding: '24px', flexGrow: 1}}>
                         <Switch>
+                            <Route path="/projects" component={ProjectsList}/>
                             <Route path="/project/:projectReference/requisition/:requisitionReference"
                                    component={RequisitionDetail}/>
                             <Route path="/project/:projectReference"
