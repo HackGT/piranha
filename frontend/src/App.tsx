@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from "./components/navigation/Navigation";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
-import Requisition from "./components/requisition/Requisition";
+import CreateRequisitionForm from "./components/requisition/CreateRequisitionForm";
 import ProjectDetail from "./components/projects/ProjectDetail";
 import RequisitionDetail from "./components/requisition/RequisitionDetail";
 
@@ -28,7 +28,7 @@ function App() {
                             <Route path="/project/:projectReference"
                                    component={ProjectDetail}/>
                             <Route exact path="/requisition"
-                                   component={Requisition}/>
+                                   component={CreateRequisitionForm}/>
                             <Route exact path="/"
                                    component={Home}/>
                         </Switch>

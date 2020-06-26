@@ -27,6 +27,11 @@ export const PROJECTS_QUERY = gql`
                 id
             }
         }
+        
+        vendors(where: {isActive: true}) {
+            id
+            name
+        }
     }`;
 
 export const PROJECT_DETAIL_QUERY = gql`
