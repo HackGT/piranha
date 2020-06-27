@@ -1,6 +1,6 @@
 import React from "react";
 import {Label, Table} from "semantic-ui-react";
-import {Requisition} from "../../util/types/Requisition";
+import {Requisition} from "../../types/Requisition";
 import {formatPrice, getTotalCost, StatusToString} from "../../util/util";
 import {Link} from "react-router-dom";
 

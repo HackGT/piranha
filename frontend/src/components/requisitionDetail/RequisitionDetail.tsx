@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useParams, useHistory, Link, useLocation} from "react-router-dom";
 import {useQuery} from "@apollo/client";
-import {Requisition, REQUISITION_DETAIL_QUERY,} from "../../util/types/Requisition";
+import {Requisition, REQUISITION_DETAIL_QUERY,} from "../../types/Requisition";
 import {screenWidthHook, StatusToColor, StatusToStep, StatusToString} from "../../util/util";
 import moment from "moment";
 
 import {Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tag, Typography} from "antd";
 import RequisitionItemsTable from "./RequisitionItemsTable";
 
-import "./Requisition.css";
+import "./index.css";
 
 const {Text, Title} = Typography;
 const {Step} = Steps;
@@ -71,11 +71,11 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                 </Col>
                 <Col xs={24} sm={24} md={9} lg={9} xl={9}>
                     <Title level={3} style={{fontSize: '20px'}}>Actions</Title>
-                    <Button type="primary" className="requisition-action-button">Approve</Button>
+                    <Button type="primary" className="action-button">Approve</Button>
                     <Link to={location.pathname.replace(/\/+$/, '') + "/edit"}>
-                        <Button className="requisition-action-button">Edit</Button>
+                        <Button className="action-button">Edit</Button>
                     </Link>
-                    <Button className="requisition-action-button" danger>Cancel</Button>
+                    <Button className="action-button" danger>Cancel</Button>
                 </Col>
             </Row>
             <Row gutter={[16, 32]}>
@@ -86,7 +86,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
                     <List
                         grid={{ gutter: 16, xs: 1, sm: 3, md: 1, lg: 2, xl: 2, xxl: 2 }}
                         dataSource={listData}
-                        id="requisition-detail-list"
+                        id="detail-list"
                         style={{margin: 0}}
                         renderItem={(item: any) => (
                             <List.Item>

@@ -1,4 +1,4 @@
-import {Requisition, RequisitionStatus} from "./types/Requisition";
+import {Requisition, RequisitionStatus} from "../types/Requisition";
 import {PresetColorType} from "antd/es/_util/colors";
 import React from "react";
 

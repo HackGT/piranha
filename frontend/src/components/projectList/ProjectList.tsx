@@ -1,14 +1,16 @@
 import React from 'react';
 import {useQuery} from "@apollo/client";
-import {Project, PROJECTS_LIST_QUERY} from "../../util/types/Project";
-import {User} from "../../util/types/User";
+import {Project, PROJECTS_LIST_QUERY} from "../../types/Project";
+import {User} from "../../types/User";
 import {Link} from "react-router-dom";
 import {Card, Empty, List, Skeleton, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons/lib";
 
+import './index.css';
+
 const {Text, Title} = Typography;
 
-function ProjectsList(props: any) {
+function ProjectList(props: any) {
     const {loading, data, error} = useQuery(PROJECTS_LIST_QUERY);
 
     if (error || (data && !data.projects)) {
@@ -43,7 +45,10 @@ function ProjectsList(props: any) {
                             <Card
                                 title={
                                     <Skeleton loading={loading} paragraph={false} active>
-                                        <Title level={3} style={{marginBottom: 0}}>{item.name}</Title>
+                                        <div className="card-head-wrapper">
+                                            <Title level={3} className="card-head-title">{item.name}</Title>
+                                            <Title level={3} className="card-head-title" style={{textAlign: 'right', color: 'grey'}}>{item.year}</Title>
+                                        </div>
                                     </Skeleton>
                                 }
                                 loading={loading}
@@ -70,4 +75,4 @@ function ProjectsList(props: any) {
     );
 }
 
-export default ProjectsList;
+export default ProjectList;

@@ -1,8 +1,8 @@
 import React from "react";
 import {StoreValue, useQuery} from "@apollo/client";
-import {Project, PROJECTS_QUERY} from "../../util/types/Project";
+import {Project, PROJECTS_QUERY} from "../../types/Project";
 import {Button, DatePicker, Form, Input, Select, Typography, Col, Row} from "antd";
-import {Vendor} from "../../util/types/Vendor";
+import {Vendor} from "../../types/Vendor";
 import {PlusOutlined} from "@ant-design/icons/lib";
 import {RuleObject} from "antd/es/form";
 import RequisitionItemCard from "./RequisitionItemCard";
@@ -29,7 +29,7 @@ const RULES = {
     }
 }
 
-const CreateRequisitionForm: React.FunctionComponent<{}> = (props) => {
+const RequisitionForm: React.FunctionComponent<{}> = (props) => {
     const {loading, data, error} = useQuery(PROJECTS_QUERY);
 
     if (error) {
@@ -166,4 +166,4 @@ const CreateRequisitionForm: React.FunctionComponent<{}> = (props) => {
     )
 }
 
-export default CreateRequisitionForm;
+export default RequisitionForm;

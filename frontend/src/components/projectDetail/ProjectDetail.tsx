@@ -4,11 +4,11 @@ import {useQuery} from "@apollo/client";
 import {Typography, Table, Tag, Button} from "antd";
 import {Breakpoint} from "antd/es/_util/responsiveObserve";
 
-import {PROJECT_DETAIL_QUERY} from "../../util/types/Project";
-import {Requisition} from "../../util/types/Requisition";
+import {PROJECT_DETAIL_QUERY} from "../../types/Project";
+import {Requisition} from "../../types/Requisition";
 import {formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook} from "../../util/util";
 
-import './Projects.css';
+import './index.css';
 
 const {Text, Title, Link} = Typography;
 
@@ -167,7 +167,7 @@ const ProjectDetail: React.FC<{}> = (props) => {
                     x: true
                 }}
                 size={screenWidth < 768 ? "small" : undefined}
-                id="project-detail-table"
+                id="table"
             />
         </>
     )

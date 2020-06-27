@@ -1,5 +1,5 @@
 import React from "react";
-import {Requisition, RequisitionItem} from "../../util/types/Requisition";
+import {Requisition, RequisitionItem} from "../../types/Requisition";
 import {formatPrice, getTotalCost} from "../../util/util";
 
 import {Typography, Table} from 'antd';

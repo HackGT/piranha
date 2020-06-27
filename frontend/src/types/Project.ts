@@ -21,6 +21,7 @@ export const PROJECTS_LIST_QUERY = gql`
             id
             name
             referenceString
+            year
             leads {
                 preferredName
                 lastName
