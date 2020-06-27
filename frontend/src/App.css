@@ -3,6 +3,30 @@
     flex-direction: column;
 }
 
+.card-head-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-head-title {
+    margin: 0 !important;
+    white-space: normal !important;
+    word-break: break-word;
+}
+
+.card-head-subtitle {
+    margin: 0 0 0 10px !important;
+    white-space: normal !important;
+    word-break: normal;
+    text-align: right;
+    color: grey;
+}
+
+.card-head-tag {
+    margin: 0 0 0 10px;
+}
+
 @media screen and (min-width: 768px) {
     #wrapper {
         padding: 30px 30px 0 30px;

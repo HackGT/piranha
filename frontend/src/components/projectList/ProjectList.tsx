@@ -6,8 +6,6 @@ import {Link} from "react-router-dom";
 import {Card, Empty, List, Skeleton, Typography} from "antd";
 import {UserOutlined} from "@ant-design/icons/lib";
 
-import './index.css';
-
 const {Text, Title} = Typography;
 
 function ProjectList(props: any) {
@@ -37,7 +35,7 @@ function ProjectList(props: any) {
         <>
             <Title>{loading ? "Loading..." : "Projects"}</Title>
             <List
-                grid={{gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 5}}
+                grid={{gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5}}
                 dataSource={projectData}
                 renderItem={(item: Project) => (
                     <List.Item>
@@ -47,7 +45,7 @@ function ProjectList(props: any) {
                                     <Skeleton loading={loading} paragraph={false} active>
                                         <div className="card-head-wrapper">
                                             <Title level={3} className="card-head-title">{item.name}</Title>
-                                            <Title level={3} className="card-head-title" style={{textAlign: 'right', color: 'grey'}}>{item.year}</Title>
+                                            <Title level={3} className="card-head-subtitle">{item.year}</Title>
                                         </div>
                                     </Skeleton>
                                 }
