@@ -1,16 +1,16 @@
 import React from 'react';
 import Navigation from "./components/navigation/Navigation";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Home from "./components/Home";
-import CreateRequisitionForm from "./components/requisition/CreateRequisitionForm";
-import ProjectDetail from "./components/projects/ProjectDetail";
-import RequisitionDetail from "./components/requisition/RequisitionDetail";
+import Home from "./components/home/Home";
+import RequisitionForm from "./components/requisitionForm/RequisitionForm";
+import ProjectDetail from "./components/projectDetail/ProjectDetail";
+import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail";
 
 import './App.css';
 
 import {Layout} from 'antd';
 import {HeartOutlined} from "@ant-design/icons";
-import ProjectsList from "./components/projects/ProjectsList";
+import ProjectList from "./components/projectList/ProjectList";
 
 const {Header, Content, Footer} = Layout;
 
@@ -24,13 +24,13 @@ function App() {
                 <Content id='wrapper'>
                     <div style={{background: '#fff', padding: '24px', flexGrow: 1}}>
                         <Switch>
-                            <Route path="/projects" component={ProjectsList}/>
                             <Route path="/project/:projectReference/requisition/:requisitionReference"
                                    component={RequisitionDetail}/>
                             <Route path="/project/:projectReference"
                                    component={ProjectDetail}/>
+                            <Route path="/project" component={ProjectList}/>
                             <Route exact path="/requisition"
-                                   component={CreateRequisitionForm}/>
+                                   component={RequisitionForm}/>
                             <Route exact path="/"
                                    component={Home}/>
                         </Switch>

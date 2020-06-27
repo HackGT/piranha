@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Grid, Header} from "semantic-ui-react";
-import RequisitionTableHome from "./requisition/RequisitionTableHome";
+import RequisitionTableHome from "./RequisitionTableHome";
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
