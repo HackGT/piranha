@@ -45,6 +45,7 @@ export const OPEN_REQUISITIONS_QUERY = gql`
             referenceString
             headline
             status
+            description
             project {
                 referenceString
             }

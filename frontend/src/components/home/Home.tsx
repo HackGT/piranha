@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
-import {Grid, Header} from "semantic-ui-react";
-import RequisitionTableHome from "./RequisitionTableHome";
+import {ConfigProvider, Empty, List, Typography, Button} from 'antd';
+import {useQuery} from "@apollo/client";
+import {OPEN_REQUISITIONS_QUERY, Requisition} from "../../types/Requisition";
+import {Link} from "react-router-dom";
+import HomeRequisitionCard from "./HomeRequisitionCard";
+
+const {Title, Text} = Typography;
 
 const funPhrases: string[] = [
     "It's a great day to balance the books",
@@ -24,20 +29,49 @@ export function pickRandomElement<T>(arr: T[]): T {
 function Home(props: any) {
     const randomPhrase = useState(pickRandomElement(funPhrases));
 
+    const {loading, data, error} = useQuery(OPEN_REQUISITIONS_QUERY);
+
+    if (error || (data && !data.requisitions)) {
+        return (
+            <>
+                <Text type="danger">Error: Unable to load the home screen.</Text>
+                <Text>{error?.message}</Text>
+            </>
+        )
+    }
+
+    const emptyRek = {
+        requisitionitemSet: []
+    }
+
+    const rekData = loading ? [emptyRek, emptyRek] : data.requisitions;
+
     return (
-        <Grid stackable>
-            <Grid.Row>
-                <Grid.Column>
-                    <Header size="huge" content="Home" subheader={randomPhrase}/>
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column>
-                    <Header textAlign="center" size="large">My Open Requisitions</Header>
-                    <RequisitionTableHome/>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
+        <>
+            <Title style={{marginBottom: 0}}>Home</Title>
+            <Text>{randomPhrase}</Text>
+            <Title style={{textAlign: 'center'}} level={3}>Your Requisitions</Title>
+            <ConfigProvider
+                renderEmpty={(name) => (
+                    <Empty description="No Open Requisitions">
+                        <Link to="/requisition">
+                            <Button type="primary">Create New</Button>
+                        </Link>
+                    </Empty>
+                )}>
+                <List
+                    grid={{gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5}}
+                    dataSource={rekData}
+                    renderItem={(rek: Requisition) => (
+                        <List.Item>
+                            <Link to={loading ? "" : `/project/${rek.project.referenceString}/requisition/${rek.projectRequisitionId}`}>
+                                <HomeRequisitionCard loading={loading} rek={rek} />
+                            </Link>
+                        </List.Item>
+                    )}
+                />
+            </ConfigProvider>
+        </>
     );
 }
 

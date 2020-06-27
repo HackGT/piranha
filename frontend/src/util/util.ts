@@ -44,9 +44,13 @@ export const formatPrice = (num: number) => {
 }
 
 export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean) => {
-    let total = requisition.requisitionitemSet.map(item => item.quantity * item.unitPrice).reduce((prev, curr) => prev + curr, 0);
+    if (requisition && requisition.requisitionitemSet) {
+        let total = requisition.requisitionitemSet.map(item => item.quantity * item.unitPrice).reduce((prev, curr) => prev + curr, 0);
 
-    return includeOtherFees ? total + requisition.otherFees : total;
+        return includeOtherFees ? total + requisition.otherFees : total;
+    }
+
+    return 0;
 }
 
 export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAction<number>>) => {
