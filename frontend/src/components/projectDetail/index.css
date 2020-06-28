@@ -1,41 +1,41 @@
 #table tr.ant-table-row-level-1 {
-    background-color: rgb(248, 248, 248);
+  background-color: rgb(248, 248, 248);
 }
 
 #table tr.ant-table-row-level-1 > td {
-    /* Make requisition items look smaller */
-    padding-top: 8px;
-    padding-bottom: 8px;
+  /* Make requisition items look smaller */
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 @media screen and (max-width: 525px) {
-    /* Hide expand/collapse icon */
-    #table .ant-table-row-expand-icon {
-        display: none;
-    }
+  /* Hide expand/collapse icon */
+  #table .ant-table-row-expand-icon {
+    display: none;
+  }
 
-    /* Force table to not be like tables anymore */
-    #table thead, #table tbody, #table th, #table td, #table tr {
-        display: block;
-    }
+  /* Force table to not be like tables anymore */
+  #table thead, #table tbody, #table th, #table td, #table tr {
+    display: block;
+  }
 
-    #table td, #table th {
-        border-bottom: none !important;
-        text-align: center !important;
-    }
+  #table td, #table th {
+    border-bottom: none !important;
+    text-align: center !important;
+  }
 
-    #table tr {
-        border-bottom: 1px solid #eee;
-    }
+  #table tr {
+    border-bottom: 1px solid #eee;
+  }
 
-    #table button.ant-table-row-expand-icon-cell {
-        display: none;
-    }
+  #table button.ant-table-row-expand-icon-cell {
+    display: none;
+  }
 }
 
 @media screen and (min-width: 525px) {
-    /* Add indent margin for requisition items */
-    #table tr.ant-table-row-level-1 .table-first-element {
-        margin-left: 15px;
-    }
+  /* Add indent margin for requisition items */
+  #table tr.ant-table-row-level-1 .table-first-element {
+    margin-left: 15px;
+  }
 }
