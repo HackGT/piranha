@@ -42,7 +42,11 @@ const Navigation = (props: any) => {
         visible={sidebarVisible}
       >
         <Menu mode="vertical" style={{ borderRight: "None" }} selectable={false}>
-          {routes.map((route: Page) => <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)}
+          {routes.map((route: Page) => (
+            <Menu.Item key={route.name}>
+              <Link onClick={() => setSidebarVisible(false)} to={route.link}>{route.name}</Link>
+            </Menu.Item>
+          ))}
         </Menu>
       </Drawer>
 
