@@ -1,7 +1,7 @@
 import React from "react";
 import { StoreValue, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row } from "antd";
-import { PlusOutlined } from "@ant-design/icons/lib";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip } from "antd";
+import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { RuleObject } from "antd/es/form";
 import { Vendor } from "../../types/Vendor";
 import { Project, PROJECTS_QUERY } from "../../types/Project";
@@ -80,13 +80,21 @@ const RequisitionForm: React.FunctionComponent = () => {
       >
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
-            <Form.Item label="Headline" name="headline" rules={[RULES.requiredRule]}>
+            <Form.Item
+              name="headline"
+              rules={[RULES.requiredRule]}
+              label="Headline"
+            >
               <Input placeholder="Giant Outdoor Games" />
             </Form.Item>
           </Col>
 
           <Col {...halfLayout}>
-            <Form.Item label="Project" name="project" rules={[RULES.requiredRule]}>
+            <Form.Item
+              name="project"
+              rules={[RULES.requiredRule]}
+              label="Project"
+            >
               <Select options={projectOptions} showSearch optionFilterProp="label" loading={loading} />
             </Form.Item>
           </Col>
@@ -94,7 +102,18 @@ const RequisitionForm: React.FunctionComponent = () => {
 
         <Row gutter={[32, 8]} justify="center">
           <Col {...fullLayout}>
-            <Form.Item label="Description" name="description" rules={[RULES.requiredRule]}>
+            <Form.Item
+              name="description"
+              rules={[RULES.requiredRule]}
+              label={(
+                <span>
+                  {"Description "}
+                  <Tooltip title="The description of what you want to order and why you need it">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
               <TextArea
                 autoSize={{ minRows: 2 }}
                 placeholder="This will help spice up our venue, and add the pizzazz that will draw students from around the world!"
@@ -105,13 +124,28 @@ const RequisitionForm: React.FunctionComponent = () => {
 
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
-            <Form.Item label="Vendor" name="vendor" rules={[RULES.requiredRule]}>
+            <Form.Item
+              name="vendor"
+              rules={[RULES.requiredRule]}
+              label="Vendor"
+            >
               <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
             </Form.Item>
           </Col>
 
           <Col {...halfLayout}>
-            <Form.Item label="Payment Required By" name="paymentRequiredBy" rules={[RULES.requiredRule]}>
+            <Form.Item
+              name="paymentRequiredBy"
+              rules={[RULES.requiredRule]}
+              label={(
+                <span>
+                  {"Payment Required By "}
+                  <Tooltip title="The date you need the payment by (Should be at least 3 days from today)">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
               <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
             </Form.Item>
           </Col>
@@ -119,7 +153,18 @@ const RequisitionForm: React.FunctionComponent = () => {
         </Row>
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
-            <Form.Item label="Other Fees" name="otherFees" rules={[RULES.requiredRule, RULES.moneyRule]}>
+            <Form.Item
+              name="otherFees"
+              rules={[RULES.requiredRule, RULES.moneyRule]}
+              label={(
+                <span>
+                  {"Other Fees "}
+                  <Tooltip title="Any other fees associated with this requisition (Such as shipping and handling, processing fees, etc)">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
               <Input prefix="$" type="number" placeholder="68.72" />
             </Form.Item>
           </Col>
