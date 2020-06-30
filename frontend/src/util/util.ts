@@ -2,7 +2,7 @@ import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
 import { Requisition, RequisitionStatus } from "../types/Requisition";
 
-export const StatusToColor = (status: RequisitionStatus): PresetColorType => {
+export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {
   switch (status) {
     case "DRAFT": return "magenta";
     case "SUBMITTED": return "gold";
@@ -11,7 +11,7 @@ export const StatusToColor = (status: RequisitionStatus): PresetColorType => {
     case "ORDERED": return "blue";
     case "RECEIVED": return "blue";
     case "CANCELLED": return "red";
-    default: return "red";
+    default: return undefined;
   }
 };
 
@@ -41,11 +41,20 @@ export const StatusToStep = (status: RequisitionStatus) => {
   }
 };
 
-export const formatPrice = (num: number) => `$${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+export const formatPrice = (num: number) => {
+  const options = {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    style: "currency",
+    currency: "USD"
+  };
+
+  return num.toLocaleString("en-US", options);
+};
 
 export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean) => {
   if (requisition && requisition.requisitionitemSet) {
-    const total = requisition.requisitionitemSet.map((item) => item.quantity * item.unitPrice).reduce((prev, curr) => prev + curr, 0);
+    const total = requisition.requisitionitemSet.reduce((prev, curr) => prev + (curr.quantity * curr.unitPrice), 0);
 
     return includeOtherFees ? total + requisition.otherFees : total;
   }

@@ -22,12 +22,11 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
     size="small"
     title={`Item ${props.field.name + 1}`}
     style={{ marginBottom: "15px" }}
-    extra={props.deleteButton
-      ? (
-        <Button onClick={() => props.remove(props.field.name)} type="text" size="small" danger>
-          Delete
-        </Button>
-      ) : null}
+    extra={props.deleteButton && (
+      <Button onClick={() => props.remove(props.field.name)} type="text" size="small" danger>
+        Delete
+      </Button>
+    )}
   >
     <Row gutter={[8, 0]}>
       <Col xs={24} sm={12}>
@@ -69,7 +68,6 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
           label="Quantity"
         >
           <InputNumber
-            prefix="$"
             type="number"
             min={1}
             precision={0}

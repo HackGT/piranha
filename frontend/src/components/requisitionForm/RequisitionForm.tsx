@@ -140,6 +140,7 @@ const RequisitionForm: React.FunctionComponent = () => {
               label={(
                 <span>
                   {"Payment Required By "}
+                  {/* TODO: Fill in actual payment required by policy */}
                   <Tooltip title="The date you need the payment by (Should be at least 3 days from today)">
                     <QuestionCircleOutlined />
                   </Tooltip>
