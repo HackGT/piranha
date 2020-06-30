@@ -3,6 +3,7 @@ from django.contrib import auth
 from graphene_django import DjangoObjectType
 from graphene import InputObjectType
 from expenses.utils import process_where_input
+from graphene_django_extras import DjangoInputObjectType
 
 from expenses.models import Project, Vendor, Requisition, RequisitionItem
 
@@ -11,6 +12,9 @@ from expenses.controllers.RequisitionController import RequisitionController
 from expenses.controllers.RequisitionItemController import RequisitionItemController
 from expenses.controllers.VendorController import VendorController
 from expenses.controllers.ProjectController import ProjectController
+
+
+# -------------------------------- User Schema ------------------------------- #
 
 
 class UserType(DjangoObjectType):
@@ -23,6 +27,9 @@ class UserType(DjangoObjectType):
 class UserWhereInput(InputObjectType):
     id = graphene.UUID()
     is_active = graphene.Boolean()
+
+
+# ------------------------------ Project Schema ------------------------------ #
 
 
 class ProjectType(DjangoObjectType):
@@ -47,6 +54,36 @@ class ProjectWhereInput(InputObjectType):
     archived = graphene.Boolean()
 
 
+class ProjectInput(DjangoInputObjectType):
+    class Meta:
+        model = Project
+        exclude_fields = ["requisition"]
+
+
+class CreateProjectMutation(graphene.Mutation):
+    project = graphene.Field(ProjectType)
+
+    class Arguments:
+        data = graphene.Argument(ProjectInput, required=True)
+
+    def mutate(self, info, data):
+        return CreateProjectMutation(project=ProjectController.create_project(info, data))
+
+
+class UpdateProjectMutation(graphene.Mutation):
+    project = graphene.Field(ProjectType)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+        data = graphene.Argument(ProjectInput, required=True)
+
+    def mutate(self, info, id, data):
+        return UpdateProjectMutation(project=ProjectController.update_project(info, id, data))
+
+
+# ------------------------------- Vendor Schema ------------------------------ #
+
+
 class VendorType(DjangoObjectType):
     class Meta:
         model = Vendor
@@ -55,6 +92,9 @@ class VendorType(DjangoObjectType):
 
 class VendorWhereInput(InputObjectType):
     is_active = graphene.Boolean()
+
+
+# ---------------------------- Requisition Schema ---------------------------- #
 
 
 class RequisitionType(DjangoObjectType):
@@ -73,10 +113,42 @@ class RequisitionType(DjangoObjectType):
         name = "Requisition"
 
 
+class RequisitionInput(DjangoInputObjectType):
+    class Meta:
+        model = Requisition
+        exclude_fields = ["approval", "payment", "created_by"]
+
+
+class CreateRequisitionMutation(graphene.Mutation):
+    requisition = graphene.Field(RequisitionType)
+
+    class Arguments:
+        data = graphene.Argument(RequisitionInput, required=True)
+
+    def mutate(self, info, data):
+        return CreateRequisitionMutation(requisition=RequisitionController.create_requisition(info, data))
+
+
+class UpdateRequisitionMutation(graphene.Mutation):
+    project = graphene.Field(RequisitionType)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+        data = graphene.Argument(RequisitionInput, required=True)
+
+    def mutate(self, info, id, data):
+        return UpdateRequisitionMutation(project=RequisitionController.update_requisition(info, id, data))
+
+
 class RequisitionItemType(DjangoObjectType):
     class Meta:
         model = RequisitionItem
         name = "RequisitionItem"
+
+
+# ---------------------------------------------------------------------------- #
+#                            QUERY SCHEMA DEFINITION                           #
+# ---------------------------------------------------------------------------- #
 
 
 class Query(graphene.ObjectType):
@@ -137,3 +209,16 @@ class Query(graphene.ObjectType):
         id = kwargs.get("id")
 
         return RequisitionItemController.get_requisition_item(info, id)
+
+
+# ---------------------------------------------------------------------------- #
+#                          MUTATION SCHEMA DEFINITION                          #
+# ---------------------------------------------------------------------------- #
+
+
+class Mutation(graphene.ObjectType):
+    create_project = CreateProjectMutation.Field()
+    update_project = UpdateProjectMutation.Field()
+
+    create_requisition = CreateRequisitionMutation.Field()
+    update_requisition = UpdateRequisitionMutation.Field()
