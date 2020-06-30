@@ -17,3 +17,11 @@ class RequisitionController:
     def get_requisitions(cls, info):
         if cls.can_view(info.context.user):
             return Requisition.objects.filter(created_by=info.context.user, project__archived=False)
+
+    @classmethod
+    def create_requisition(cls, info, data):
+        pass
+
+    @classmethod
+    def update_requisition(cls, info, id, data):
+        pass
