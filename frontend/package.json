@@ -48,7 +48,7 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
-    "babel-plugin-relay": "^2.0.0",
+    "babel-plugin-relay": "^9.1.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-import-resolver-typescript": "^2.0.0",
     "fb-watchman": "^2.0.1"
