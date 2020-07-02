@@ -94,6 +94,43 @@ class VendorWhereInput(InputObjectType):
     is_active = graphene.Boolean()
 
 
+class VendorInput(DjangoInputObjectType):
+    class Meta:
+        model = Vendor
+        exclude_fields = ["payment", "requisition"]
+
+
+class CreateVendorMutation(graphene.Mutation):
+    vendor = graphene.Field(VendorType)
+
+    class Arguments:
+        data = graphene.Argument(VendorInput, required=True)
+
+    def mutate(self, info, data):
+        return CreateVendorMutation(vendor=VendorController.create_vendor(info, data))
+
+
+class UpdateVendorMutation(graphene.Mutation):
+    vendor = graphene.Field(VendorType)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+        data = graphene.Argument(VendorInput, required=True)
+
+    def mutate(self, info, id, data):
+        return UpdateVendorMutation(vendor=VendorController.update_vendor(info, id, data))
+
+
+class DeleteVendorMutation(graphene.Mutation):
+    success = graphene.Field(graphene.Boolean)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    def mutate(self, info, id):
+        return DeleteVendorMutation(success=VendorController.delete_vendor(info, id))
+
+
 # ---------------------------- Requisition Schema ---------------------------- #
 
 
@@ -230,3 +267,7 @@ class Mutation(graphene.ObjectType):
 
     create_requisition = CreateRequisitionMutation.Field()
     update_requisition = UpdateRequisitionMutation.Field()
+
+    create_vendor = CreateVendorMutation.Field()
+    update_vendor = UpdateVendorMutation.Field()
+    delete_vendor = DeleteVendorMutation.Field()
