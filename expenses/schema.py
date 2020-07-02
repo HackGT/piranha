@@ -32,6 +32,10 @@ class UserWhereInput(InputObjectType):
 # ------------------------------ Project Schema ------------------------------ #
 
 
+class ProjectWhereInput(InputObjectType):
+    archived = graphene.Boolean()
+
+
 class ProjectType(DjangoObjectType):
     leads = graphene.List(UserType)
 
@@ -48,10 +52,6 @@ class ProjectType(DjangoObjectType):
     class Meta:
         model = Project
         name = "Project"
-
-
-class ProjectWhereInput(InputObjectType):
-    archived = graphene.Boolean()
 
 
 class ProjectInput(DjangoInputObjectType):
@@ -113,10 +113,18 @@ class RequisitionType(DjangoObjectType):
         name = "Requisition"
 
 
+class RequisitionItemInput(DjangoInputObjectType):
+    class Meta:
+        model = RequisitionItem
+        exclude_fields = ["requisition"]
+
+
 class RequisitionInput(DjangoInputObjectType):
+    requisitionitemSet = graphene.List(RequisitionItemInput)
+
     class Meta:
         model = Requisition
-        exclude_fields = ["approval", "payment", "created_by"]
+        exclude_fields = ["approval", "payment", "created_by", "project_requisition_id", "requisitionitem"]
 
 
 class CreateRequisitionMutation(graphene.Mutation):
@@ -130,14 +138,14 @@ class CreateRequisitionMutation(graphene.Mutation):
 
 
 class UpdateRequisitionMutation(graphene.Mutation):
-    project = graphene.Field(RequisitionType)
+    requisition = graphene.Field(RequisitionType)
 
     class Arguments:
         id = graphene.ID(required=True)
         data = graphene.Argument(RequisitionInput, required=True)
 
     def mutate(self, info, id, data):
-        return UpdateRequisitionMutation(project=RequisitionController.update_requisition(info, id, data))
+        return UpdateRequisitionMutation(requisition=RequisitionController.update_requisition(info, id, data))
 
 
 class RequisitionItemType(DjangoObjectType):
