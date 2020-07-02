@@ -42,15 +42,15 @@ class RequisitionStatus(models.Model):
 
 class Requisition(TimestampedModel):
     headline = CharField(max_length=150)
-    description = TextField()
-    status = CharField(choices=RequisitionStatus.choices, max_length=50)
+    description = TextField(blank=True)
+    status = CharField(choices=RequisitionStatus.choices, max_length=50, default=RequisitionStatus.DRAFT)
     created_by = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="created_by",
                             related_query_name="created_by")
     project = ForeignKey('Project', on_delete=models.CASCADE)
-    vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
+    vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
     project_requisition_id = PositiveIntegerField()
-    payment_required_by = DateTimeField()
-    other_fees = DecimalField(max_digits=15, decimal_places=4)
+    payment_required_by = DateTimeField(null=True, blank=True)
+    other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
 
     class Meta:
         rules_permissions = {
@@ -71,12 +71,12 @@ class Requisition(TimestampedModel):
 
 
 class RequisitionItem(models.Model):
-    name = CharField(max_length=150)
+    name = CharField(max_length=150, blank=True)
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
-    quantity = PositiveIntegerField(default=1)
-    unit_price = DecimalField(max_digits=15, decimal_places=4)
-    link = URLField()
-    notes = TextField()
+    quantity = PositiveIntegerField(null=True, blank=True)
+    unit_price = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
+    link = URLField(blank=True)
+    notes = TextField(blank=True)
 
     def __str__(self):
         return self.name
