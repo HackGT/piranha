@@ -17,7 +17,8 @@ class Page {
 export const routes = [
   new Page("Home", "/"),
   new Page("Projects", "/project"),
-  new Page("Create Requisition", "/requisition")
+  new Page("Create Requisition", "/requisition"),
+  new Page("Admin", "/admin")
 ];
 
 const Navigation = (props: any) => {
