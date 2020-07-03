@@ -143,7 +143,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Title level={2}>Create Requisition</Title>
+      <Title level={2}>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
       <Form
         name="create"
         initialValues={props.editMode ? props.requisitionData : { items: [{}] }}
@@ -280,7 +280,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Row justify="center">
           <Col {...fullLayout}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">Submit</Button>
+              <Button type="primary" htmlType="submit">{props.editMode ? "Save" : "Submit"}</Button>
               {showDraftButton && <Button style={{ marginLeft: "10px" }} onClick={() => onSaveDraft()}>Save as Draft</Button>}
             </Form.Item>
           </Col>
