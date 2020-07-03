@@ -16,43 +16,49 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
       title: "Item",
       dataIndex: "name",
       render: (text: string, record: RequisitionItem, index: number) => {
-        if (index % 2 === 0) {
-          return (
-            <Link href={record.link} target="_blank">{record.name}</Link>
-          );
+        if (index % 2 === 1) {
+          return {
+            children: <Text>{record.notes || "Notes: Not Set"}</Text>,
+            props: {
+              colSpan: 3
+            }
+          };
         }
-        return {
-          children: <Text>{record.notes}</Text>,
-          props: {
-            colSpan: 3
-          }
-        };
+        if (!record.name) {
+          return `Item ${index / 2 + 1}`;
+        }
+        return (
+          <Link href={record.link} target="_blank">{record.name}</Link>
+        );
       }
     },
     {
       title: "Quantity",
       render: (text: number, record: RequisitionItem, index: number) => {
-        if (index % 2 === 0) {
-          return `${record.quantity} @ ${formatPrice(record.unitPrice)}`;
+        if (index % 2 === 1) {
+          return {
+            props: {
+              colSpan: 0
+            }
+          };
         }
-        return {
-          props: {
-            colSpan: 0
-          }
-        };
+        if (!record.quantity || !record.unitPrice) {
+          return "Not Set";
+        }
+        return `${record.quantity} @ ${formatPrice(record.unitPrice)}`;
       }
     },
     {
       title: "Subtotal",
       render: (text: string, record: RequisitionItem, index: number) => {
-        if (index % 2 === 0) {
-          return formatPrice(record.quantity * record.unitPrice);
+        if (index % 2 === 1) {
+          return {
+            props: {
+              colSpan: 0
+            }
+          };
         }
-        return {
-          props: {
-            colSpan: 0
-          }
-        };
+        return formatPrice(record.quantity * record.unitPrice);
       }
     }
   ];

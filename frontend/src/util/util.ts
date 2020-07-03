@@ -49,7 +49,7 @@ export const formatPrice = (num: number) => {
     currency: "USD"
   };
 
-  return num.toLocaleString("en-US", options);
+  return (num || 0).toLocaleString("en-US", options);
 };
 
 export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean) => {
@@ -68,4 +68,11 @@ export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAct
   return () => {
     window.removeEventListener("resize", handleResize);
   };
+};
+
+export const parseRequisitionParams = (projectReference: (string | null), requisitionReference: (string | null)) => {
+  const [year, shortCode] = (projectReference || "").split("-");
+  const projectRequisitionId: number = parseInt(requisitionReference || "");
+
+  return { year, shortCode, projectRequisitionId };
 };

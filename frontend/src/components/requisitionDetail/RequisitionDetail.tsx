@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import moment from "moment";
 import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tag, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
-import { screenWidthHook, StatusToColor, StatusToStep, StatusToString } from "../../util/util";
+import { parseRequisitionParams, screenWidthHook, StatusToColor, StatusToStep, StatusToString } from "../../util/util";
 
 import RequisitionItemsTable from "./RequisitionItemsTable";
 
@@ -17,12 +17,10 @@ const RequisitionDetail: React.FC<{}> = (props) => {
   const { projectReference, requisitionReference } = useParams();
   const history = useHistory();
   const location = useLocation();
-
-  const [year, shortCode] = (projectReference || "").split("-");
-  const projectRequisitionId: number = parseInt(requisitionReference || "");
-
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   useEffect(screenWidthHook(setScreenWidth));
+
+  const { year, shortCode, projectRequisitionId } = parseRequisitionParams(projectReference, requisitionReference);
 
   const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
     variables: { year, shortCode, projectRequisitionId }
@@ -43,7 +41,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
   const listData = [
     {
       title: "Payment Required By",
-      body: loading ? "" : moment(rekData.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
+      body: (loading || !rekData.paymentRequiredBy) ? "Not Set" : moment(rekData.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
     },
     {
       title: "Created By",
@@ -51,7 +49,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     },
     {
       title: "Vendor",
-      body: loading ? "" : rekData.vendor.name
+      body: (loading || !rekData.vendor) ? "Not Set" : rekData.vendor.name
     }
   ];
 

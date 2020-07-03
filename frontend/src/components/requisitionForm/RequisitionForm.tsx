@@ -1,11 +1,12 @@
 import React from "react";
-import { StoreValue, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip } from "antd";
+import { StoreValue, useMutation, useQuery } from "@apollo/client";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { RuleObject } from "antd/es/form";
-import { Vendor } from "../../types/Vendor";
-import { Project, PROJECTS_QUERY } from "../../types/Project";
+import { useHistory } from "react-router-dom";
+import { PROJECTS_QUERY } from "../../types/Project";
 import RequisitionItemCard from "./RequisitionItemCard";
+import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
@@ -19,7 +20,7 @@ const RULES = {
     type: "url",
     message: "Please enter a valid URL."
   },
-  moneyRule: {
+  moneyRule: { // Checks if entered value is greater than 0
     validator: (rule: RuleObject, value: StoreValue) => {
       if (!value || parseInt(value as string) > 0) {
         return Promise.resolve();
@@ -29,8 +30,19 @@ const RULES = {
   }
 };
 
-const RequisitionForm: React.FunctionComponent = () => {
+interface Props {
+  editMode?: boolean;
+  requisitionData?: RequisitionFormData;
+  requisitionId?: string;
+}
+
+const RequisitionForm: React.FC<Props> = (props) => {
+  const [form] = Form.useForm();
+  const history = useHistory();
+
   const { loading, data, error } = useQuery(PROJECTS_QUERY);
+  const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION);
+  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   if (error) {
     return (
@@ -41,22 +53,83 @@ const RequisitionForm: React.FunctionComponent = () => {
     );
   }
 
-  const projectOptions = loading ? [] : data.projects.map((project: Project) => ({
+  const projectOptions = loading ? [] : data.projects.map((project: any) => ({
     label: project.name,
-    value: project.name
+    value: project.id
   }));
 
-  const vendorOptions = loading ? [] : data.vendors.map((vendor: Vendor) => ({
+  const vendorOptions = loading ? [] : data.vendors.map((vendor: any) => ({
     label: vendor.name,
     value: vendor.id
   }));
 
+  const saveDataToServer = (values: any) => {
+    const mutationData = values;
+    Object.keys(mutationData).forEach((key) => (mutationData[key] === undefined ? delete mutationData[key] : {}));
+
+    if (mutationData.paymentRequiredBy) {
+      mutationData.paymentRequiredBy = mutationData.paymentRequiredBy.format();
+    }
+
+    mutationData.requisitionitemSet = mutationData.items.filter((item: any) => Object.keys(item).length !== 0).map((item: any) => ({
+      ...item.name !== undefined && { name: item.name },
+      ...item.link !== undefined && { link: item.link },
+      ...item.quantity !== undefined && { quantity: item.quantity },
+      ...item.unitPrice !== undefined && { unitPrice: item.unitPrice },
+      ...item.notes !== undefined && { notes: item.notes }
+    }));
+
+    delete mutationData.items;
+
+    const hide = message.loading("Saving requisition...", 0);
+    if (props.editMode) {
+      updateRequisition({ variables: { data: mutationData, id: props.requisitionId } })
+        .then((result) => {
+          hide();
+          message.success("Successfully updated", 3);
+
+          const rekData = result.data.updateRequisition.requisition;
+          history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
+        })
+        .catch(() => {
+          hide();
+          message.error("Error saving", 3);
+        });
+    } else {
+      createRequisition({ variables: { data: mutationData } })
+        .then((result) => {
+          hide();
+          message.success("Successfully created", 3);
+
+          const rekData = result.data.createRequisition.requisition;
+          history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
+        })
+        .catch(() => {
+          hide();
+          message.error("Error saving", 3);
+        });
+    }
+  };
+
   const onFinish = (values: any) => {
     console.log("Form Success:", values);
+    saveDataToServer(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
+    message.error("Please complete the required fields.", 3);
     console.log("Failed:", errorInfo);
+  };
+
+  const onSaveDraft = () => {
+    form.validateFields(["headline", "project"])
+      .then((res) => {
+        saveDataToServer(form.getFieldsValue());
+      })
+      .catch((err) => {
+        message.error("Please complete the required fields.", 3);
+        console.error(err);
+      });
   };
 
   const halfLayout = {
@@ -66,17 +139,19 @@ const RequisitionForm: React.FunctionComponent = () => {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
 
+  const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
+
   return (
     <>
       <Title level={2}>Create Requisition</Title>
       <Form
         name="create"
-        initialValues={{ items: [{}] }}
+        initialValues={props.editMode ? props.requisitionData : { items: [{}] }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         layout="vertical"
         autoComplete="off"
-        scrollToFirstError
+        form={form}
       >
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
@@ -157,6 +232,7 @@ const RequisitionForm: React.FunctionComponent = () => {
             <Form.Item
               name="otherFees"
               rules={[RULES.requiredRule, RULES.moneyRule]}
+              normalize={(value: any) => parseInt(value)}
               label={(
                 <span>
                   {"Other Fees "}
@@ -205,6 +281,7 @@ const RequisitionForm: React.FunctionComponent = () => {
           <Col {...fullLayout}>
             <Form.Item>
               <Button type="primary" htmlType="submit">Submit</Button>
+              {showDraftButton && <Button style={{ marginLeft: "10px" }} onClick={() => onSaveDraft()}>Save as Draft</Button>}
             </Form.Item>
           </Col>
         </Row>
