@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import moment from "moment";
 import { User } from "./User";
 import { Project } from "./Project";
 import { Vendor } from "./Vendor";
@@ -37,6 +38,51 @@ export type RequisitionItem = {
   notes: string
 }
 
+export type RequisitionFormData = {
+  headline: string;
+  project: string;
+  description: string;
+  vendor: string;
+  paymentRequiredBy: moment.Moment | undefined;
+  otherFees: string;
+  items: {
+    name: string;
+    link: string;
+    quantity: number;
+    unitPrice: string;
+    notes: string;
+  }[]
+  status: RequisitionStatus;
+}
+
+export const CREATE_REQUISITION_MUTATION = gql`
+  mutation createRequisition($data: RequisitionInput!) {
+    createRequisition(data: $data) {
+      requisition {
+        id
+        project {
+          referenceString
+        }
+        projectRequisitionId
+      }
+    }
+  }
+`;
+
+export const UPDATE_REQUISITION_MUTATION = gql`
+  mutation updateRequisition($data: RequisitionInput!, $id: ID!) {
+    updateRequisition(data: $data, id: $id) {
+      requisition {
+        id
+        project {
+          referenceString
+        }
+        projectRequisitionId
+      }
+    }
+  }
+`;
+
 export const OPEN_REQUISITIONS_QUERY = gql`
   query requisitions {
     requisitions {
@@ -70,6 +116,7 @@ export const REQUISITION_DETAIL_QUERY = gql`
         lastName
       }
       project {
+        id
         name
         requisitionSet {
           projectRequisitionId

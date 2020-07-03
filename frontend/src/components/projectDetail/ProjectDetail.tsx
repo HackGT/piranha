@@ -97,6 +97,7 @@ const ProjectDetail: React.FC = () => {
     : [];
 
   const rows: RequisitionTableData[] = sortedData.map((requisition) => {
+    console.log(requisition);
     const row: RequisitionTableData = {
       key: requisition.projectRequisitionId,
       children: requisition.requisitionitemSet.map((item, index) => ({
@@ -105,7 +106,7 @@ const ProjectDetail: React.FC = () => {
           <>
             <Link className="table-first-element" href={item.link} target="_blank">{item.name}</Link>
             <Text>
-              {`: ${item.quantity} @ ${formatPrice(item.unitPrice)}`}
+              {(item.quantity && item.unitPrice) ? `: ${item.quantity} @ ${formatPrice(item.unitPrice)}` : `Item ${index + 1}`}
             </Text>
           </>
         ),
@@ -115,7 +116,7 @@ const ProjectDetail: React.FC = () => {
       ...requisition
     };
 
-    if (requisition.otherFees !== 0) {
+    if (requisition.otherFees) {
       row.children.push({
         key: `${requisition.projectRequisitionId}-otherFees`,
         nameElement: <Text className="table-first-element">Other Fees</Text>,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Col, Form, Input, InputNumber, Row, Tooltip } from "antd";
+import { Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 
 const { TextArea } = Input;
@@ -23,9 +23,16 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
     title={`Item ${props.field.name + 1}`}
     style={{ marginBottom: "15px" }}
     extra={props.deleteButton && (
-      <Button onClick={() => props.remove(props.field.name)} type="text" size="small" danger>
-        Delete
-      </Button>
+      <Popconfirm
+        title="Are you sure you want to delete this item?"
+        onConfirm={() => props.remove(props.field.name)}
+        okText="Delete"
+        cancelText="Cancel"
+      >
+        <Button type="text" size="small" danger>
+          Delete
+        </Button>
+      </Popconfirm>
     )}
   >
     <Row gutter={[8, 0]}>
@@ -83,6 +90,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
           fieldKey={[props.field.fieldKey, "unitPrice"]}
           rules={[props.rules.requiredRule, props.rules.moneyRule]}
           label="Unit Price"
+          normalize={(value: any) => parseInt(value)}
         >
           <Input prefix="$" type="number" placeholder="99.99" />
         </Form.Item>

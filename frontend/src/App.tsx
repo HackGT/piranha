@@ -2,14 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HeartOutlined } from "@ant-design/icons";
 import { Layout } from "antd";
+import "./App.css";
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
 import RequisitionForm from "./components/requisitionForm/RequisitionForm";
 import ProjectDetail from "./components/projectDetail/ProjectDetail";
 import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail";
 import ProjectList from "./components/projectList/ProjectList";
-
-import "./App.css";
+import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,6 +23,10 @@ function App() {
         <Content id="wrapper">
           <div style={{ background: "#fff", padding: "24px", flexGrow: 1 }}>
             <Switch>
+              <Route
+                path="/project/:projectReference/requisition/:requisitionReference/edit"
+                component={RequisitionEdit}
+              />
               <Route
                 path="/project/:projectReference/requisition/:requisitionReference"
                 component={RequisitionDetail}
