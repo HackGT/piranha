@@ -1,5 +1,7 @@
 import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
+import { Rule, RuleObject } from "antd/es/form";
+import { StoreValue } from "@apollo/client";
 import { Requisition, RequisitionStatus } from "../types/Requisition";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {
@@ -75,4 +77,23 @@ export const parseRequisitionParams = (projectReference: (string | null), requis
   const projectRequisitionId: number = parseInt(requisitionReference || "");
 
   return { year, shortCode, projectRequisitionId };
+};
+
+export const FORM_RULES = {
+  requiredRule: {
+    required: true,
+    message: "Please input this field."
+  },
+  urlRule: {
+    type: "url",
+    message: "Please enter a valid URL."
+  } as Rule,
+  moneyRule: { // Checks if entered value is greater than 0
+    validator: (rule: RuleObject, value: StoreValue) => {
+      if (!value || parseInt(value as string) > 0) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("Please enter a value greater than 0."));
+    }
+  }
 };

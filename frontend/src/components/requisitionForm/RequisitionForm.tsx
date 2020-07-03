@@ -1,34 +1,15 @@
 import React from "react";
-import { StoreValue, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
-import { RuleObject } from "antd/es/form";
 import { useHistory } from "react-router-dom";
 import { PROJECTS_QUERY } from "../../types/Project";
 import RequisitionItemCard from "./RequisitionItemCard";
 import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
+import { FORM_RULES } from "../../util/util";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
-
-const RULES = {
-  requiredRule: {
-    required: true,
-    message: "Please input this field."
-  },
-  urlRule: {
-    type: "url",
-    message: "Please enter a valid URL."
-  },
-  moneyRule: { // Checks if entered value is greater than 0
-    validator: (rule: RuleObject, value: StoreValue) => {
-      if (!value || parseInt(value as string) > 0) {
-        return Promise.resolve();
-      }
-      return Promise.reject(new Error("Please enter a value greater than 0."));
-    }
-  }
-};
 
 interface Props {
   editMode?: boolean;
@@ -157,7 +138,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...halfLayout}>
             <Form.Item
               name="headline"
-              rules={[RULES.requiredRule]}
+              rules={[FORM_RULES.requiredRule]}
               label="Headline"
             >
               <Input placeholder="Giant Outdoor Games" />
@@ -167,7 +148,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...halfLayout}>
             <Form.Item
               name="project"
-              rules={[RULES.requiredRule]}
+              rules={[FORM_RULES.requiredRule]}
               label="Project"
             >
               <Select options={projectOptions} showSearch optionFilterProp="label" loading={loading} />
@@ -179,7 +160,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...fullLayout}>
             <Form.Item
               name="description"
-              rules={[RULES.requiredRule]}
+              rules={[FORM_RULES.requiredRule]}
               label={(
                 <span>
                   {"Description "}
@@ -201,7 +182,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...halfLayout}>
             <Form.Item
               name="vendor"
-              rules={[RULES.requiredRule]}
+              rules={[FORM_RULES.requiredRule]}
               label="Vendor"
             >
               <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
@@ -211,7 +192,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...halfLayout}>
             <Form.Item
               name="paymentRequiredBy"
-              rules={[RULES.requiredRule]}
+              rules={[FORM_RULES.requiredRule]}
               label={(
                 <span>
                   {"Payment Required By "}
@@ -231,7 +212,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...halfLayout}>
             <Form.Item
               name="otherFees"
-              rules={[RULES.requiredRule, RULES.moneyRule]}
+              rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
               normalize={(value: any) => parseInt(value)}
               label={(
                 <span>
@@ -256,7 +237,6 @@ const RequisitionForm: React.FC<Props> = (props) => {
                     <RequisitionItemCard
                       deleteButton={fields.length > 1}
                       field={field}
-                      rules={RULES}
                       remove={remove}
                     />
                   </Col>
