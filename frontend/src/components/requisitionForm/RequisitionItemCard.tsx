@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
+import { FORM_RULES } from "../../util/util";
 
 const { TextArea } = Input;
 
@@ -13,7 +14,6 @@ interface FieldData {
 interface Props {
   field: FieldData;
   deleteButton: boolean;
-  rules: any;
   remove: (index: number) => void;
 }
 
@@ -40,7 +40,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "name"]}
           fieldKey={[props.field.fieldKey, "name"]}
-          rules={[props.rules.requiredRule]}
+          rules={[FORM_RULES.requiredRule]}
           label="Name"
         >
           <Input placeholder="Sparkly crayons" />
@@ -51,7 +51,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "link"]}
           fieldKey={[props.field.fieldKey, "link"]}
-          rules={[props.rules.requiredRule, props.rules.urlRule]}
+          rules={[FORM_RULES.requiredRule, FORM_RULES.urlRule]}
           label={(
             <span>
               {"Link "}
@@ -71,7 +71,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "quantity"]}
           fieldKey={[props.field.fieldKey, "quantity"]}
-          rules={[props.rules.requiredRule]}
+          rules={[FORM_RULES.requiredRule]}
           label="Quantity"
         >
           <InputNumber
@@ -88,7 +88,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "unitPrice"]}
           fieldKey={[props.field.fieldKey, "unitPrice"]}
-          rules={[props.rules.requiredRule, props.rules.moneyRule]}
+          rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
           label="Unit Price"
           normalize={(value: any) => parseInt(value)}
         >
@@ -102,7 +102,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "notes"]}
           fieldKey={[props.field.fieldKey, "notes"]}
-          rules={[props.rules.requiredRule]}
+          rules={[FORM_RULES.requiredRule]}
           label={(
             <span>
               {"Notes "}
