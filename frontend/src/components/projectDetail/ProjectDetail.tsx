@@ -97,7 +97,6 @@ const ProjectDetail: React.FC = () => {
     : [];
 
   const rows: RequisitionTableData[] = sortedData.map((requisition) => {
-    console.log(requisition);
     const row: RequisitionTableData = {
       key: requisition.projectRequisitionId,
       children: requisition.requisitionitemSet.map((item, index) => ({
