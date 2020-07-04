@@ -71,8 +71,9 @@ const RequisitionForm: React.FC<Props> = (props) => {
           const rekData = result.data.updateRequisition.requisition;
           history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
         })
-        .catch(() => {
+        .catch((err) => {
           hide();
+          console.error(JSON.parse(JSON.stringify(err)));
           message.error("Error saving", 3);
         });
     } else {
@@ -84,8 +85,9 @@ const RequisitionForm: React.FC<Props> = (props) => {
           const rekData = result.data.createRequisition.requisition;
           history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
         })
-        .catch(() => {
+        .catch((err) => {
           hide();
+          console.error(JSON.parse(JSON.stringify(err)));
           message.error("Error saving", 3);
         });
     }
