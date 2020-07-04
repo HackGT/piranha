@@ -15,34 +15,26 @@ export type Project = {
   referenceString: string
 }
 
-export const PROJECTS_LIST_QUERY = gql`
+export const PROJECT_LIST_QUERY = gql`
   query projects {
-    projects(where: {archived: false}) {
+    projects {
       id
       name
+      archived
       referenceString
       year
+      shortCode
       leads {
+        id
         preferredName
         lastName
+      }
+      requisitionSet {
         id
       }
     }
-  }`;
-
-export const PROJECTS_QUERY = gql`
-  query projects {
-    projects(where: {archived: false}) {
-      id
-      name
-      referenceString
-    }
-  
-    vendors(where: {isActive: true}) {
-      id
-      name
-    }
-  }`;
+  }
+`;
 
 export const PROJECT_DETAIL_QUERY = gql`
   query project($year: Int!, $shortCode: String!) {
@@ -58,18 +50,8 @@ export const PROJECT_DETAIL_QUERY = gql`
         projectRequisitionId
         headline
         status
-        description
         canEdit
         otherFees
-        paymentRequiredBy
-        createdBy {
-          preferredName
-          lastName
-        }
-        vendor {
-          id
-          name
-        }
         project {
           referenceString
         }
@@ -79,13 +61,13 @@ export const PROJECT_DETAIL_QUERY = gql`
           quantity
           unitPrice
           link
-          notes
         }
       }
       leads {
+        id
         preferredName
         lastName
-        id
       }
     }
-  }`;
+  }
+`;

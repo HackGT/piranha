@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Input, message, Modal, Switch } from "antd";
 import { useMutation } from "@apollo/client";
 import { FORM_RULES } from "../../../util/util";
-import { CREATE_VENDOR_MUTATION, UPDATE_VENDOR_MUTATION } from "../../../types/Vendor";
+import { CREATE_VENDOR_MUTATION, VENDOR_LIST_QUERY, UPDATE_VENDOR_MUTATION } from "../../../types/Vendor";
 
 interface Props {
   visible: boolean;
@@ -13,7 +13,16 @@ interface Props {
 const VendorsFormModal: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
 
-  const [createVendor] = useMutation(CREATE_VENDOR_MUTATION);
+  const [createVendor] = useMutation(CREATE_VENDOR_MUTATION, {
+    update(cache, { data: { createVendor: createVendorData } }) {
+      // @ts-ignore
+      const { vendors } = cache.readQuery({ query: VENDOR_LIST_QUERY });
+      cache.writeQuery({
+        query: VENDOR_LIST_QUERY,
+        data: { vendors: vendors.concat([createVendorData.vendor]) }
+      });
+    }
+  });
   const [updateVendor] = useMutation(UPDATE_VENDOR_MUTATION);
 
   useEffect(() => form.resetFields(), [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372

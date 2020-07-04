@@ -6,32 +6,41 @@ export type Vendor = {
   isActive: boolean
 }
 
-export const MANAGE_VENDORS_QUERY = gql`
+export const VENDOR_INFO_FRAGMENT = gql`
+  fragment VendorInfoFragment on Vendor {
+    id
+    name
+    isActive
+  }
+`;
+
+export const VENDOR_LIST_QUERY = gql`
   query manageVendors {
     vendors {
-      id
-      name
-      isActive
+      ...VendorInfoFragment
     }
   }
+  ${VENDOR_INFO_FRAGMENT}
 `;
 
 export const CREATE_VENDOR_MUTATION = gql`
   mutation createVendor($data: VendorInput!) {
     createVendor(data: $data) {
       vendor {
-        id
+        ...VendorInfoFragment
       }
     }
   }
+  ${VENDOR_INFO_FRAGMENT}
 `;
 
 export const UPDATE_VENDOR_MUTATION = gql`
   mutation updateVendor($data: VendorInput!, $id: ID!) {
     updateVendor(data: $data, id: $id) {
       vendor {
-        id
+        ...VendorInfoFragment
       }
     }
   }
+  ${VENDOR_INFO_FRAGMENT}
 `;

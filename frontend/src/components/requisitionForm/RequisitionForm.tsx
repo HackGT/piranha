@@ -3,9 +3,8 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
-import { PROJECTS_QUERY } from "../../types/Project";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
+import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY } from "../../types/Requisition";
 import { FORM_RULES } from "../../util/util";
 
 const { TextArea } = Input;
@@ -21,7 +20,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
 
-  const { loading, data, error } = useQuery(PROJECTS_QUERY);
+  const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
   const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION);
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
@@ -124,7 +123,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Title level={2}>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
+      <Title>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
       <Form
         name="create"
         initialValues={props.editMode ? props.requisitionData : { items: [{}] }}

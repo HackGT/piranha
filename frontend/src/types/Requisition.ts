@@ -55,30 +55,17 @@ export type RequisitionFormData = {
   status: RequisitionStatus;
 }
 
-export const CREATE_REQUISITION_MUTATION = gql`
-  mutation createRequisition($data: RequisitionInput!) {
-    createRequisition(data: $data) {
-      requisition {
-        id
-        project {
-          referenceString
-        }
-        projectRequisitionId
-      }
+export const REQUISITION_FORM_QUERY = gql`
+  query projects {
+    projects(where: {archived: false}) {
+      id
+      name
+      referenceString
     }
-  }
-`;
-
-export const UPDATE_REQUISITION_MUTATION = gql`
-  mutation updateRequisition($data: RequisitionInput!, $id: ID!) {
-    updateRequisition(data: $data, id: $id) {
-      requisition {
-        id
-        project {
-          referenceString
-        }
-        projectRequisitionId
-      }
+  
+    vendors(where: {isActive: true}) {
+      id
+      name
     }
   }
 `;
@@ -93,6 +80,7 @@ export const OPEN_REQUISITIONS_QUERY = gql`
       status
       description
       project {
+        id
         referenceString
       }
       requisitionitemSet {
@@ -102,42 +90,75 @@ export const OPEN_REQUISITIONS_QUERY = gql`
       }
       otherFees
     }
-  }`;
+  }
+`;
+
+export const REQUISITION_INFO_FRAGMENT = gql`
+  fragment RequisitionInfoFragment on Requisition {
+    id
+    headline
+    description
+    status
+    createdBy {
+      id
+      preferredName
+      lastName
+    }
+    project {
+      id
+      name
+      referenceString
+      requisitionSet {
+        projectRequisitionId
+      }
+    }
+    vendor {
+      id
+      name
+    }
+    projectRequisitionId
+    paymentRequiredBy
+    requisitionitemSet {
+      id
+      name
+      quantity
+      unitPrice
+      link
+      notes
+    }
+    canEdit
+    referenceString
+    otherFees
+  }
+`;
 
 export const REQUISITION_DETAIL_QUERY = gql`
   query requisition($year: Int!, $shortCode: String!, $projectRequisitionId: Int!) {
     requisition(year: $year, shortCode: $shortCode, projectRequisitionId: $projectRequisitionId) {
-      id
-      headline
-      description
-      status
-      createdBy {
-        preferredName
-        lastName
-      }
-      project {
-        id
-        name
-        requisitionSet {
-          projectRequisitionId
-        }
-      }
-      vendor {
-        id
-        name
-      }
-      projectRequisitionId
-      paymentRequiredBy
-      requisitionitemSet {
-        id
-        name
-        quantity
-        unitPrice
-        link
-        notes
-      }
-      canEdit
-      referenceString
-      otherFees
+      ...RequisitionInfoFragment
     }
-  }`;
+  }
+  ${REQUISITION_INFO_FRAGMENT}
+`;
+
+export const CREATE_REQUISITION_MUTATION = gql`
+  mutation createRequisition($data: RequisitionInput!) {
+    createRequisition(data: $data) {
+      requisition {
+        ...RequisitionInfoFragment
+      }
+    }
+  }
+  ${REQUISITION_INFO_FRAGMENT}
+`;
+
+export const UPDATE_REQUISITION_MUTATION = gql`
+  mutation updateRequisition($data: RequisitionInput!, $id: ID!) {
+    updateRequisition(data: $data, id: $id) {
+      requisition {
+        ...RequisitionInfoFragment
+      }
+    }
+  }
+  ${REQUISITION_INFO_FRAGMENT}
+`;
