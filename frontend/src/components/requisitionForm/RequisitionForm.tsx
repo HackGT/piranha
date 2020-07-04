@@ -43,6 +43,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
     value: vendor.id
   }));
 
+  vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
+
   const saveDataToServer = (values: any) => {
     const mutationData = values;
     Object.keys(mutationData).forEach((key) => (mutationData[key] === undefined ? delete mutationData[key] : {}));

@@ -1,10 +1,8 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { Link } from "react-router-dom";
-import { Card, Empty, List, Skeleton, Typography } from "antd";
-import { UserOutlined } from "@ant-design/icons/lib";
-import { User } from "../../types/User";
+import { List, Typography } from "antd";
 import { Project, PROJECT_LIST_QUERY } from "../../types/Project";
+import ProjectListCard from "./ProjectListCard";
 
 const { Text, Title } = Typography;
 
@@ -20,52 +18,34 @@ const ProjectList: React.FC = () => {
     );
   }
 
-  if (data && !data.projects.length) {
-    return (
-      <>
-        <Title>Projects</Title>
-        <Empty />
-      </>
-    );
-  }
+  const projectData = loading ? [
+    { archived: true },
+    { archived: true },
+    { archived: false },
+    { archived: false }] : data.projects;
 
-  const projectData = loading ? [{}, {}] : data.projects;
+  const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 
   return (
     <>
       <Title>{loading ? "Loading..." : "Projects"}</Title>
+      <Title style={{ textAlign: "center" }} level={3}>Active Projects</Title>
       <List
-        grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 }}
-        dataSource={projectData}
+        grid={grid}
+        dataSource={projectData.filter((item: Project) => !item.archived)}
         renderItem={(item: Project) => (
           <List.Item>
-            <Link to={`/project/${item.referenceString}`}>
-              <Card
-                title={(
-                  <Skeleton loading={loading} paragraph={false} active>
-                    <div className="card-head-wrapper">
-                      <Title level={3} className="card-head-title">{item.name}</Title>
-                      <Title level={3} className="card-head-subtitle">{item.year}</Title>
-                    </div>
-                  </Skeleton>
-                )}
-                loading={loading}
-                hoverable
-              >
-                <Text strong underline>Leads</Text>
-                <List
-                  dataSource={item.leads}
-                  renderItem={(lead: User) => (
-                    <List.Item>
-                      <Text>
-                        <UserOutlined style={{ marginRight: "5px" }} />
-                        {`${lead.preferredName} ${lead.lastName}`}
-                      </Text>
-                    </List.Item>
-                  )}
-                />
-              </Card>
-            </Link>
+            <ProjectListCard item={item} loading={loading} />
+          </List.Item>
+        )}
+      />
+      <Title style={{ textAlign: "center", marginTop: "20px" }} level={3}>Archived Projects</Title>
+      <List
+        grid={grid}
+        dataSource={projectData.filter((item: Project) => item.archived)}
+        renderItem={(item: Project) => (
+          <List.Item>
+            <ProjectListCard item={item} loading={loading} />
           </List.Item>
         )}
       />
