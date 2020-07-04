@@ -18,7 +18,7 @@ const AdminHome: React.FC = () => (
           query={PROJECT_LIST_QUERY}
           title="Projects"
           tag={(item) => <Tag color={item.archived ? "gold" : "green"} style={{ margin: 0 }}>{item.archived ? "Archived" : "Active"}</Tag>}
-          sortData={(data) => data.projects.concat().sort((a: any, b: any) => a.year - b.year)}
+          sortData={(data) => data.projects.concat().sort((a: any, b: any) => b.year - a.year)}
           name={(item) => `${item.name} (${item.year})`}
           modal={ProjectFormModal}
         />
