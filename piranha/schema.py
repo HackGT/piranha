@@ -1,15 +1,15 @@
 import graphene
+from expenses.graphql import Query, Mutation
 
-import expenses.schema
 
-
-class Query(expenses.schema.Query, graphene.ObjectType):
+class Query(Query.Query, graphene.ObjectType):
     # This class will inherit from multiple Queries
     # as we begin to add more apps to our project
     pass
 
 
-class Mutation(expenses.schema.Mutation, graphene.ObjectType):
+class Mutation(Mutation.Mutation, graphene.ObjectType):
     pass
+
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
