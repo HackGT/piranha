@@ -16,7 +16,7 @@ const ManageContentModal: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
 
   const [createMutation] = useMutation(props.createMutation, {
-    update(cache, { data: { createMutation: createMutationData } }) {
+    update(cache, { data: createMutationData }) {
       props.updateCache(cache, createMutationData);
     }
   });

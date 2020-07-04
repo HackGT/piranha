@@ -16,7 +16,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   if (error) {
     return (
       <>
-        <Text type="danger">Error: Unable to load user llist.</Text>
+        <Text type="danger">Error: Unable to load user list.</Text>
         <Text>{error?.message}</Text>
       </>
     );
@@ -39,11 +39,11 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
       updateMutation={UPDATE_PROJECT_MUTATION}
       name="Project"
       updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-      // @ts-ignore
+        // @ts-ignore
         const { projects } = cache.readQuery({ query: PROJECT_LIST_QUERY });
         cache.writeQuery({
           query: PROJECT_LIST_QUERY,
-          data: { projects: projects.concat([createMutationData.project]) }
+          data: { projects: projects.concat([createMutationData.createProject.project]) }
         });
       }}
     >
