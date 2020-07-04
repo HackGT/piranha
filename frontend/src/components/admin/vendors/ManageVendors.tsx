@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, List, Tag, Typography } from "antd";
 import { useQuery } from "@apollo/client";
-import { MANAGE_VENDORS_QUERY, Vendor } from "../../../types/Vendor";
+import { VENDOR_LIST_QUERY, Vendor } from "../../../types/Vendor";
 import VendorsFormModal from "./VendorsFormModal";
 
 const { Title, Text } = Typography;
@@ -17,7 +17,7 @@ const ManageVendors: React.FC = () => {
     initialValues: null
   } as ModalState);
 
-  const { loading, data, error } = useQuery(MANAGE_VENDORS_QUERY);
+  const { loading, data, error } = useQuery(VENDOR_LIST_QUERY);
 
   const openModal = (vendor: Vendor | null) => {
     setModalState({

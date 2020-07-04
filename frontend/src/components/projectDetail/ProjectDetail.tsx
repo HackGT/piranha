@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Typography, Table, Tag, Button } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
@@ -9,7 +9,7 @@ import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHo
 
 import "./index.css";
 
-const { Text, Title, Link } = Typography;
+const { Text, Title } = Typography;
 
 type RequisitionTableData = {
   key: number,
@@ -61,7 +61,11 @@ const ProjectDetail: React.FC = () => {
             }
           };
         }
-        return <Link href={`/project/${projectReference}/requisition/${record.projectRequisitionId}`} strong>{record.headline}</Link>;
+        return (
+          <Link to={`/project/${projectReference}/requisition/${record.projectRequisitionId}`} style={{ fontWeight: "bold" }}>
+            {record.headline}
+          </Link>
+        );
       }
     },
     {
@@ -87,7 +91,11 @@ const ProjectDetail: React.FC = () => {
         if ("isChild" in record || !record.canEdit) {
           return null;
         }
-        return <Link href={`/project/${projectReference}/requisition/${record.projectRequisitionId}/edit`}>Edit</Link>;
+        return (
+          <Link to={`/project/${projectReference}/requisition/${record.projectRequisitionId}/edit`}>
+            Edit
+          </Link>
+        );
       }
     }
   ];
@@ -103,7 +111,7 @@ const ProjectDetail: React.FC = () => {
         key: `${requisition.projectRequisitionId.toString()}-${index}`,
         nameElement: (
           <>
-            <Link className="table-first-element" href={item.link} target="_blank">{item.name}</Link>
+            <Typography.Link className="table-first-element" href={item.link} target="_blank">{item.name}</Typography.Link>
             <Text>
               {(item.quantity && item.unitPrice) ? `: ${item.quantity} @ ${formatPrice(item.unitPrice)}` : `Item ${index + 1}`}
             </Text>

@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { Card, Empty, List, Skeleton, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons/lib";
 import { User } from "../../types/User";
-import { Project, PROJECTS_LIST_QUERY } from "../../types/Project";
+import { Project, PROJECT_LIST_QUERY } from "../../types/Project";
 
 const { Text, Title } = Typography;
 
 const ProjectList: React.FC = () => {
-  const { loading, data, error } = useQuery(PROJECTS_LIST_QUERY);
+  const { loading, data, error } = useQuery(PROJECT_LIST_QUERY);
 
   if (error || (data && !data.projects)) {
     return (
