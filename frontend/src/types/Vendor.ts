@@ -15,7 +15,7 @@ export const VENDOR_INFO_FRAGMENT = gql`
 `;
 
 export const VENDOR_LIST_QUERY = gql`
-  query manageVendors {
+  query vendorList {
     vendors {
       ...VendorInfoFragment
     }
