@@ -37,8 +37,9 @@ const ManageContentModal: React.FC<Props> = (props) => {
         }
 
         hide();
-        message.success("Successfully updated", 2);
         props.closeModal();
+        message.success("Successfully updated", 2);
+        form.resetFields();
       } catch (err) {
         hide();
         message.error("Error saving", 2);
