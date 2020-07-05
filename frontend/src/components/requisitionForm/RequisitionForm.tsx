@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
@@ -9,7 +9,7 @@ import { RequisitionFormData,
   UPDATE_REQUISITION_MUTATION,
   REQUISITION_FORM_QUERY,
   RequisitionStatus } from "../../types/Requisition";
-import { FORM_RULES } from "../../util/util";
+import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
@@ -23,11 +23,12 @@ interface Props {
 const RequisitionForm: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
+  const [runningTotal, setRunningTotal] = useState(getTotalCost(props.requisitionData, true));
 
   const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
   const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION);
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-
+  
   if (error) {
     return (
       <>
@@ -114,6 +115,10 @@ const RequisitionForm: React.FC<Props> = (props) => {
     }
   };
 
+  const onValuesChange = (changedValues: any, allValues: any) => {
+    setRunningTotal(getTotalCost(allValues, true));
+  };
+
   const halfLayout = {
     xs: 24, sm: 12, md: 8, lg: 6, xl: 6
   };
@@ -131,6 +136,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         initialValues={props.editMode ? props.requisitionData : { requisitionitemSet: [{}] }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={onValuesChange}
         layout="vertical"
         autoComplete="off"
         form={form}
@@ -258,11 +264,20 @@ const RequisitionForm: React.FC<Props> = (props) => {
           )}
         </Form.List>
 
+        <Row gutter={[0, 16]} justify="center">
+          <Col {...fullLayout}>
+            <Text>
+              <strong>Total: </strong>
+              {formatPrice(runningTotal)}
+            </Text>
+          </Col>
+        </Row>
+
         <Row justify="center">
           <Col {...fullLayout}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">{submittalMode ? "Submit for Review" : "Save"}</Button>
-              {showDraftButton && <Button style={{ marginLeft: "10px" }} onClick={() => onSaveDraft()}>Save as Draft</Button>}
+              <Button type="primary" htmlType="submit" style={{ margin: "0 10px 10px 0" }}>{submittalMode ? "Submit for Review" : "Save"}</Button>
+              {showDraftButton && <Button onClick={() => onSaveDraft()}>Save as Draft</Button>}
             </Form.Item>
           </Col>
         </Row>
