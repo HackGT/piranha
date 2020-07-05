@@ -82,7 +82,7 @@ export const parseRequisitionParams = (projectReference: (string | null), requis
 export const FORM_RULES = {
   requiredRule: {
     required: true,
-    message: "Please input this field."
+    message: "This field is required."
   },
   urlRule: {
     type: "url",
@@ -90,7 +90,7 @@ export const FORM_RULES = {
   } as Rule,
   moneyRule: { // Checks if entered value is greater than 0
     validator: (rule: RuleObject, value: StoreValue) => {
-      if (!value || parseInt(value as string) > 0) {
+      if (!value || parseFloat(value as string) > 0) {
         return Promise.resolve();
       }
       return Promise.reject(new Error("Please enter a value greater than 0."));

@@ -90,7 +90,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
           fieldKey={[props.field.fieldKey, "unitPrice"]}
           rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
           label="Unit Price"
-          normalize={(value: any) => parseInt(value)}
+          normalize={(value: any) => (value ? parseFloat(value) : null)}
         >
           <Input prefix="$" type="number" placeholder="99.99" />
         </Form.Item>
