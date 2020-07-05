@@ -101,14 +101,16 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
               showSearch
             />
           </Form.Item>
-          <Form.Item
-            name="archived"
-            label="Archived"
-            valuePropName="checked"
-            initialValue={initialValues ? initialValues.archived : false}
-          >
-            <Switch />
-          </Form.Item>
+          {initialValues && (
+            <Form.Item
+              name="archived"
+              label="Archived"
+              valuePropName="checked"
+              initialValue={initialValues.archived}
+            >
+              <Switch />
+            </Form.Item>
+          )}
         </>
       )}
     </ManageContentModal>

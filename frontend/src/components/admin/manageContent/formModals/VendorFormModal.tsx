@@ -36,14 +36,16 @@ const VendorFormModal: React.FC<FormModalProps> = (props) => (
         >
           <Input placeholder="Wristband Superstore" />
         </Form.Item>
-        <Form.Item
-          name="isActive"
-          label="Active"
-          valuePropName="checked"
-          initialValue={initialValues ? initialValues.isActive : true}
-        >
-          <Switch />
-        </Form.Item>
+        {initialValues && (
+          <Form.Item
+            name="isActive"
+            label="Active"
+            valuePropName="checked"
+            initialValue={initialValues.isActive}
+          >
+            <Switch />
+          </Form.Item>
+        )}
       </>
     )}
   </ManageContentModal>
