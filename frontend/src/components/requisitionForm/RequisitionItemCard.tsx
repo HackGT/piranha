@@ -102,7 +102,6 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
         <Form.Item
           name={[props.field.name, "notes"]}
           fieldKey={[props.field.fieldKey, "notes"]}
-          rules={[FORM_RULES.requiredRule]}
           label={(
             <span>
               {"Notes "}

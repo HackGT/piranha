@@ -10,15 +10,17 @@ interface Props {
   loading: boolean;
 }
 
+type RequisitionItemRow = RequisitionItem & { isNotesRow: boolean }
+
 const RequisitionItemsTable: React.FC<Props> = (props) => {
   const columns = [
     {
       title: "Item",
       dataIndex: "name",
-      render: (text: string, record: RequisitionItem, index: number) => {
-        if (index % 2 === 1) {
+      render: (text: string, record: RequisitionItemRow, index: number) => {
+        if (record.isNotesRow) {
           return {
-            children: <Text>{record.notes || "Notes: Not Set"}</Text>,
+            children: <Text>{record.notes}</Text>,
             props: {
               colSpan: 3
             }
@@ -34,8 +36,8 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
     },
     {
       title: "Quantity",
-      render: (text: number, record: RequisitionItem, index: number) => {
-        if (index % 2 === 1) {
+      render: (text: number, record: RequisitionItemRow, index: number) => {
+        if (record.isNotesRow) {
           return {
             props: {
               colSpan: 0
@@ -50,8 +52,8 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
     },
     {
       title: "Subtotal",
-      render: (text: string, record: RequisitionItem, index: number) => {
-        if (index % 2 === 1) {
+      render: (text: string, record: RequisitionItemRow, index: number) => {
+        if (record.isNotesRow) {
           return {
             props: {
               colSpan: 0
@@ -63,8 +65,13 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
     }
   ];
 
-  // Duplicates the rows so every other row can be used for the notes
-  const rows = props.loading ? [] : props.data.requisitionitemSet.flatMap((item) => [item, item]);
+  // Duplicates the rows so that items with notes have an extra row
+  const rows = props.loading ? [] : props.data.requisitionitemSet.flatMap((item) => {
+    if (item.notes) {
+      return [{ ...item, isNotesRow: false }, { ...item, isNotesRow: true }];
+    }
+    return [{ ...item, isNotesRow: false }];
+  });
 
   return (
     <Table
@@ -75,7 +82,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
       size="small"
       bordered
       scroll={{ x: true }}
-      summary={(items: RequisitionItem[]) => (props.loading ? null
+      summary={() => (props.loading ? null
         : (
           <>
             <Table.Summary.Row>
