@@ -45,13 +45,7 @@ export type RequisitionFormData = {
   vendor: string | undefined;
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
-  requisitionitemSet: {
-    name: string;
-    link: string;
-    quantity: number;
-    unitPrice: string;
-    notes: string;
-  }[]
+  requisitionitemSet:RequisitionItem[];
   status: RequisitionStatus;
 }
 

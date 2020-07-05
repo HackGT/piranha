@@ -2,7 +2,7 @@ import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
 import { Rule, RuleObject } from "antd/es/form";
 import { StoreValue } from "@apollo/client";
-import { Requisition, RequisitionStatus } from "../types/Requisition";
+import { Requisition, RequisitionFormData, RequisitionStatus } from "../types/Requisition";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {
   switch (status) {
@@ -54,11 +54,21 @@ export const formatPrice = (num: number) => {
   return (num || 0).toLocaleString("en-US", options);
 };
 
-export const getTotalCost = (requisition: Requisition, includeOtherFees: boolean) => {
-  if (requisition && requisition.requisitionitemSet) {
-    const total = requisition.requisitionitemSet.reduce((prev, curr) => prev + (curr.quantity * curr.unitPrice), 0);
+export const getTotalCost = (requisition: Requisition | RequisitionFormData | undefined, includeOtherFees: boolean) => {
+  if (requisition) {
+    let itemTotal = 0;
 
-    return includeOtherFees ? total + requisition.otherFees : total;
+    if (requisition.requisitionitemSet) {
+      itemTotal = requisition.requisitionitemSet.reduce((prev, curr) => {
+        if (curr.quantity && curr.unitPrice) {
+          return prev + (curr.quantity * curr.unitPrice);
+        }
+        return prev;
+      }, 0);
+    }
+
+    // @ts-ignore
+    return includeOtherFees ? itemTotal + parseFloat(requisition.otherFees || 0) : itemTotal;
   }
 
   return 0;
