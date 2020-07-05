@@ -24,40 +24,29 @@ const ManageContentModal: React.FC<Props> = (props) => {
 
   useEffect(() => form.resetFields(), [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372
 
-  const onSubmit = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        const hide = message.loading("Saving...", 0);
+  const onSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const hide = message.loading("Saving...", 0);
+
+      try {
         if (props.initialValues) {
-          updateMutation({ variables: { data: values, id: props.initialValues.id } })
-            .then(() => {
-              hide();
-              message.success("Successfully updated", 2);
-              props.closeModal();
-            })
-            .catch((err) => {
-              hide();
-              console.error(JSON.parse(JSON.stringify(err)));
-              message.error("Error saving", 2);
-            });
+          await updateMutation({ variables: { data: values, id: props.initialValues.id } });
         } else {
-          createMutation({ variables: { data: values } })
-            .then(() => {
-              hide();
-              message.success("Successfully created", 2);
-              props.closeModal();
-            })
-            .catch((err) => {
-              hide();
-              console.error(JSON.parse(JSON.stringify(err)));
-              message.error("Error saving", 2);
-            });
+          await createMutation({ variables: { data: values } });
         }
-      })
-      .catch((info) => {
-        console.log("Validate Failed:", info);
-      });
+
+        hide();
+        message.success("Successfully updated", 2);
+        props.closeModal();
+      } catch (err) {
+        hide();
+        message.error("Error saving", 2);
+        console.error(JSON.parse(JSON.stringify(err)));
+      }
+    } catch (info) {
+      console.log("Validate Failed:", info);
+    }
   };
 
   return (

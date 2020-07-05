@@ -52,7 +52,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
 
-  const saveDataToServer = (values: any, requisitionStatus: RequisitionStatus) => {
+  const saveDataToServer = async (values: any, requisitionStatus: RequisitionStatus) => {
     const mutationData: RequisitionFormData = {
       headline: values.headline,
       project: values.project,
@@ -71,56 +71,47 @@ const RequisitionForm: React.FC<Props> = (props) => {
     };
 
     const hide = message.loading("Saving requisition...", 0);
-    if (props.editMode) {
-      updateRequisition({ variables: { data: mutationData, id: props.requisitionId } })
-        .then((result) => {
-          hide();
-          message.success("Successfully updated", 3);
 
-          const rekData = result.data.updateRequisition.requisition;
-          history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
-        })
-        .catch((err) => {
-          hide();
-          console.error(JSON.parse(JSON.stringify(err)));
-          message.error("Error saving", 3);
-        });
-    } else {
-      createRequisition({ variables: { data: mutationData } })
-        .then((result) => {
-          hide();
-          message.success("Successfully created", 3);
+    try {
+      let rekData, text;
+      if (props.editMode) {
+        const result = await updateRequisition({ variables: { data: mutationData, id: props.requisitionId } });
+        text = "Successfully updated";
+        rekData = result.data.updateRequisition.requisition;
+      } else {
+        const result = await createRequisition({ variables: { data: mutationData } });
+        text = "Successfully created";
+        rekData = result.data.createRequisition.requisition;
+      }
 
-          const rekData = result.data.createRequisition.requisition;
-          history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
-        })
-        .catch((err) => {
-          hide();
-          console.error(JSON.parse(JSON.stringify(err)));
-          message.error("Error saving", 3);
-        });
+      hide();
+      message.success(text, 2);
+      history.push(`/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`);
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
     }
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log("Form Success:", values);
-    saveDataToServer(values, submittalMode ? "SUBMITTED" : props.requisitionData!.status);
+    await saveDataToServer(values, submittalMode ? "SUBMITTED" : props.requisitionData!.status);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    message.error("Please complete the required fields.", 3);
+    message.error("Please complete the required fields.", 2);
     console.log("Failed:", errorInfo);
   };
 
-  const onSaveDraft = () => {
-    form.validateFields(["headline", "project"])
-      .then((res) => {
-        saveDataToServer(form.getFieldsValue(), "DRAFT");
-      })
-      .catch((err) => {
-        message.error("Please complete the required fields.", 3);
-        console.error(err);
-      });
+  const onSaveDraft = async () => {
+    try {
+      await form.validateFields(["headline", "project"]);
+      await saveDataToServer(form.getFieldsValue(), "DRAFT");
+    } catch (err) {
+      message.error("Please complete the required fields.", 2);
+      console.error(err);
+    }
   };
 
   const halfLayout = {
