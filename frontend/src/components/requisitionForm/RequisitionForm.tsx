@@ -4,7 +4,11 @@ import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip,
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY } from "../../types/Requisition";
+import { RequisitionFormData,
+  CREATE_REQUISITION_MUTATION,
+  UPDATE_REQUISITION_MUTATION,
+  REQUISITION_FORM_QUERY,
+  RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES } from "../../util/util";
 
 const { TextArea } = Input;
@@ -43,25 +47,28 @@ const RequisitionForm: React.FC<Props> = (props) => {
     value: vendor.id
   }));
 
+  // Determines if requisition is submitting for review or just editing to save changes by an admin
+  const submittalMode = !props.requisitionData || ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status);
+
   vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
 
-  const saveDataToServer = (values: any) => {
-    const mutationData = values;
-    Object.keys(mutationData).forEach((key) => (mutationData[key] === undefined ? delete mutationData[key] : {}));
-
-    if (mutationData.paymentRequiredBy) {
-      mutationData.paymentRequiredBy = mutationData.paymentRequiredBy.format();
-    }
-
-    mutationData.requisitionitemSet = mutationData.items.filter((item: any) => Object.keys(item).length !== 0).map((item: any) => ({
-      ...item.name !== undefined && { name: item.name },
-      ...item.link !== undefined && { link: item.link },
-      ...item.quantity !== undefined && { quantity: item.quantity },
-      ...item.unitPrice !== undefined && { unitPrice: item.unitPrice },
-      ...item.notes !== undefined && { notes: item.notes }
-    }));
-
-    delete mutationData.items;
+  const saveDataToServer = (values: any, requisitionStatus: RequisitionStatus) => {
+    const mutationData: RequisitionFormData = {
+      headline: values.headline,
+      project: values.project,
+      description: values.description,
+      vendor: values.vendor || undefined,
+      paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format() : null,
+      otherFees: values.otherFees,
+      requisitionitemSet: values.requisitionitemSet.map((item: any) => ({
+        name: item.name,
+        link: item.link,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        notes: item.notes
+      })),
+      status: requisitionStatus
+    };
 
     const hide = message.loading("Saving requisition...", 0);
     if (props.editMode) {
@@ -97,7 +104,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   const onFinish = (values: any) => {
     console.log("Form Success:", values);
-    saveDataToServer(values);
+    saveDataToServer(values, submittalMode ? "SUBMITTED" : props.requisitionData!.status);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -108,7 +115,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const onSaveDraft = () => {
     form.validateFields(["headline", "project"])
       .then((res) => {
-        saveDataToServer(form.getFieldsValue());
+        saveDataToServer(form.getFieldsValue(), "DRAFT");
       })
       .catch((err) => {
         message.error("Please complete the required fields.", 3);
@@ -130,7 +137,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       <Title>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
       <Form
         name="create"
-        initialValues={props.editMode ? props.requisitionData : { items: [{}] }}
+        initialValues={props.editMode ? props.requisitionData : { requisitionitemSet: [{}] }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         layout="vertical"
@@ -216,7 +223,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
             <Form.Item
               name="otherFees"
               rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
-              normalize={(value: any) => parseInt(value)}
+              normalize={(value: any) => (value ? parseFloat(value) : null)}
               label={(
                 <span>
                   {"Other Fees "}
@@ -231,7 +238,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           </Col>
         </Row>
 
-        <Form.List name="items">
+        <Form.List name="requisitionitemSet">
           {(fields, { add, remove }) => (
             <div>
               {fields.map((field) => (
@@ -263,7 +270,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Row justify="center">
           <Col {...fullLayout}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">{props.editMode ? "Save" : "Submit"}</Button>
+              <Button type="primary" htmlType="submit">{submittalMode ? "Submit for Review" : "Save"}</Button>
               {showDraftButton && <Button style={{ marginLeft: "10px" }} onClick={() => onSaveDraft()}>Save as Draft</Button>}
             </Form.Item>
           </Col>

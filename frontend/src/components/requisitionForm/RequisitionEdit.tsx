@@ -32,14 +32,14 @@ const RequisitionEdit: React.FC = () => {
   }
 
   const requisitionData: RequisitionFormData = {
-    description: data.requisition.description,
     headline: data.requisition.headline,
-    items: data.requisition.requisitionitemSet.length === 0 ? [{}] : data.requisition.requisitionitemSet,
-    otherFees: data.requisition.otherFees,
-    paymentRequiredBy: data.requisition.paymentRequiredBy ? moment(data.requisition.paymentRequiredBy) : undefined,
     project: data.requisition.project.id,
-    status: data.requisition.status,
-    vendor: data.requisition.vendor ? data.requisition.vendor.id : undefined
+    description: data.requisition.description,
+    vendor: data.requisition.vendor ? data.requisition.vendor.id : null,
+    paymentRequiredBy: data.requisition.paymentRequiredBy ? moment(data.requisition.paymentRequiredBy) : null,
+    otherFees: data.requisition.otherFees,
+    requisitionitemSet: data.requisition.requisitionitemSet.length === 0 ? [{}] : data.requisition.requisitionitemSet,
+    status: data.requisition.status
   };
 
   return (

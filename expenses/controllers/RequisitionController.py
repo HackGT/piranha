@@ -24,7 +24,7 @@ class RequisitionController:
             new_data = {
                 "project": project,
                 "vendor": Vendor.objects.get(id=data["vendor"]) if "vendor" in data else None,
-                "project_requisition_id": id_max["project_requisition_id__max"] + 1,
+                "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 "created_by": info.context.user
             }
             new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "project", "vendor"]})
@@ -45,9 +45,8 @@ class RequisitionController:
         if info.context.user.has_perm("expenses.change_requisition"):
             query = Requisition.objects.filter(id=id)
 
-            project = Project.objects.get(id=data["project"])
             new_data = {
-                "project": project,
+                "project": Project.objects.get(id=data["project"]),
                 "vendor": Vendor.objects.get(id=data["vendor"]) if "vendor" in data else None,
             }
             new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "project", "vendor"]})

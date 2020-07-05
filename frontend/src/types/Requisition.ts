@@ -42,10 +42,10 @@ export type RequisitionFormData = {
   headline: string;
   project: string;
   description: string;
-  vendor: string;
-  paymentRequiredBy: moment.Moment | undefined;
+  vendor: string | undefined;
+  paymentRequiredBy: moment.Moment | null;
   otherFees: string;
-  items: {
+  requisitionitemSet: {
     name: string;
     link: string;
     quantity: number;
