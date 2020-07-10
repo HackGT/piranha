@@ -45,6 +45,11 @@ class RequisitionType(DjangoObjectType):
     def resolve_can_edit(self, info):
         return info.context.user.has_perm("expenses.change_requisition", self)
 
+    can_cancel = graphene.Boolean()
+
+    def resolve_can_cancel(self, info):
+        return is_exec(info.context.user)
+
     reference_string = graphene.String()
 
     def resolve_reference_string(self, info):

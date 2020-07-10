@@ -66,10 +66,14 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <Title level={3} style={{ fontSize: "20px" }}>Actions</Title>
           <Button type="primary" className="action-button">Approve</Button>
-          <Link to={`${location.pathname.replace(/\/+$/, "")}/edit`}>
-            <Button className="action-button">Edit</Button>
-          </Link>
-          <Button className="action-button" danger>Cancel</Button>
+          {rekData.canEdit
+          && (
+            <Link to={`${location.pathname.replace(/\/+$/, "")}/edit`}>
+              <Button className="action-button">Edit</Button>
+            </Link>
+          )}
+          {rekData.canCancel
+          && <Button className="action-button" danger>Cancel</Button>}
         </Col>
       </Row>
       <Row gutter={[16, 32]}>
