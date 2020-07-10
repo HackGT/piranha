@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, List, Typography } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
 import { FormModalProps } from "./formModals/FormModalProps";
+import ErrorDisplay from "../../../util/ErrorDisplay";
 
 const { Title, Text } = Typography;
 
@@ -35,12 +36,7 @@ const ManageContentList: React.FC<Props> = (props) => {
   };
 
   if (error) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to display list.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const sortedData = data ? props.sortData(data) : [];

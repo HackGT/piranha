@@ -8,6 +8,7 @@ import { Requisition } from "../../types/Requisition";
 import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook } from "../../util/util";
 
 import "./index.css";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { Text, Title } = Typography;
 
@@ -35,12 +36,7 @@ const ProjectDetail: React.FC = () => {
   });
 
   if (error || (data && !data.project)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to display this project</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const columns = [

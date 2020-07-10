@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, InputNumber, Select, Switch, Tooltip, Typography } from "antd";
+import { Form, Input, InputNumber, Select, Switch, Tooltip } from "antd";
 import { ApolloCache, useQuery } from "@apollo/client";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { FORM_RULES } from "../../../../util/util";
@@ -7,19 +7,13 @@ import { CREATE_PROJECT_MUTATION, PROJECT_LIST_QUERY, UPDATE_PROJECT_MUTATION } 
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
 import { ALL_USERS_QUERY } from "../../../../types/User";
-
-const { Text } = Typography;
+import ErrorDisplay from "../../../../util/ErrorDisplay";
 
 const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   const { loading, data, error } = useQuery(ALL_USERS_QUERY);
 
   if (error) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to load user list.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const leadOptions = loading ? [] : data.users.map((user: any) => ({

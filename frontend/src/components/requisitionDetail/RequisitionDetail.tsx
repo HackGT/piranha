@@ -9,6 +9,7 @@ import { parseRequisitionParams, screenWidthHook, StatusToColor, StatusToStep, S
 import RequisitionItemsTable from "./RequisitionItemsTable";
 
 import "./index.css";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { Text, Title } = Typography;
 const { Step } = Steps;
@@ -27,12 +28,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
   });
 
   if (error || (data && !data.requisition)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to display this requisition.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   // @ts-ignore

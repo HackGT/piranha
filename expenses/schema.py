@@ -20,9 +20,7 @@ class UserType(DjangoObjectType):
 class ProjectType(DjangoObjectType):
     leads = graphene.List(UserType)
 
-    @graphene.resolve_only_args
-    def resolve_leads(self):
-        # TODO: permissions
+    def resolve_leads(self, info):
         return self.leads.all()
 
     reference_string = graphene.String()

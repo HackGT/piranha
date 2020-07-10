@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HeartOutlined } from "@ant-design/icons";
-import { Layout, Spin, Typography } from "antd";
+import { Layout, Spin } from "antd";
 import "./App.css";
 import { useQuery } from "@apollo/client";
 import Navigation from "./components/navigation/Navigation";
@@ -15,20 +15,15 @@ import AdminHome from "./components/admin/AdminHome";
 import { User, USER_INFO_QUERY } from "./types/User";
 import PrivateRoute from "./util/PrivateRoute";
 import NotFound from "./components/NotFound";
+import ErrorDisplay from "./util/ErrorDisplay";
 
 const { Header, Content, Footer } = Layout;
-const { Text } = Typography;
 
 const App:React.FC = () => {
   const { loading, data, error } = useQuery(USER_INFO_QUERY);
 
   if (error || (data && !data.user)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to continue. Error retrieving user information.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const user: User = data && data.user;
