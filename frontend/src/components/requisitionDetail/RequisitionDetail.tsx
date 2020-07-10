@@ -83,7 +83,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
           <Tooltip title={!rekData.canEdit && "You must be a project lead or exec member to edit a requisition after submission."}>
             <Button className="action-button" onClick={handleEdit} disabled={!rekData.canEdit}>Edit</Button>
           </Tooltip>
-          <Tooltip title={!rekData.canCancel && "You must be a exec member to cancel a requisition."}>
+          <Tooltip title={!rekData.canCancel && "You must be an exec member to cancel a requisition."}>
             <Button className="action-button" danger onClick={handleCancel} disabled={!rekData.canCancel}>Cancel</Button>
           </Tooltip>
         </Col>
