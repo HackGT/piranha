@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory, Link, useLocation } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import moment from "moment";
-import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tag, Typography } from "antd";
+import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tag, Tooltip, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
 import { parseRequisitionParams, screenWidthHook, StatusToColor, StatusToStep, StatusToString } from "../../util/util";
 
@@ -49,6 +49,20 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     }
   ];
 
+  const handleEdit = () => {
+    if (rekData.canEdit) {
+      history.push(`${location.pathname.replace(/\/+$/, "")}/edit`);
+    }
+  };
+
+  const handleCancel = () => {
+    // TODO Cancel requisition
+  };
+
+  const handleApprove = () => {
+    // TODO Approve requisition
+  };
+
   return (
     <>
       <Row gutter={[16, 16]}>
@@ -65,15 +79,13 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <Title level={3} style={{ fontSize: "20px" }}>Actions</Title>
-          <Button type="primary" className="action-button">Approve</Button>
-          {rekData.canEdit
-          && (
-            <Link to={`${location.pathname.replace(/\/+$/, "")}/edit`}>
-              <Button className="action-button">Edit</Button>
-            </Link>
-          )}
-          {rekData.canCancel
-          && <Button className="action-button" danger>Cancel</Button>}
+          <Button className="action-button" type="primary" onClick={handleApprove}>Approve</Button>
+          <Tooltip title={!rekData.canEdit && "You must be a project lead or exec member to edit a requisition after submission."}>
+            <Button className="action-button" onClick={handleEdit} disabled={!rekData.canEdit}>Edit</Button>
+          </Tooltip>
+          <Tooltip title={!rekData.canCancel && "You must be a exec member to cancel a requisition."}>
+            <Button className="action-button" danger onClick={handleCancel} disabled={!rekData.canCancel}>Cancel</Button>
+          </Tooltip>
         </Col>
       </Row>
       <Row gutter={[16, 32]}>
