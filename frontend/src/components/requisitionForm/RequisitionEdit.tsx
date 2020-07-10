@@ -1,13 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Spin, Typography } from "antd";
+import { Spin } from "antd";
 import moment from "moment";
 import { parseRequisitionParams } from "../../util/util";
 import { REQUISITION_DETAIL_QUERY, RequisitionFormData } from "../../types/Requisition";
 import RequisitionForm from "./RequisitionForm";
-
-const { Text } = Typography;
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const RequisitionEdit: React.FC = () => {
   const { projectReference, requisitionReference } = useParams();
@@ -19,12 +18,7 @@ const RequisitionEdit: React.FC = () => {
   });
 
   if (error || (data && !data.requisition)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to edit this requisition.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
   
   if (loading) {

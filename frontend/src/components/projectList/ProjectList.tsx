@@ -3,19 +3,15 @@ import { useQuery } from "@apollo/client";
 import { List, Typography } from "antd";
 import { Project, PROJECT_LIST_QUERY } from "../../types/Project";
 import ProjectListCard from "./ProjectListCard";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const ProjectList: React.FC = () => {
   const { loading, data, error } = useQuery(PROJECT_LIST_QUERY);
 
   if (error || (data && !data.projects)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to display the projects.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const projectData = loading ? [

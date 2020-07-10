@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { OPEN_REQUISITIONS_QUERY, Requisition } from "../../types/Requisition";
 import HomeRequisitionCard from "./HomeRequisitionCard";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { Title, Text } = Typography;
 
@@ -32,12 +33,7 @@ const Home: React.FC = () => {
   const { loading, data, error } = useQuery(OPEN_REQUISITIONS_QUERY);
 
   if (error || (data && !data.requisitions)) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to load the home screen.</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const emptyRek = {

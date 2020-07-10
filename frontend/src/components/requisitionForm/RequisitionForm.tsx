@@ -10,6 +10,7 @@ import { RequisitionFormData,
   REQUISITION_FORM_QUERY,
   RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
@@ -30,12 +31,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
   
   if (error) {
-    return (
-      <>
-        <Text type="danger">Error: Unable to display this project</Text>
-        <Text>{error?.message}</Text>
-      </>
-    );
+    return <ErrorDisplay message={error?.message} />;
   }
 
   const projectOptions = loading ? [] : data.projects.map((project: any) => ({
