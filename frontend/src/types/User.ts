@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
 
 export type User = {
+  id: string,
   preferredName: string,
   lastName: string,
-  id: string
+  email: string,
+  hasAdminAccess: boolean
 }
 
 export const ALL_USERS_QUERY = gql`
@@ -12,6 +14,18 @@ export const ALL_USERS_QUERY = gql`
       id
       preferredName
       lastName
+    }
+  }
+`;
+
+export const USER_INFO_QUERY = gql`
+  query user {
+    user {
+      id
+      preferredName
+      lastName
+      email
+      hasAdminAccess
     }
   }
 `;

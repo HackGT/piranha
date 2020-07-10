@@ -30,4 +30,9 @@ def is_member(user):
 
 @rules.predicate
 def is_exec(user):
-    return is_group_member("exec")(user)
+    return is_group_member("exec")(user) or is_group_member("admin")(user)
+
+
+@rules.predicate
+def is_admin(user):
+    return is_group_member("admin")(user)

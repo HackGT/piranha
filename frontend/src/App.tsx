@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HeartOutlined } from "@ant-design/icons";
-import { Layout } from "antd";
+import { Layout, Spin, Typography } from "antd";
 import "./App.css";
+import { useQuery } from "@apollo/client";
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
 import RequisitionForm from "./components/requisitionForm/RequisitionForm";
@@ -11,36 +12,47 @@ import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail"
 import ProjectList from "./components/projectList/ProjectList";
 import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
+import { User, USER_INFO_QUERY } from "./types/User";
+import PrivateRoute from "./util/PrivateRoute";
 
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
-function App() {
+const App:React.FC = () => {
+  const { loading, data, error } = useQuery(USER_INFO_QUERY);
+
+  if (error || (data && !data.user)) {
+    return (
+      <>
+        <Text type="danger">Error: Unable to continue. Error retrieving user information.</Text>
+        <Text>{error?.message}</Text>
+      </>
+    );
+  }
+
+  const user: User = data && data.user;
+
   return (
     <Router>
       <Layout className="App" style={{ minHeight: "100vh" }}>
         <Header style={{ padding: "0px 30px" }}>
-          <Navigation />
+          <Navigation user={user} />
         </Header>
         <Content id="wrapper">
           <div style={{ background: "#fff", padding: "24px", flexGrow: 1 }}>
-            <Switch>
-              <Route
-                path="/project/:projectReference/requisition/:requisitionReference/edit"
-                component={RequisitionEdit}
-              />
-              <Route
-                path="/project/:projectReference/requisition/:requisitionReference"
-                component={RequisitionDetail}
-              />
-              <Route
-                path="/project/:projectReference"
-                component={ProjectDetail}
-              />
-              <Route exact path="/project" component={ProjectList} />
-              <Route exact path="/requisition" component={RequisitionForm} />
-              <Route exact path="/" component={Home} />
-              <Route exact path="/admin" component={AdminHome} />
-            </Switch>
+            {loading
+              ? <Spin style={{ position: "absolute", top: "48%", left: "48%" }} />
+              : (
+                <Switch>
+                  <Route exact path="/project/:projectReference/requisition/:requisitionReference/edit" component={RequisitionEdit} />
+                  <Route exact path="/project/:projectReference/requisition/:requisitionReference" component={RequisitionDetail} />
+                  <Route exact path="/project/:projectReference" component={ProjectDetail} />
+                  <Route exact path="/project" component={ProjectList} />
+                  <Route exact path="/requisition" component={RequisitionForm} />
+                  <PrivateRoute exact path="/admin" component={AdminHome} user={user} />
+                  <Route exact path="/" component={Home} />
+                </Switch>
+              )}
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
@@ -51,6 +63,6 @@ function App() {
       </Layout>
     </Router>
   );
-}
+};
 
 export default App;
