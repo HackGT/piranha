@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Drawer, Menu, Button, Typography } from "antd";
 import { MenuOutlined } from "@ant-design/icons/lib";
 import { Link } from "react-router-dom";
+import { User } from "../../types/User";
 
 class Page {
   name: string;
-
   link: string;
+  privateRoute: boolean;
 
-  constructor(name: string, link: string) {
+  constructor(name: string, link: string, privateRoute: boolean = false) {
     this.name = name;
     this.link = link;
+    this.privateRoute = privateRoute;
   }
 }
 
@@ -18,10 +20,14 @@ export const routes = [
   new Page("Home", "/"),
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
-  new Page("Admin", "/admin")
+  new Page("Admin", "/admin", true)
 ];
 
-const Navigation = (props: any) => {
+interface Props {
+  user: User;
+}
+
+const Navigation: React.FC<Props> = (props) => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -33,6 +39,8 @@ const Navigation = (props: any) => {
     };
   });
 
+  const filteredRoutes = routes.filter((page: Page) => !page.privateRoute || (props.user && props.user.hasAdminAccess));
+
   return (
     <div style={{ direction: "rtl" }}>
       <Drawer
@@ -43,7 +51,7 @@ const Navigation = (props: any) => {
         visible={sidebarVisible}
       >
         <Menu mode="vertical" style={{ borderRight: "None" }} selectable={false}>
-          {routes.map((route: Page) => (
+          {filteredRoutes.map((route: Page) => (
             <Menu.Item key={route.name}>
               <Link onClick={() => setSidebarVisible(false)} to={route.link}>{route.name}</Link>
             </Menu.Item>
@@ -77,7 +85,7 @@ const Navigation = (props: any) => {
         )
         : (
           <Menu theme="dark" mode="horizontal" selectable={false}>
-            {routes.slice().reverse().map((route: Page) => <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)}
+            {filteredRoutes.slice().reverse().map((route: Page) => <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)}
           </Menu>
         )}
     </div>

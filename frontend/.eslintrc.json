@@ -58,6 +58,7 @@
     "no-multiple-empty-lines": "off",
     "no-console": "off",
     "one-var": "off",
-    "one-var-declaration-per-line": "off"
+    "one-var-declaration-per-line": "off",
+    "lines-between-class-members": "off"
   }
 }
