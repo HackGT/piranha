@@ -51,6 +51,11 @@ A few steps to finish up:
 4. Run `python manage.py createsuperuser` to create an initial admin user
 5. Run `python manage.py runserver` to run the application (if you're using a JetBrains IDE, a run configuration is included in this repo for this)
 
+#### Permissions
+Piranha uses Django group permissions to manage access to the dashboard. To access the dashboard, a user must be a part
+of the `member` group. If this is your first time setting up the app, login to the Django admin panel and create this group.
+The other permission groups used are `admin` and `exec`, which provide higher level access controls on an individual basis.
+
 ### Frontend
 
 The frontend lives in the [/frontend](/frontend) directory.
