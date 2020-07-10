@@ -14,6 +14,7 @@ import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
 import { User, USER_INFO_QUERY } from "./types/User";
 import PrivateRoute from "./util/PrivateRoute";
+import NotFound from "./components/NotFound";
 
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
@@ -51,6 +52,7 @@ const App:React.FC = () => {
                   <Route exact path="/requisition" component={RequisitionForm} />
                   <PrivateRoute exact path="/admin" component={AdminHome} user={user} />
                   <Route exact path="/" component={Home} />
+                  <Route component={NotFound} />
                 </Switch>
               )}
           </div>
