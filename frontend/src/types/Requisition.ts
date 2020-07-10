@@ -27,6 +27,7 @@ export type Requisition = {
   requisitionitemSet: RequisitionItem[],
   referenceString: string,
   canEdit: boolean,
+  canCancel: boolean,
   otherFees: number
 }
 
@@ -121,6 +122,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       notes
     }
     canEdit
+    canCancel
     referenceString
     otherFees
   }
