@@ -62,7 +62,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
               min={2018}
               precision={0}
               style={{ width: "100%" }}
-              placeholder="2020"
+              placeholder={new Date().getFullYear().toString()}
             />
           </Form.Item>
           <Form.Item
