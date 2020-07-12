@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import moment from "moment";
-import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tag, Tooltip, Typography } from "antd";
+import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tooltip, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
-import { parseRequisitionParams, screenWidthHook, StatusToColor, StatusToStep, StatusToString } from "../../util/util";
+import { parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
 
 import RequisitionItemsTable from "./RequisitionItemsTable";
 
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import RequisitionExpenseSection from "./RequisitionExpenseSection";
+import RequisitionTag from "../../util/RequisitionTag";
 
 const { Text, Title } = Typography;
 const { Step } = Steps;
@@ -73,7 +75,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
             subTitle={loading ? shortCode : `${rekData.project.name} Requisitions`}
             style={{ padding: 0, marginBottom: "10px" }}
           />
-          <Tag color={StatusToColor(rekData.status)}>{StatusToString(rekData.status)}</Tag>
+          <RequisitionTag status={rekData.status} />
           <Title level={2} style={{ marginBottom: "0.25em", marginTop: "0.1em" }}>{loading ? "Loading..." : rekData.headline}</Title>
           <Text strong>{rekData.description}</Text>
         </Col>
@@ -124,6 +126,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         <Step title="Ordered" />
         <Step title="Received" />
       </Steps>
+      <RequisitionExpenseSection requisition={rekData} />
       <Pagination
         pageSize={1}
         defaultCurrent={projectRequisitionId}
