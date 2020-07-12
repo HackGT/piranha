@@ -1,13 +1,14 @@
 import graphene
 from graphene import Mutation, ObjectType
-from expenses.schema import ProjectType, VendorType, RequisitionType
+from expenses.schema import ProjectType, VendorType, RequisitionType, PaymentMethodType
 from graphene_django_extras import DjangoInputObjectType
 
-from expenses.models import Project, Vendor, Requisition, RequisitionItem
+from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod
 
 from expenses.controllers.RequisitionController import RequisitionController
 from expenses.controllers.VendorController import VendorController
 from expenses.controllers.ProjectController import ProjectController
+from expenses.controllers.PaymentMethodController import PaymentMethodController
 
 
 # ------------------------------ Project Schema ------------------------------ #
@@ -118,6 +119,46 @@ class UpdateRequisitionMutation(Mutation):
         return UpdateRequisitionMutation(requisition=RequisitionController.update_requisition(info, id, data))
 
 
+# --------------------------- Payment Method Schema -------------------------- #
+
+
+class PaymentMethodInput(DjangoInputObjectType):
+    class Meta:
+        model = PaymentMethod
+        exclude_fields = ["payment"]
+
+
+class CreatePaymentMethodMutation(Mutation):
+    payment_method = graphene.Field(PaymentMethodType)
+
+    class Arguments:
+        data = graphene.Argument(PaymentMethodInput, required=True)
+
+    def mutate(self, info, data):
+        return CreatePaymentMethodMutation(payment_method=PaymentMethodController.create_payment_method(info, data))
+
+
+class UpdatePaymentMethodMutation(Mutation):
+    payment_method = graphene.Field(PaymentMethodType)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+        data = graphene.Argument(PaymentMethodInput, required=True)
+
+    def mutate(self, info, id, data):
+        return UpdatePaymentMethodMutation(payment_method=PaymentMethodController.update_payment_method(info, id, data))
+
+
+class DeletePaymentMethodMutation(Mutation):
+    success = graphene.Field(graphene.Boolean)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    def mutate(self, info, id):
+        return DeletePaymentMethodMutation(success=PaymentMethodController.delete_payment_method(info, id))
+
+
 class Mutation(ObjectType):
     create_project = CreateProjectMutation.Field()
     update_project = UpdateProjectMutation.Field()
@@ -128,3 +169,7 @@ class Mutation(ObjectType):
     create_vendor = CreateVendorMutation.Field()
     update_vendor = UpdateVendorMutation.Field()
     delete_vendor = DeleteVendorMutation.Field()
+
+    create_payment_method = CreatePaymentMethodMutation.Field()
+    update_payment_method = UpdatePaymentMethodMutation.Field()
+    delete_payment_method = DeletePaymentMethodMutation.Field()

@@ -112,12 +112,12 @@ class Vendor(TimestampedModel):
         return self.name
 
 
-class PaymentMethod(models.Model):
-    friendly_name = CharField(max_length=150, unique=True)
+class PaymentMethod(TimestampedModel):
+    name = CharField(max_length=150, unique=True)
     is_active = BooleanField(default=True)
 
     def __str__(self):
-        return self.friendly_name
+        return self.name
 
 
 class Payment(TimestampedModel):

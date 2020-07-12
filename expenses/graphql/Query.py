@@ -1,7 +1,7 @@
 import graphene
 from graphene import InputObjectType, ObjectType
 
-from expenses.schema import UserType, ProjectType, VendorType, RequisitionType, RequisitionItemType
+from expenses.schema import UserType, ProjectType, VendorType, RequisitionType, RequisitionItemType, PaymentMethodType
 from expenses.utils import process_where_input
 
 from expenses.controllers.UserController import UserController
@@ -9,6 +9,7 @@ from expenses.controllers.RequisitionController import RequisitionController
 from expenses.controllers.RequisitionItemController import RequisitionItemController
 from expenses.controllers.VendorController import VendorController
 from expenses.controllers.ProjectController import ProjectController
+from expenses.controllers.PaymentMethodController import PaymentMethodController
 
 
 class UserWhereInput(InputObjectType):
@@ -21,6 +22,10 @@ class ProjectWhereInput(InputObjectType):
 
 
 class VendorWhereInput(InputObjectType):
+    is_active = graphene.Boolean()
+
+
+class PaymentMethodWhereInput(InputObjectType):
     is_active = graphene.Boolean()
 
 
@@ -82,3 +87,16 @@ class Query(ObjectType):
         id = kwargs.get("id")
 
         return RequisitionItemController.get_requisition_item(info, id)
+
+    payment_method = graphene.Field(PaymentMethodType, id=graphene.ID())
+    payment_methods = graphene.List(PaymentMethodType, where=PaymentMethodWhereInput())
+
+    def resolve_payment_method(self, info, **kwargs):
+        id = kwargs.get("id")
+
+        return PaymentMethodController.get_payment_method(info, id)
+
+    def resolve_payment_methods(self, info, **kwargs):
+        where = process_where_input(kwargs.get("where", {}))
+
+        return PaymentMethodController.get_payment_methods(info, where)
