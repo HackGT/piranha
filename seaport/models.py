@@ -55,3 +55,6 @@ class User(AbstractUser):
 
     def get_full_name(self):
         return self.full_name
+
+    def __str__(self):
+        return self.full_name

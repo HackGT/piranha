@@ -1,7 +1,7 @@
 import graphene
 from graphene import InputObjectType, ObjectType
 
-from expenses.schema import UserType, ProjectType, VendorType, RequisitionType, RequisitionItemType, PaymentMethodType
+from expenses.schema import UserType, ProjectType, VendorType, RequisitionType, RequisitionItemType, PaymentMethodType, ApprovalType, PaymentType
 from expenses.utils import process_where_input
 
 from expenses.controllers.UserController import UserController
@@ -10,6 +10,8 @@ from expenses.controllers.RequisitionItemController import RequisitionItemContro
 from expenses.controllers.VendorController import VendorController
 from expenses.controllers.ProjectController import ProjectController
 from expenses.controllers.PaymentMethodController import PaymentMethodController
+from expenses.controllers.ApprovalController import ApprovalController
+from expenses.controllers.PaymentController import PaymentController
 
 
 class UserWhereInput(InputObjectType):
@@ -100,3 +102,17 @@ class Query(ObjectType):
         where = process_where_input(kwargs.get("where", {}))
 
         return PaymentMethodController.get_payment_methods(info, where)
+
+    approval = graphene.Field(ApprovalType, id=graphene.ID())
+
+    def resolve_approval(self, info, **kwargs):
+        id = kwargs.get("id")
+
+        return ApprovalController.get_approval(info, id)
+
+    payment = graphene.Field(PaymentType, id=graphene.ID())
+
+    def resolve_payment(self, info, **kwargs):
+        id = kwargs.get("id")
+
+        return PaymentController.get_payment(info, id)
