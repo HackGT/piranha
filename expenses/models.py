@@ -49,7 +49,7 @@ class Requisition(TimestampedModel):
     project = ForeignKey('Project', on_delete=models.CASCADE)
     vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
     project_requisition_id = PositiveIntegerField()
-    payment_required_by = DateTimeField(null=True, blank=True)
+    payment_required_by = DateField(null=True, blank=True)
     other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
 
     class Meta:
