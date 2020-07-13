@@ -7,14 +7,14 @@ const { Text } = Typography;
 const { Panel } = Collapse;
 
 interface Props {
-  onFinish: (name: string, values: any) => void
+  onFinish: (values: any) => void
   newStatus: RequisitionStatus;
   title: string;
   description: string;
   key: string;
 }
 
-const RequisitionExpenseRow: React.FC<Props> = (props) => (
+const RequisitionExpenseRow: React.FC<Props> = props => (
   <Panel
     extra={(
       <>
@@ -28,7 +28,7 @@ const RequisitionExpenseRow: React.FC<Props> = (props) => (
     <Text>{props.description}</Text>
     <Form
       name={props.key}
-      onFinish={(values: any) => props.onFinish(props.key, values)}
+      onFinish={props.onFinish}
       autoComplete="off"
       style={{ marginTop: "15px" }}
     >

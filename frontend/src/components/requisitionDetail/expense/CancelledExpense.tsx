@@ -1,4 +1,5 @@
 import React from "react";
+import { Collapse } from "antd";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 
 const CancelledExpense: React.FC = (props) => {
@@ -7,14 +8,15 @@ const CancelledExpense: React.FC = (props) => {
   };
 
   return (
-    <RequisitionExpenseRow
-      onFinish={onFinish}
-      newStatus="DRAFT"
-      title="Reactivate Requisition"
-      description="This will reactivate the requisition."
-      key="reactivate"
-      {...props}
-    />
+    <Collapse>
+      <RequisitionExpenseRow
+        onFinish={onFinish}
+        newStatus="DRAFT"
+        title="Reactivate Requisition"
+        description="This will reactivate the requisition."
+        key="reactivate"
+      />
+    </Collapse>
   );
 };
 
