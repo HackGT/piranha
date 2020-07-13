@@ -98,10 +98,13 @@ class Project(TimestampedModel):
 
 
 class Approval(TimestampedModel):
-    is_approving = BooleanField(null=True)
-    notes = TextField()
+    is_approving = BooleanField()
+    notes = TextField(blank=True)
     approver = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT)
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{}: {}".format(self.approver, self.requisition)
 
 
 class Vendor(TimestampedModel):

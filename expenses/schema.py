@@ -1,7 +1,7 @@
 import graphene
 from django.contrib import auth
 from graphene_django import DjangoObjectType
-from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod
+from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Approval, Payment
 from expenses.rules import is_exec
 
 
@@ -70,3 +70,15 @@ class RequisitionItemType(DjangoObjectType):
     class Meta:
         model = RequisitionItem
         name = "RequisitionItem"
+
+
+class ApprovalType(DjangoObjectType):
+    class Meta:
+        model = Approval
+        name = "Approval"
+
+
+class PaymentType(DjangoObjectType):
+    class Meta:
+        model = Payment
+        name = "Payment"
