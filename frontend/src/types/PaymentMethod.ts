@@ -6,6 +6,15 @@ export type PaymentMethod = {
   isActive: boolean
 }
 
+export const PAYMENT_METHOD_EXPENSE_QUERY = gql`
+  query paymentMethodExpense {
+    paymentMethods(where: {isActive: true}) {
+      id
+      name
+    }
+  }
+`;
+
 export const PAYMENT_METHOD_INFO_FRAGMENT = gql`
   fragment PaymentMethodInfoFragment on PaymentMethod {
     id

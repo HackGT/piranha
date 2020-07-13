@@ -61,10 +61,6 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     // TODO Cancel requisition
   };
 
-  const handleApprove = () => {
-    // TODO Approve requisition
-  };
-
   return (
     <>
       <Row gutter={[16, 16]}>
@@ -81,7 +77,6 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <Title level={3} style={{ fontSize: "20px" }}>Actions</Title>
-          <Button className="action-button" type="primary" onClick={handleApprove}>Approve</Button>
           <Tooltip title={!rekData.canEdit && "You must be a project lead or exec member to edit a requisition after submission."}>
             <Button className="action-button" onClick={handleEdit} disabled={!rekData.canEdit}>Edit</Button>
           </Tooltip>
@@ -126,7 +121,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         <Step title="Ordered" />
         <Step title="Received" />
       </Steps>
-      <RequisitionExpenseSection requisition={rekData} />
+      <RequisitionExpenseSection status={rekData.status} />
       <Pagination
         pageSize={1}
         defaultCurrent={projectRequisitionId}

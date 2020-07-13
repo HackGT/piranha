@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Form, Collapse, Typography } from "antd";
-import { RequisitionStatus } from "../../types/Requisition";
-import RequisitionTag from "../../util/RequisitionTag";
+import { RequisitionStatus } from "../../../types/Requisition";
+import RequisitionTag from "../../../util/RequisitionTag";
 
 const { Text } = Typography;
 const { Panel } = Collapse;
