@@ -121,7 +121,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         <Step title="Ordered" />
         <Step title="Received" />
       </Steps>
-      <RequisitionExpenseSection status={rekData.status} />
+      <RequisitionExpenseSection requisition={rekData} />
       <Pagination
         pageSize={1}
         defaultCurrent={projectRequisitionId}
