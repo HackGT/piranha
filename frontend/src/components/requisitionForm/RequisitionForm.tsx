@@ -55,7 +55,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       project: values.project,
       description: values.description,
       vendor: values.vendor || undefined,
-      paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format() : null,
+      paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
       otherFees: values.otherFees,
       requisitionitemSet: values.requisitionitemSet.map((item: any) => ({
         name: item.name,
@@ -234,7 +234,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Form.List name="requisitionitemSet">
           {(fields, { add, remove }) => (
             <div>
-              {fields.map((field) => (
+              {fields.map(field => (
                 <Row justify="center" key={field.key}>
                   <Col {...fullLayout}>
                     <RequisitionItemCard
