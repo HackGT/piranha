@@ -1,48 +1,50 @@
 import React from "react";
-import { Collapse, Form, Input, Typography } from "antd";
-import { Requisition } from "../../types/Requisition";
-import { FORM_RULES } from "../../util/util";
-import RequisitionExpenseRow from "./RequisitionExpenseRow";
+import { Collapse, Typography } from "antd";
+import { RequisitionStatus } from "../../types/Requisition";
+import CancelledExpense from "./expense/CancelledExpense";
+import SubmittedExpense from "./expense/SubmittedExpense";
+import ReadyToOrderExpense from "./expense/ReadyToOrderExpense";
+import OrderedExpense from "./expense/OrderedExpense";
 
 const { Title } = Typography;
 
 interface Props {
-  requisition: Requisition;
+  status: RequisitionStatus;
 }
 
 const RequisitionExpenseSection: React.FC<Props> = (props) => {
-  const onFinish = (key: string, values: any) => {
-    console.log("Form Success:", values);
-  };
+  let content: any = null;
+
+  switch (props.status) {
+    case "CANCELLED":
+      content = <CancelledExpense />;
+      break;
+    case "SUBMITTED":
+      content = <SubmittedExpense />;
+      break;
+    case "READY_TO_ORDER":
+      content = <ReadyToOrderExpense />;
+      break;
+    case "ORDERED":
+      content = <OrderedExpense />;
+      break;
+    case "DRAFT":
+    case "PENDING_CHANGES":
+    case "RECEIVED":
+    default:
+      break;
+  }
 
   return (
-    <>
-      <Title level={3} style={{ marginTop: "10px" }}>Manage Status</Title>
-      <Collapse bordered={false}>
-        <RequisitionExpenseRow
-          onFinish={onFinish}
-          newStatus="READY_TO_ORDER"
-          title="Approve Requisition"
-          description="This will approve the requisition. You are signifying that this is a valid purchase."
-          key="approve"
-        />
-        <RequisitionExpenseRow
-          onFinish={onFinish}
-          newStatus="PENDING_CHANGES"
-          title="Ask For More Information"
-          description="This will send the requisition back to the creator for changes."
-          key="pending"
-        >
-          <Form.Item
-            name="notes"
-            rules={[FORM_RULES.requiredRule]}
-            label="Notes"
-          >
-            <Input placeholder="Needs more detail in description." />
-          </Form.Item>
-        </RequisitionExpenseRow>
-      </Collapse>
-    </>
+    content
+    && (
+      <>
+        <Title level={3} style={{ marginTop: "10px" }}>Manage Status</Title>
+        <Collapse>
+          {content}
+        </Collapse>
+      </>
+    )
   );
 };
 
