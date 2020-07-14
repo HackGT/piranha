@@ -1,4 +1,4 @@
-from expenses.models import Payment, PaymentMethod, Vendor, Requisition
+from expenses.models import Payment, PaymentMethod, Vendor, Requisition, RequisitionStatus
 
 
 class PaymentController:
@@ -10,13 +10,17 @@ class PaymentController:
     @classmethod
     def create_payment(cls, info, data):
         if info.context.user.has_perm("expenses.add_payment"):
+            requisition = Requisition.objects.get(id=data["requisition"])
             new_data = {
                 "funding_source": PaymentMethod.objects.get(id=data["funding_source"]),
                 "recipient": Vendor.objects.get(id=data["recipient"]),
-                "requisition": Requisition.objects.get(id=data["requisition"])
+                "requisition": requisition
             }
             new_data.update({k: v for k, v in data.items() if k not in ["funding_source", "recipient", "requisition"]})
 
             payment = Payment.objects.create(**new_data)
+
+            requisition.status = RequisitionStatus.ORDERED
+            requisition.save()
 
             return payment

@@ -54,8 +54,12 @@ class RequisitionController:
             query.update(**new_data)
             requisition = query.first()
 
+            # Exits if requisition items are not provided in query
+            if "requisitionitemSet" not in data:
+                return requisition
+
             # Will create new item, delete extra items in db, and update existing item respectively
-            for new_item, existing_item in zip_longest(data.requisitionitemSet, list(RequisitionItem.objects.filter(requisition=requisition))):
+            for new_item, existing_item in zip_longest(data["requisitionitemSet"], list(RequisitionItem.objects.filter(requisition=requisition))):
                 if not existing_item:
                     item_new_data = {
                         "requisition": requisition

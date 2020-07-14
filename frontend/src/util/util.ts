@@ -11,7 +11,7 @@ export const StatusToColor = (status: RequisitionStatus): PresetColorType | unde
     case "PENDING_CHANGES": return "orange";
     case "READY_TO_ORDER": return "green";
     case "ORDERED": return "blue";
-    case "RECEIVED": return "blue";
+    case "RECEIVED": return "purple";
     case "CANCELLED": return "red";
     default: return undefined;
   }

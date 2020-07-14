@@ -1,16 +1,12 @@
 import React from "react";
-import { Collapse, Form, Input, message } from "antd";
+import { Collapse, Form, Input } from "antd";
 import { useMutation } from "@apollo/client";
 import { FORM_RULES } from "../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { CREATE_APPROVAL_MUTATION } from "../../../types/Approval";
-import { Requisition } from "../../../types/Requisition";
+import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
 
-interface Props {
-  requisition: Requisition;
-}
-
-const SubmittedExpense: React.FC<Props> = (props) => {
+const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
@@ -20,17 +16,7 @@ const SubmittedExpense: React.FC<Props> = (props) => {
       ...values
     };
 
-    const hide = message.loading("Saving...", 0);
-
-    try {
-      await createApproval({ variables: { data: mutationData } });
-      hide();
-      message.success("Successful!", 2);
-    } catch (err) {
-      hide();
-      message.error("Error saving", 2);
-      console.error(JSON.parse(JSON.stringify(err)));
-    }
+    await saveExpenseData(createApproval, { data: mutationData });
   };
 
   return (

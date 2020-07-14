@@ -16,6 +16,10 @@ export const CREATE_PAYMENT_MUTATION = gql`
     createPayment(data: $data) {
       payment {
         id
+        requisition {
+          id
+          status
+        }
       }
     }
   }
