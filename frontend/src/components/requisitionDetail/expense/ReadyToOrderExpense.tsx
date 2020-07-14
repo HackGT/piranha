@@ -1,6 +1,7 @@
 import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input, Select } from "antd";
+import { Collapse, DatePicker, Form, Input, Select, Tooltip } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../types/PaymentMethod";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 import { FORM_RULES } from "../../../util/util";
@@ -62,6 +63,19 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
           label="Order Date"
         >
           <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item
+          name="shippingLocation"
+          label={(
+            <span>
+              {"Shipping Location "}
+              <Tooltip title="If applicable, list the location the item(s) will be shipped. Ex. Storage Unit, Klaus, Submitter's Apartment.">
+                <QuestionCircleOutlined />
+              </Tooltip>
+            </span>
+          )}
+        >
+          <Input placeholder="Storage Unit" />
         </Form.Item>
       </RequisitionExpenseRow>
     </Collapse>

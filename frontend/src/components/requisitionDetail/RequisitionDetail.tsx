@@ -76,6 +76,13 @@ const RequisitionDetail: React.FC<{}> = (props) => {
       title: "Payment",
       body: `Paid ${formatPrice(payment.amount)} from ${payment.fundingSource.name} on ${moment(payment.date).format("M/D/YY")}`
     });
+
+    if (payment.shippingLocation) {
+      listData.push({
+        title: "Order Info",
+        body: `Shipped to ${payment.shippingLocation}`
+      });
+    }
   }
 
   const handleEdit = () => {

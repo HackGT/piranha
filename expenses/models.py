@@ -132,6 +132,7 @@ class Payment(TimestampedModel):
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     date = DateField()
+    shipping_location = CharField(max_length=150, blank=True)
 
     def __str__(self):
         return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)
