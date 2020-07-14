@@ -1,18 +1,14 @@
 import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input, message, Select } from "antd";
+import { Collapse, DatePicker, Form, Input, Select } from "antd";
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../types/PaymentMethod";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 import { FORM_RULES } from "../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { Requisition } from "../../../types/Requisition";
 import { CREATE_PAYMENT_MUTATION } from "../../../types/Payment";
+import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
 
-interface Props {
-  requisition: Requisition;
-}
-
-const ReadyToOrderExpense: React.FC<Props> = (props) => {
+const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const { loading, data, error } = useQuery(PAYMENT_METHOD_EXPENSE_QUERY);
   const [createPayment] = useMutation(CREATE_PAYMENT_MUTATION);
 
@@ -28,17 +24,7 @@ const ReadyToOrderExpense: React.FC<Props> = (props) => {
       date: values.date.format("YYYY-MM-DD")
     };
 
-    const hide = message.loading("Saving...", 0);
-
-    try {
-      await createPayment({ variables: { data: mutationData } });
-      hide();
-      message.success("Successful!", 2);
-    } catch (err) {
-      hide();
-      message.error("Error saving", 2);
-      console.error(JSON.parse(JSON.stringify(err)));
-    }
+    await saveExpenseData(createPayment, { data: mutationData });
   };
 
   const paymentMethodOptions = loading ? [] : data.paymentMethods.map((paymentMethod: any) => ({

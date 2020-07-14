@@ -1,13 +1,10 @@
 import React from "react";
 import { Checkbox, Collapse, Form } from "antd";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { Requisition, RequisitionItem } from "../../../types/Requisition";
+import { RequisitionItem } from "../../../types/Requisition";
+import { RequisitionExpenseSectionProps } from "../RequisitionExpenseSection";
 
-interface Props {
-  requisition: Requisition;
-}
-
-const OrderedExpense: React.FC<Props> = (props) => {
+const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const onFinish = (values: any) => {
     console.log(values);
   };

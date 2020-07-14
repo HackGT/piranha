@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "antd";
+import { message, Typography } from "antd";
 import { Requisition } from "../../types/Requisition";
 import CancelledExpense from "./expense/CancelledExpense";
 import SubmittedExpense from "./expense/SubmittedExpense";
@@ -8,16 +8,30 @@ import OrderedExpense from "./expense/OrderedExpense";
 
 const { Title } = Typography;
 
-interface Props {
+export interface RequisitionExpenseSectionProps {
   requisition: Requisition;
 }
 
-const RequisitionExpenseSection: React.FC<Props> = (props) => {
+export const saveExpenseData = async (mutation: any, variables: any) => {
+  const hide = message.loading("Saving...", 0);
+
+  try {
+    await mutation({ variables });
+    hide();
+    message.success("Successful!", 2);
+  } catch (err) {
+    hide();
+    message.error("Error saving", 2);
+    console.error(JSON.parse(JSON.stringify(err)));
+  }
+};
+
+const RequisitionExpenseSection: React.FC<RequisitionExpenseSectionProps> = (props) => {
   let content: any = null;
 
   switch (props.requisition.status) {
     case "CANCELLED":
-      content = <CancelledExpense />;
+      content = <CancelledExpense requisition={props.requisition} />;
       break;
     case "SUBMITTED":
       content = <SubmittedExpense requisition={props.requisition} />;

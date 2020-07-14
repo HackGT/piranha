@@ -14,6 +14,10 @@ export const CREATE_APPROVAL_MUTATION = gql`
     createApproval(data: $data) {
       approval {
         id
+        requisition {
+          id
+          status
+        }
       }
     }
   }
