@@ -19,7 +19,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         key="received"
       >
         {props.requisition.requisitionitemSet.map((item: RequisitionItem) => (
-          <Form.Item name={item.name} valuePropName="checked" style={{ marginBottom: "10px" }}>
+          <Form.Item name={item.name} valuePropName="checked" style={{ marginBottom: "10px" }} initialValue={item.received}>
             <Checkbox>{item.name}</Checkbox>
           </Form.Item>
         ))}

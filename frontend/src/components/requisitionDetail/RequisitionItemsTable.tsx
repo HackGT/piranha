@@ -22,16 +22,20 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
           return {
             children: <Text>{record.notes}</Text>,
             props: {
-              colSpan: 3
+              colSpan: 3,
+              style: { background: record.received ? "#f6ffed" : "" }
             }
           };
         }
         if (!record.name) {
           return `Item ${index / 2 + 1}`;
         }
-        return (
-          <Link href={record.link} target="_blank">{record.name}</Link>
-        );
+        return {
+          children: <Link href={record.link} target="_blank">{record.name}</Link>,
+          props: {
+            style: { background: record.received ? "#f6ffed" : "" }
+          }
+        };
       }
     },
     {
@@ -47,7 +51,12 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         if (!record.quantity || !record.unitPrice) {
           return "Not Set";
         }
-        return `${record.quantity} @ ${formatPrice(record.unitPrice)}`;
+        return {
+          children: `${record.quantity} @ ${formatPrice(record.unitPrice)}`,
+          props: {
+            style: { background: record.received ? "#f6ffed" : "" }
+          }
+        };
       }
     },
     {
@@ -60,7 +69,12 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
             }
           };
         }
-        return formatPrice(record.quantity * record.unitPrice);
+        return {
+          children: formatPrice(record.quantity * record.unitPrice),
+          props: {
+            style: { background: record.received ? "#f6ffed" : "" }
+          }
+        };
       }
     }
   ];
