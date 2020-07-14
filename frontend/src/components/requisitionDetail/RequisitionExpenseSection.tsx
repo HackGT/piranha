@@ -40,6 +40,7 @@ const RequisitionExpenseSection: React.FC<RequisitionExpenseSectionProps> = (pro
       content = <ReadyToOrderExpense requisition={props.requisition} />;
       break;
     case "ORDERED":
+    case "PARTLY_RECEIVED":
       content = <OrderedExpense requisition={props.requisition} />;
       break;
     case "DRAFT":

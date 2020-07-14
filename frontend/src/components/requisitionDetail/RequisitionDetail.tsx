@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, useLocation } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
-import { Button, Card, Col, List, PageHeader, Pagination, Row, Skeleton, Steps, Tooltip, Typography } from "antd";
-import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
-import { parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
-
+import { Button, Card, Col, List, PageHeader, Pagination, Popconfirm, Row, Skeleton, Steps, Tooltip, Typography } from "antd";
+import { Requisition, REQUISITION_DETAIL_QUERY, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
+import { formatPrice, parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
 import RequisitionItemsTable from "./RequisitionItemsTable";
-
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
-import RequisitionExpenseSection from "./RequisitionExpenseSection";
+import RequisitionExpenseSection, { saveExpenseData } from "./RequisitionExpenseSection";
 import RequisitionTag from "../../util/RequisitionTag";
+import { Approval } from "../../types/Approval";
+import { Payment } from "../../types/Payment";
 
 const { Text, Title } = Typography;
 const { Step } = Steps;
@@ -28,8 +28,10 @@ const RequisitionDetail: React.FC<{}> = (props) => {
   const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
     variables: { year, shortCode, projectRequisitionId }
   });
+  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION); // Used to cancel requisition
 
   if (error || (data && !data.requisition)) {
+    console.error(JSON.parse(JSON.stringify(error)));
     return <ErrorDisplay message={error?.message} />;
   }
 
@@ -50,6 +52,31 @@ const RequisitionDetail: React.FC<{}> = (props) => {
       body: (loading || !rekData.vendor) ? "Not Set" : rekData.vendor.name
     }
   ];
+  
+  if (rekData.approvalSet && rekData.approvalSet.length > 0) {
+    const approval: Approval = rekData.approvalSet[rekData.approvalSet.length - 1]; // Gets last approval
+    let text = "";
+
+    if (approval.isApproving) {
+      text = `Approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")}`;
+    } else {
+      text = `Not approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")} Notes: ${approval.notes}`;
+    }
+
+    listData.push({
+      title: "Approval",
+      body: text
+    });
+  }
+
+  if (rekData.paymentSet && rekData.paymentSet.length > 0) {
+    const payment: Payment = rekData.paymentSet[rekData.paymentSet.length - 1]; // Gets last payment
+
+    listData.push({
+      title: "Payment",
+      body: `Paid ${formatPrice(payment.amount)} from ${payment.fundingSource.name} on ${moment(payment.date).format("M/D/YY")}`
+    });
+  }
 
   const handleEdit = () => {
     if (rekData.canEdit) {
@@ -57,8 +84,14 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     }
   };
 
-  const handleCancel = () => {
-    // TODO Cancel requisition
+  const handleCancel = async () => {
+    const mutationData = {
+      headline: rekData.headline,
+      project: rekData.project.id,
+      status: "CANCELLED"
+    };
+
+    await saveExpenseData(updateRequisition, { id: rekData.id, data: mutationData });
   };
 
   return (
@@ -81,14 +114,22 @@ const RequisitionDetail: React.FC<{}> = (props) => {
             <Button className="action-button" onClick={handleEdit} disabled={!rekData.canEdit}>Edit</Button>
           </Tooltip>
           <Tooltip title={!rekData.canCancel && "You must be an exec member to cancel a requisition."}>
-            <Button className="action-button" danger onClick={handleCancel} disabled={!rekData.canCancel}>Cancel</Button>
+            <Popconfirm
+              title="Are you sure you want to cancel this requisition?"
+              onConfirm={handleCancel}
+              okText="Yes"
+              cancelText="No"
+              disabled={!rekData.canCancel}
+            >
+              <Button className="action-button" danger disabled={!rekData.canCancel}>Cancel</Button>
+            </Popconfirm>
           </Tooltip>
         </Col>
       </Row>
       <Row gutter={[16, 32]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <RequisitionItemsTable data={rekData} loading={loading} />
-          {rekData.status === "ORDERED" && <em>* Items in green have been received</em>}
+          {rekData.status === "PARTLY_RECEIVED" && <em>* Items in green have been received</em>}
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <List

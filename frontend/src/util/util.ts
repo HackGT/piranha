@@ -11,6 +11,7 @@ export const StatusToColor = (status: RequisitionStatus): PresetColorType | unde
     case "PENDING_CHANGES": return "orange";
     case "READY_TO_ORDER": return "green";
     case "ORDERED": return "blue";
+    case "PARTLY_RECEIVED": return "purple";
     case "RECEIVED": return "purple";
     case "CANCELLED": return "red";
     default: return undefined;
@@ -24,6 +25,7 @@ export const StatusToString = (status: RequisitionStatus) => {
     case "PENDING_CHANGES": return "Pending Changes";
     case "READY_TO_ORDER": return "Ready to Order";
     case "ORDERED": return "Ordered";
+    case "PARTLY_RECEIVED": return "Partly Received";
     case "RECEIVED": return "Received";
     case "CANCELLED": return "Cancelled";
     default: return "Unknown";
@@ -34,11 +36,12 @@ export const StatusToStep = (status: RequisitionStatus) => {
   switch (status) {
     case "DRAFT": return 0;
     case "SUBMITTED": return 1;
-    case "PENDING_CHANGES": return 1;
+    case "PENDING_CHANGES": return 0;
     case "READY_TO_ORDER": return 2;
     case "ORDERED": return 3;
+    case "PARTLY_RECEIVED": return 3;
     case "RECEIVED": return 4;
-    case "CANCELLED": return 1;
+    case "CANCELLED": return -1;
     default: return 0;
   }
 };

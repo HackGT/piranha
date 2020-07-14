@@ -1,12 +1,41 @@
 import React from "react";
 import { Checkbox, Collapse, Form } from "antd";
+import { useMutation } from "@apollo/client";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { RequisitionItem } from "../../../types/Requisition";
-import { RequisitionExpenseSectionProps } from "../RequisitionExpenseSection";
+import { RequisitionItem, UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
+import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
 
 const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
-  const onFinish = (values: any) => {
-    console.log(values);
+  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
+
+  const onFinish = async (values: any) => {
+    const numReceived = Object.values(values).reduce((prev: number, curr: any) => prev + (curr ? 1 : 0), 0);
+
+    let status = ""; // Calculates the requisition status based on the number of items received
+
+    if (numReceived === 0) {
+      status = "ORDERED";
+    } else if (numReceived === Object.keys(values).length) {
+      status = "RECEIVED";
+    } else {
+      status = "PARTLY_RECEIVED";
+    }
+
+    const mutationData = {
+      headline: props.requisition.headline,
+      project: props.requisition.project.id,
+      requisitionitemSet: props.requisition.requisitionitemSet.map((item: RequisitionItem) => ({
+        name: item.name,
+        link: item.link,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        notes: item.notes,
+        received: !!values[item.name]
+      })),
+      status
+    };
+
+    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
   };
 
   return (
