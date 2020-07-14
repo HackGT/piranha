@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Form, Input } from "antd";
+import { Collapse, Form, Input, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { FORM_RULES } from "../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
@@ -10,6 +10,11 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
+    if (isApproving && !props.requisition.vendor.isActive) {
+      message.error("Vendor must be active before approval.", 2);
+      return;
+    }
+
     const mutationData = {
       isApproving,
       requisition: props.requisition.id,
