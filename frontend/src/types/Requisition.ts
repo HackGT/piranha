@@ -116,6 +116,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     vendor {
       id
       name
+      isActive
     }
     projectRequisitionId
     paymentRequiredBy
