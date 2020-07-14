@@ -18,6 +18,17 @@ export const CREATE_APPROVAL_MUTATION = gql`
         requisition {
           id
           status
+          approvalSet {
+            id
+            isApproving
+            approver {
+              id
+              preferredName
+              lastName
+            }
+            notes
+            createdAt
+          }
         }
       }
     }
