@@ -9,6 +9,7 @@ export type Payment = {
   requisition: Requisition;
   fundingSource: PaymentMethod;
   date: Date;
+  shippingLocation: string;
 }
 
 export const CREATE_PAYMENT_MUTATION = gql`
@@ -27,6 +28,7 @@ export const CREATE_PAYMENT_MUTATION = gql`
               name
             }
             date
+            shippingLocation
           }
         }
       }

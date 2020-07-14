@@ -148,6 +148,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         name
       }
       date
+      shippingLocation
     }
     canEdit
     canCancel
