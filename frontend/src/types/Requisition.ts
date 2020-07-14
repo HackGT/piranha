@@ -36,7 +36,8 @@ export type RequisitionItem = {
   unitPrice: number,
   quantity: number,
   link: string,
-  notes: string
+  notes: string,
+  received: boolean
 }
 
 export type RequisitionFormData = {
@@ -46,7 +47,7 @@ export type RequisitionFormData = {
   vendor: string | undefined;
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
-  requisitionitemSet:RequisitionItem[];
+  requisitionitemSet: RequisitionItem[];
   status: RequisitionStatus;
 }
 
@@ -120,6 +121,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       unitPrice
       link
       notes
+      received
     }
     canEdit
     canCancel

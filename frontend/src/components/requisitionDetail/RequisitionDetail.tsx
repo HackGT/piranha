@@ -88,6 +88,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
       <Row gutter={[16, 32]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <RequisitionItemsTable data={rekData} loading={loading} />
+          {rekData.status === "ORDERED" && <em>* Items in green have been received</em>}
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <List

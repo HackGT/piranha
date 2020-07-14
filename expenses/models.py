@@ -77,6 +77,7 @@ class RequisitionItem(models.Model):
     unit_price = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
     link = URLField(blank=True)
     notes = TextField(blank=True)
+    received = BooleanField(default=False)
 
     def __str__(self):
         return self.name
