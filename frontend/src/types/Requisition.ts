@@ -3,6 +3,8 @@ import moment from "moment";
 import { User } from "./User";
 import { Project } from "./Project";
 import { Vendor } from "./Vendor";
+import { Approval } from "./Approval";
+import { Payment } from "./Payment";
 
 export type RequisitionStatus =
   "DRAFT" |
@@ -10,6 +12,7 @@ export type RequisitionStatus =
   "PENDING_CHANGES" |
   "READY_TO_ORDER" |
   "ORDERED" |
+  "PARTLY_RECEIVED" |
   "RECEIVED" |
   "CANCELLED";
 
@@ -25,6 +28,8 @@ export type Requisition = {
   projectRequisitionId: number,
   paymentRequiredBy: Date,
   requisitionitemSet: RequisitionItem[],
+  approvalSet: Approval[],
+  paymentSet: Payment[],
   referenceString: string,
   canEdit: boolean,
   canCancel: boolean,
@@ -122,6 +127,26 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       link
       notes
       received
+    }
+    approvalSet {
+      id
+      isApproving
+      approver {
+        id
+        preferredName
+        lastName
+      }
+      notes
+      createdAt
+    }
+    paymentSet {
+      id
+      amount
+      fundingSource {
+        id
+        name
+      }
+      date
     }
     canEdit
     canCancel

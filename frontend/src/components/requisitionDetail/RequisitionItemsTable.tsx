@@ -23,7 +23,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
             children: <Text>{record.notes}</Text>,
             props: {
               colSpan: 3,
-              style: { background: record.received ? "#f6ffed" : "" }
+              style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
             }
           };
         }
@@ -33,7 +33,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: <Link href={record.link} target="_blank">{record.name}</Link>,
           props: {
-            style: { background: record.received ? "#f6ffed" : "" }
+            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }
@@ -54,7 +54,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: `${record.quantity} @ ${formatPrice(record.unitPrice)}`,
           props: {
-            style: { background: record.received ? "#f6ffed" : "" }
+            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }
@@ -72,7 +72,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: formatPrice(record.quantity * record.unitPrice),
           props: {
-            style: { background: record.received ? "#f6ffed" : "" }
+            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }

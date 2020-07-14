@@ -7,6 +7,7 @@ export type Approval = {
   requisition: Requisition;
   notes: string;
   isApproving: boolean;
+  createdAt: string;
 }
 
 export const CREATE_APPROVAL_MUTATION = gql`

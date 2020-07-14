@@ -15,7 +15,7 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
       status: "DRAFT"
     };
 
-    await saveExpenseData(updateRequisition(), { id: props.requisition.id, data: mutationData });
+    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
   };
 
   return (
