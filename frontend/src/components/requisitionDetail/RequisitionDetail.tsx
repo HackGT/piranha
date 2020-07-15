@@ -11,7 +11,6 @@ import ErrorDisplay from "../../util/ErrorDisplay";
 import RequisitionExpenseSection, { saveExpenseData } from "./RequisitionExpenseSection";
 import RequisitionTag from "../../util/RequisitionTag";
 import { Approval } from "../../types/Approval";
-import { Payment } from "../../types/Payment";
 
 const { Text, Title } = Typography;
 const { Step } = Steps;
@@ -69,8 +68,8 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     });
   }
 
-  if (rekData.paymentSet && rekData.paymentSet.length > 0) {
-    const payment: Payment = rekData.paymentSet[rekData.paymentSet.length - 1]; // Gets last payment
+  if (rekData.payment) {
+    const { payment } = rekData;
 
     listData.push({
       title: "Payment",
