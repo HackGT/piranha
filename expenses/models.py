@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 # Create your models here.
 from django.db.models import CharField, ForeignKey, DateTimeField, BooleanField, DateField, TextField, ManyToManyField, \
-    PositiveIntegerField, DecimalField, URLField
+    PositiveIntegerField, DecimalField, URLField, OneToOneField
 from rules.contrib.models import RulesModelMixin, RulesModelBase
 
 from expenses.rules import is_member, requisition_is_unlocked, can_edit_locked_requisition, is_exec, \
@@ -127,7 +127,7 @@ class PaymentMethod(TimestampedModel):
 
 
 class Payment(TimestampedModel):
-    requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
+    requisition = OneToOneField('Requisition', on_delete=models.CASCADE)
     recipient = ForeignKey('Vendor', on_delete=models.PROTECT)
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
