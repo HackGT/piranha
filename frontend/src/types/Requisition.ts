@@ -33,6 +33,7 @@ export type Requisition = {
   referenceString: string,
   canEdit: boolean,
   canCancel: boolean,
+  canExpense: boolean,
   otherFees: number
 }
 
@@ -152,6 +153,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     }
     canEdit
     canCancel
+    canExpense
     referenceString
     otherFees
   }
