@@ -2,6 +2,8 @@ import rules
 from rules import is_group_member
 
 
+# REQUISITION PERMISSIONS
+
 @rules.predicate
 def requisition_is_unlocked(user, rek):
     if not rek:
@@ -20,8 +22,10 @@ def can_edit_unlocked_requisition(user, rek):
 def can_edit_locked_requisition(user, rek):
     if not rek:
         return None
-    return is_exec(user) or user in rek.project.leads.all()
+    return is_exec(user) or is_project_lead(user, rek)
 
+
+# ACCESS PERMISSIONS
 
 @rules.predicate
 def is_member(user):
@@ -36,3 +40,8 @@ def is_exec(user):
 @rules.predicate
 def is_admin(user):
     return is_group_member("admin")(user)
+
+
+@rules.predicate
+def is_project_lead(user, rek):
+    return user in rek.project.leads.all()

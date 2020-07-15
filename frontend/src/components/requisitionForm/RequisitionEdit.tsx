@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
 import moment from "moment";
@@ -23,6 +23,10 @@ const RequisitionEdit: React.FC = () => {
   
   if (loading) {
     return <Spin style={{ position: "absolute", top: "48%", left: "48%" }} />;
+  }
+
+  if (!data.requisition.canEdit) {
+    return <Redirect to={`/project/${projectReference}/requisition/${requisitionReference}`} />;
   }
 
   const requisitionData: RequisitionFormData = {

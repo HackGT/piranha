@@ -27,6 +27,10 @@ export const saveExpenseData = async (mutation: any, variables: any) => {
 };
 
 const RequisitionExpenseSection: React.FC<RequisitionExpenseSectionProps> = (props) => {
+  if (!props.requisition.canExpense) {
+    return null;
+  }
+
   let content: any = null;
 
   switch (props.requisition.status) {

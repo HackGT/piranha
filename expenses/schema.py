@@ -2,7 +2,7 @@ import graphene
 from django.contrib import auth
 from graphene_django import DjangoObjectType
 from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Approval, Payment
-from expenses.rules import is_exec
+from expenses.rules import is_exec, is_project_lead
 
 
 class UserType(DjangoObjectType):
@@ -49,6 +49,12 @@ class RequisitionType(DjangoObjectType):
 
     def resolve_can_cancel(self, info):
         return is_exec(info.context.user)
+
+    can_expense = graphene.Boolean()
+
+    def resolve_can_expense(self, info):
+        # User can expense if they are exec or a project lead and the status if one of these
+        return is_exec(info.context.user) or (is_project_lead(info.context.user, self) and self.status in ["Draft", "Pending Changes", "Submitted",])
 
     reference_string = graphene.String()
 
