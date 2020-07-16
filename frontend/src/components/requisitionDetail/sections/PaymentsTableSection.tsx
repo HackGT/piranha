@@ -11,7 +11,7 @@ const { Summary } = Table;
 const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data } = props;
 
-  if (!data.paymentSet || data.paymentSet.length > 0) {
+  if (!data.paymentSet || data.paymentSet.length === 0) {
     return null;
   }
 
