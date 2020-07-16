@@ -160,7 +160,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         current={loading ? -1 : StatusToStep(rekData.status)}
         labelPlacement="vertical"
         size={screenWidth < 768 ? "small" : "default"}
-        direction={screenWidth < 650 ? "vertical" : "horizontal"}
+        direction={screenWidth < 768 ? "vertical" : "horizontal"}
       >
         <Step title="Draft" />
         <Step title="Submitted" />
