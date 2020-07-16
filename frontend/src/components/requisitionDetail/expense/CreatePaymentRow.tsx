@@ -42,6 +42,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
       title="Create Payment"
       description="Create a payment for this order. Note: multiple payments can be made as applicable."
       key="payment"
+      buttonText="Create"
       {...props}
     >
       <Form.Item

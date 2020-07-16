@@ -32,6 +32,7 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
         title="Requisition Ordered"
         description="Mark this requisition as being ordered."
         key="ordered"
+        buttonText="Ordered"
       >
         <Form.Item
           name="orderDate"

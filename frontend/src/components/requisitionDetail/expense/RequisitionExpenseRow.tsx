@@ -13,6 +13,7 @@ interface Props {
   title: string;
   description: string;
   key: string;
+  buttonText: string;
 }
 
 const RequisitionExpenseRow: React.FC<Props> = (props) => {
@@ -39,7 +40,7 @@ const RequisitionExpenseRow: React.FC<Props> = (props) => {
       >
         {props.children}
         <Form.Item style={{ marginBottom: 0 }}>
-          <Button type="primary" htmlType="submit">Submit</Button>
+          <Button type="primary" htmlType="submit">{props.buttonText}</Button>
         </Form.Item>
       </Form>
     </Panel>

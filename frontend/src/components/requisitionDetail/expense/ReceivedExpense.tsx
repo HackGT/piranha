@@ -28,6 +28,7 @@ const ReceivedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         title="Requisition Closed"
         description="Mark this requisition as being closed. This means all items have been received and all payments have been made."
         key="closed"
+        buttonText="Close"
       />
       <CreatePaymentRow requisition={props.requisition} />
     </Collapse>
