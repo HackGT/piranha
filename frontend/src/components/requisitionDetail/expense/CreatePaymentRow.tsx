@@ -1,6 +1,7 @@
 import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { DatePicker, Form, Input, Select } from "antd";
+import { FormInstance } from "antd/es/form";
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../types/PaymentMethod";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 import { FORM_RULES } from "../../../util/util";
@@ -16,7 +17,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
     return <ErrorDisplay message={error?.message} />;
   }
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: any, form: FormInstance) => {
     const mutationData = {
       amount: values.amount,
       fundingSource: values.fundingSource,
@@ -26,6 +27,8 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
     };
 
     await saveExpenseData(createPayment, { data: mutationData });
+
+    form.resetFields();
   };
 
   const paymentMethodOptions = loading ? [] : data.paymentMethods.map((paymentMethod: any) => ({
