@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { RequisitionItem, UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
+import CreatePaymentRow from "./CreatePaymentRow";
 
 const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
@@ -24,6 +25,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     const mutationData = {
       headline: props.requisition.headline,
       project: props.requisition.project.id,
+      vendor: props.requisition.vendor?.id,
       requisitionitemSet: props.requisition.requisitionitemSet.map((item: RequisitionItem) => ({
         name: item.name,
         link: item.link,
@@ -53,6 +55,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
           </Form.Item>
         ))}
       </RequisitionExpenseRow>
+      <CreatePaymentRow requisition={props.requisition} />
     </Collapse>
   );
 };

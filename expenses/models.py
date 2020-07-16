@@ -26,6 +26,7 @@ class RequisitionStatus(models.Model):
     ORDERED = "Ordered"
     PARTLY_RECEIVED = "Partly Received"
     RECEIVED = "Received"
+    CLOSED = "Closed"
     CANCELLED = "Cancelled"
 
     choices = [(DRAFT, DRAFT),
@@ -35,6 +36,7 @@ class RequisitionStatus(models.Model):
                (ORDERED, ORDERED),
                (PARTLY_RECEIVED, PARTLY_RECEIVED),
                (RECEIVED, RECEIVED),
+               (CLOSED, CLOSED),
                (CANCELLED, CANCELLED)
                ]
 
@@ -53,6 +55,8 @@ class Requisition(TimestampedModel):
     project_requisition_id = PositiveIntegerField()
     payment_required_by = DateField(null=True, blank=True)
     other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
+    shipping_location = CharField(max_length=150, blank=True)
+    order_date = DateField(null=True, blank=True)
 
     class Meta:
         rules_permissions = {
@@ -132,7 +136,6 @@ class Payment(TimestampedModel):
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     date = DateField()
-    shipping_location = CharField(max_length=150, blank=True)
 
     def __str__(self):
         return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)

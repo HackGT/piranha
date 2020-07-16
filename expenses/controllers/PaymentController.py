@@ -20,7 +20,4 @@ class PaymentController:
 
             payment = Payment.objects.create(**new_data)
 
-            requisition.status = RequisitionStatus.ORDERED
-            requisition.save()
-
             return payment
