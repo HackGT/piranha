@@ -20,7 +20,7 @@ export const CREATE_PAYMENT_MUTATION = gql`
         requisition {
           id
           status
-          payment {
+          paymentSet {
             id
             amount
             fundingSource {

@@ -29,7 +29,7 @@ export type Requisition = {
   paymentRequiredBy: Date,
   requisitionitemSet: RequisitionItem[],
   approvalSet: Approval[],
-  payment: Payment,
+  paymentSet: Payment[],
   referenceString: string,
   canEdit: boolean,
   canCancel: boolean,
@@ -141,7 +141,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       notes
       createdAt
     }
-    payment {
+    paymentSet {
       id
       amount
       fundingSource {
