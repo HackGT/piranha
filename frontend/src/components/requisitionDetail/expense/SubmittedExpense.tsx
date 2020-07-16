@@ -32,6 +32,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         title="Approve Requisition"
         description="This will approve the requisition. You are signifying that this is a valid purchase."
         key="approve"
+        buttonText="Approve"
       />
       <RequisitionExpenseRow
         onFinish={values => onFinish(values, false)}
@@ -39,6 +40,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         title="Ask For More Information"
         description="This will send the requisition back to the creator for changes."
         key="pending"
+        buttonText="Request Changes"
       >
         <Form.Item
           name="notes"
