@@ -3,8 +3,9 @@ import { message, Typography } from "antd";
 import { Requisition } from "../../types/Requisition";
 import CancelledExpense from "./expense/CancelledExpense";
 import SubmittedExpense from "./expense/SubmittedExpense";
-import ReadyToOrderExpense from "./expense/ReadyToOrderExpense";
 import OrderedExpense from "./expense/OrderedExpense";
+import ReadyToOrderExpense from "./expense/ReadyToOrderExpense";
+import ReceivedExpense from "./expense/ReceivedExpense";
 
 const { Title } = Typography;
 
@@ -27,10 +28,6 @@ export const saveExpenseData = async (mutation: any, variables: any) => {
 };
 
 const RequisitionExpenseSection: React.FC<RequisitionExpenseSectionProps> = (props) => {
-  if (!props.requisition.canExpense) {
-    return null;
-  }
-
   let content: any = null;
 
   switch (props.requisition.status) {
@@ -47,16 +44,18 @@ const RequisitionExpenseSection: React.FC<RequisitionExpenseSectionProps> = (pro
     case "PARTLY_RECEIVED":
       content = <OrderedExpense requisition={props.requisition} />;
       break;
+    case "RECEIVED":
+      content = <ReceivedExpense requisition={props.requisition} />;
+      break;
     case "DRAFT":
     case "PENDING_CHANGES":
-    case "RECEIVED":
+    case "CLOSED":
     default:
       break;
   }
 
   return (
-    content
-    && (
+    content && (
       <>
         <Title level={3} style={{ marginTop: "10px" }}>Manage Status</Title>
         {content}

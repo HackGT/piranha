@@ -14,6 +14,7 @@ export type RequisitionStatus =
   "ORDERED" |
   "PARTLY_RECEIVED" |
   "RECEIVED" |
+  "CLOSED" |
   "CANCELLED";
 
 export type Requisition = {
@@ -34,7 +35,9 @@ export type Requisition = {
   canEdit: boolean,
   canCancel: boolean,
   canExpense: boolean,
-  otherFees: number
+  otherFees: number,
+  shippingLocation: string,
+  orderDate: string
 }
 
 export type RequisitionItem = {
@@ -149,13 +152,14 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         name
       }
       date
-      shippingLocation
     }
     canEdit
     canCancel
     canExpense
     referenceString
     otherFees
+    shippingLocation
+    orderDate
   }
 `;
 

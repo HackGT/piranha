@@ -1,11 +1,12 @@
 import React from "react";
-import { Collapse } from "antd";
 import { useMutation } from "@apollo/client";
+import { Collapse } from "antd";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
+import { UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
+import CreatePaymentRow from "./CreatePaymentRow";
 
-const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
+const ReceivedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   const onFinish = async () => {
@@ -13,7 +14,7 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
       headline: props.requisition.headline,
       project: props.requisition.project.id,
       vendor: props.requisition.vendor?.id,
-      status: "DRAFT"
+      status: "CLOSED"
     };
 
     await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
@@ -23,13 +24,14 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     <Collapse>
       <RequisitionExpenseRow
         onFinish={onFinish}
-        newStatus="DRAFT"
-        title="Reactivate Requisition"
-        description="This will reactivate the requisition."
-        key="reactivate"
+        newStatus="CLOSED"
+        title="Requisition Closed"
+        description="Mark this requisition as being closed. This means all items have been received and all payments have been made."
+        key="closed"
       />
+      <CreatePaymentRow requisition={props.requisition} />
     </Collapse>
   );
 };
 
-export default CancelledExpense;
+export default ReceivedExpense;

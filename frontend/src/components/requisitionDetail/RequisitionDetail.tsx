@@ -4,14 +4,13 @@ import { useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
 import { Button, Card, Col, List, PageHeader, Pagination, Popconfirm, Row, Skeleton, Steps, Tooltip, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
-import { formatPrice, parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
+import { parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
 import RequisitionItemsTable from "./RequisitionItemsTable";
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import RequisitionExpenseSection, { saveExpenseData } from "./RequisitionExpenseSection";
 import RequisitionTag from "../../util/RequisitionTag";
 import { Approval } from "../../types/Approval";
-import { Payment } from "../../types/Payment";
 
 const { Text, Title } = Typography;
 const { Step } = Steps;
@@ -69,20 +68,19 @@ const RequisitionDetail: React.FC<{}> = (props) => {
     });
   }
 
-  if (rekData.paymentSet && rekData.paymentSet.length > 0) {
-    const payment: Payment = rekData.paymentSet[rekData.paymentSet.length - 1]; // Gets last payment
+  if (rekData.orderDate) {
+    let text = "";
+
+    if (rekData.shippingLocation) {
+      text = `Ordered on ${moment(rekData.orderDate).format("M/D/YY")} and shipped to ${rekData.shippingLocation}`;
+    } else {
+      text = `Ordered on ${moment(rekData.orderDate).format("M/D/YY")}`;
+    }
 
     listData.push({
-      title: "Payment",
-      body: `Paid ${formatPrice(payment.amount)} from ${payment.fundingSource.name} on ${moment(payment.date).format("M/D/YY")}`
+      title: "Order Info",
+      body: text
     });
-
-    if (payment.shippingLocation) {
-      listData.push({
-        title: "Order Info",
-        body: `Shipped to ${payment.shippingLocation}`
-      });
-    }
   }
 
   const handleEdit = () => {
@@ -169,6 +167,7 @@ const RequisitionDetail: React.FC<{}> = (props) => {
         <Step title="Ready to Order" />
         <Step title="Ordered" />
         <Step title="Received" />
+        <Step title="Closed" />
       </Steps>
       <RequisitionExpenseSection requisition={rekData} />
       <Pagination

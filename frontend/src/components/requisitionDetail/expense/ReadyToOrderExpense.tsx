@@ -1,37 +1,28 @@
 import React from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input, Select, Tooltip } from "antd";
+import { useMutation } from "@apollo/client";
+import { Collapse, DatePicker, Form, Input, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
-import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../types/PaymentMethod";
-import ErrorDisplay from "../../../util/ErrorDisplay";
 import { FORM_RULES } from "../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { CREATE_PAYMENT_MUTATION } from "../../../types/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
+import { UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
+import CreatePaymentRow from "./CreatePaymentRow";
 
 const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
-  const { loading, data, error } = useQuery(PAYMENT_METHOD_EXPENSE_QUERY);
-  const [createPayment] = useMutation(CREATE_PAYMENT_MUTATION);
-
-  if (error) {
-    return <ErrorDisplay message={error?.message} />;
-  }
+  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   const onFinish = async (values: any) => {
     const mutationData = {
-      ...values,
-      recipient: props.requisition.vendor.id,
-      requisition: props.requisition.id,
-      date: values.date.format("YYYY-MM-DD")
+      headline: props.requisition.headline,
+      project: props.requisition.project.id,
+      vendor: props.requisition.vendor?.id,
+      status: "ORDERED",
+      shippingLocation: values.shippingLocation,
+      orderDate: values.orderDate.format("YYYY-MM-DD")
     };
 
-    await saveExpenseData(createPayment, { data: mutationData });
+    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
   };
-
-  const paymentMethodOptions = loading ? [] : data.paymentMethods.map((paymentMethod: any) => ({
-    label: paymentMethod.name,
-    value: paymentMethod.id
-  }));
 
   return (
     <Collapse>
@@ -43,22 +34,7 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
         key="ordered"
       >
         <Form.Item
-          name="amount"
-          rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
-          normalize={(value: any) => (value ? parseFloat(value) : null)}
-          label="Amount Paid"
-        >
-          <Input prefix="$" type="number" placeholder="23.90" />
-        </Form.Item>
-        <Form.Item
-          name="fundingSource"
-          rules={[FORM_RULES.requiredRule]}
-          label="Funding Source"
-        >
-          <Select options={paymentMethodOptions} optionFilterProp="label" loading={loading} />
-        </Form.Item>
-        <Form.Item
-          name="date"
+          name="orderDate"
           rules={[FORM_RULES.requiredRule]}
           label="Order Date"
         >
@@ -78,6 +54,7 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
           <Input placeholder="Storage Unit" />
         </Form.Item>
       </RequisitionExpenseRow>
+      <CreatePaymentRow requisition={props.requisition} />
     </Collapse>
   );
 };

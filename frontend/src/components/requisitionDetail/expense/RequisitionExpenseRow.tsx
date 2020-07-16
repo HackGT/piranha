@@ -8,7 +8,7 @@ const { Panel } = Collapse;
 
 interface Props {
   onFinish: (values: any) => void
-  newStatus: RequisitionStatus;
+  newStatus?: RequisitionStatus;
   title: string;
   description: string;
   key: string;
@@ -16,7 +16,7 @@ interface Props {
 
 const RequisitionExpenseRow: React.FC<Props> = props => (
   <Panel
-    extra={(
+    extra={props.newStatus && (
       <>
         <Text>New Status:</Text>
         <RequisitionTag status={props.newStatus} style={{ margin: "0 0 0 10px" }} />
