@@ -26,10 +26,14 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     const approval: Approval = data.approvalSet[data.approvalSet.length - 1]; // Gets last approval
     let text = "";
 
+    const time = moment(approval.createdAt);
+    // @ts-ignore
+    const timeDisplay = time.diff() < 86400000 ? time.fromNow() : `on ${time.format("M/D/YY")}`; // Checks if requisition was approved less than a day ago
+
     if (approval.isApproving) {
-      text = `Approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")}`;
+      text = `Approved by ${approval.approver.preferredName} ${approval.approver.lastName} ${timeDisplay}`;
     } else {
-      text = `Not approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")} Notes: ${approval.notes}`;
+      text = `${approval.approver.preferredName} ${approval.approver.lastName} requested changes ${timeDisplay}. Notes: ${approval.notes}`;
     }
 
     listData.push({
