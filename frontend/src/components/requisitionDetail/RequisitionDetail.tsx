@@ -54,7 +54,7 @@ const RequisitionDetail: React.FC = () => {
           <Text strong>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <ActionsSection data={rekData} />
+          <ActionsSection data={rekData} loading={loading} />
         </Col>
       </Row>
 

@@ -9,12 +9,16 @@ import { RequisitionSectionProps } from "../RequisitionDetail";
 const { Title } = Typography;
 
 const ActionsSection: React.FC<RequisitionSectionProps> = (props) => {
-  const { data } = props;
+  const { data, loading } = props;
   
   const location = useLocation();
   const history = useHistory();
 
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
+
+  if (loading || ["CLOSED", "CANCELLED"].includes(data.status)) {
+    return null;
+  }
 
   const handleEdit = () => {
     if (data.canEdit) {
