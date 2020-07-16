@@ -1,18 +1,16 @@
 import React from "react";
 import { Typography, Table } from "antd";
-import { Requisition, RequisitionItem } from "../../types/Requisition";
-import { formatPrice, getTotalCost } from "../../util/util";
+import { RequisitionItem } from "../../../types/Requisition";
+import { formatPrice, getTotalCost } from "../../../util/util";
+import { RequisitionSectionProps } from "../RequisitionDetail";
 
 const { Text, Link } = Typography;
 
-interface Props {
-  data: Requisition;
-  loading: boolean;
-}
-
 type RequisitionItemRow = RequisitionItem & { isNotesRow: boolean }
 
-const RequisitionItemsTable: React.FC<Props> = (props) => {
+const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
+  const { data, loading } = props;
+  
   const columns = [
     {
       title: "Item",
@@ -23,7 +21,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
             children: <Text>{record.notes}</Text>,
             props: {
               colSpan: 3,
-              style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+              style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
             }
           };
         }
@@ -33,7 +31,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: <Link href={record.link} target="_blank">{record.name}</Link>,
           props: {
-            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }
@@ -54,7 +52,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: `${record.quantity} @ ${formatPrice(record.unitPrice)}`,
           props: {
-            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }
@@ -72,7 +70,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
         return {
           children: formatPrice(record.quantity * record.unitPrice),
           props: {
-            style: { background: record.received && props.data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
           }
         };
       }
@@ -80,7 +78,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
   ];
 
   // Duplicates the rows so that items with notes have an extra row
-  const rows = props.loading ? [] : props.data.requisitionitemSet.flatMap((item) => {
+  const rows = loading ? [] : data.requisitionitemSet.flatMap((item) => {
     if (item.notes) {
       return [{ ...item, isNotesRow: false }, { ...item, isNotesRow: true }];
     }
@@ -92,11 +90,12 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
       columns={columns}
       dataSource={rows}
       pagination={false}
-      loading={props.loading}
+      loading={loading}
       size="small"
       bordered
       scroll={{ x: true }}
-      summary={() => (props.loading ? null
+      footer={data.status === "PARTLY_RECEIVED" ? () => <em>* Items in green have been received</em> : undefined}
+      summary={() => (loading ? null
         : (
           <>
             <Table.Summary.Row>
@@ -104,7 +103,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                 <Text strong>Subtotal</Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell index={2}>
-                <Text strong>{formatPrice(getTotalCost(props.data, false))}</Text>
+                <Text strong>{formatPrice(getTotalCost(data, false))}</Text>
               </Table.Summary.Cell>
             </Table.Summary.Row>
             <Table.Summary.Row>
@@ -112,7 +111,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                 <Text>Other Fees</Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell index={2}>
-                <Text>{formatPrice(props.data.otherFees)}</Text>
+                <Text>{formatPrice(data.otherFees)}</Text>
               </Table.Summary.Cell>
             </Table.Summary.Row>
             <Table.Summary.Row>
@@ -120,7 +119,7 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
                 <Text strong>Total</Text>
               </Table.Summary.Cell>
               <Table.Summary.Cell index={2}>
-                <Text strong>{formatPrice(getTotalCost(props.data, true))}</Text>
+                <Text strong>{formatPrice(getTotalCost(data, true))}</Text>
               </Table.Summary.Cell>
             </Table.Summary.Row>
           </>
@@ -129,4 +128,4 @@ const RequisitionItemsTable: React.FC<Props> = (props) => {
   );
 };
 
-export default RequisitionItemsTable;
+export default ItemsTableSection;

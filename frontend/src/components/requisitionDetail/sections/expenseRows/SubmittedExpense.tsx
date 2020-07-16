@@ -1,10 +1,10 @@
 import React from "react";
 import { Collapse, Form, Input, message } from "antd";
 import { useMutation } from "@apollo/client";
-import { FORM_RULES } from "../../../util/util";
+import { FORM_RULES } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { CREATE_APPROVAL_MUTATION } from "../../../types/Approval";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
+import { CREATE_APPROVAL_MUTATION } from "../../../../types/Approval";
+import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 
 const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);

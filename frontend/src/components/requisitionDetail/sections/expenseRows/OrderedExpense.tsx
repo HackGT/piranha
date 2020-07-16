@@ -2,8 +2,8 @@ import React from "react";
 import { Checkbox, Collapse, Form } from "antd";
 import { useMutation } from "@apollo/client";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { RequisitionItem, UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../RequisitionExpenseSection";
+import { RequisitionItem, UPDATE_REQUISITION_MUTATION } from "../../../../types/Requisition";
+import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import CreatePaymentRow from "./CreatePaymentRow";
 
 const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {

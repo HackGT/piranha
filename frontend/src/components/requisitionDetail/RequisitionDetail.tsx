@@ -1,33 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useHistory, useLocation } from "react-router-dom";
-import { useMutation, useQuery } from "@apollo/client";
-import moment from "moment";
-import { Button, Card, Col, List, PageHeader, Pagination, Popconfirm, Row, Skeleton, Steps, Tooltip, Typography } from "antd";
-import { Requisition, REQUISITION_DETAIL_QUERY, UPDATE_REQUISITION_MUTATION } from "../../types/Requisition";
-import { parseRequisitionParams, screenWidthHook, StatusToStep } from "../../util/util";
-import RequisitionItemsTable from "./RequisitionItemsTable";
-import "./index.css";
+import React from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { Col, PageHeader, Pagination, Row, Typography } from "antd";
+import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
+import { parseRequisitionParams } from "../../util/util";
+import ItemsTableSection from "./sections/ItemsTableSection";
 import ErrorDisplay from "../../util/ErrorDisplay";
-import RequisitionExpenseSection, { saveExpenseData } from "./RequisitionExpenseSection";
+import ManageStatusSection from "./sections/ManageStatusSection";
 import RequisitionTag from "../../util/RequisitionTag";
-import { Approval } from "../../types/Approval";
+import ActionsSection from "./sections/ActionsSection";
+import InfoCardsSection from "./sections/InfoCardsSection";
+import PaymentsTableSection from "./sections/PaymentsTableSection";
+import "./index.css";
+import StatusStepsSection from "./sections/StatusStepsSection";
 
 const { Text, Title } = Typography;
-const { Step } = Steps;
 
-const RequisitionDetail: React.FC<{}> = (props) => {
+export interface RequisitionSectionProps {
+  data: Requisition;
+  loading?: boolean;
+}
+
+const RequisitionDetail: React.FC = () => {
   const { projectReference, requisitionReference } = useParams();
   const history = useHistory();
-  const location = useLocation();
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  useEffect(screenWidthHook(setScreenWidth));
 
   const { year, shortCode, projectRequisitionId } = parseRequisitionParams(projectReference, requisitionReference);
 
   const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
     variables: { year, shortCode, projectRequisitionId }
   });
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION); // Used to cancel requisition
 
   if (error || (data && !data.requisition)) {
     console.error(JSON.parse(JSON.stringify(error)));
@@ -36,68 +38,6 @@ const RequisitionDetail: React.FC<{}> = (props) => {
 
   // @ts-ignore
   const rekData: Requisition = loading ? {} : data.requisition as Requisition;
-
-  const listData = [
-    {
-      title: "Payment Required By",
-      body: (loading || !rekData.paymentRequiredBy) ? "Not Set" : moment(rekData.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
-    },
-    {
-      title: "Created By",
-      body: loading ? "" : `${rekData.createdBy.preferredName} ${rekData.createdBy.lastName}`
-    },
-    {
-      title: "Vendor",
-      body: (loading || !rekData.vendor) ? "Not Set" : rekData.vendor.name
-    }
-  ];
-  
-  if (rekData.approvalSet && rekData.approvalSet.length > 0) {
-    const approval: Approval = rekData.approvalSet[rekData.approvalSet.length - 1]; // Gets last approval
-    let text = "";
-
-    if (approval.isApproving) {
-      text = `Approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")}`;
-    } else {
-      text = `Not approved by ${approval.approver.preferredName} ${approval.approver.lastName} on ${moment(approval.createdAt).format("M/D/YY")} Notes: ${approval.notes}`;
-    }
-
-    listData.push({
-      title: "Approval",
-      body: text
-    });
-  }
-
-  if (rekData.orderDate) {
-    let text = "";
-
-    if (rekData.shippingLocation) {
-      text = `Ordered on ${moment(rekData.orderDate).format("M/D/YY")} and shipped to ${rekData.shippingLocation}`;
-    } else {
-      text = `Ordered on ${moment(rekData.orderDate).format("M/D/YY")}`;
-    }
-
-    listData.push({
-      title: "Order Info",
-      body: text
-    });
-  }
-
-  const handleEdit = () => {
-    if (rekData.canEdit) {
-      history.push(`${location.pathname.replace(/\/+$/, "")}/edit`);
-    }
-  };
-
-  const handleCancel = async () => {
-    const mutationData = {
-      headline: rekData.headline,
-      project: rekData.project.id,
-      status: "CANCELLED"
-    };
-
-    await saveExpenseData(updateRequisition, { id: rekData.id, data: mutationData });
-  };
 
   return (
     <>
@@ -114,62 +54,23 @@ const RequisitionDetail: React.FC<{}> = (props) => {
           <Text strong>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Title level={3} style={{ fontSize: "20px" }}>Actions</Title>
-          <Tooltip title={!rekData.canEdit && "You must be a project lead or exec member to edit a requisition after submission."}>
-            <Button className="action-button" onClick={handleEdit} disabled={!rekData.canEdit}>Edit</Button>
-          </Tooltip>
-          <Tooltip title={!rekData.canCancel && "You must be an exec member to cancel a requisition."}>
-            <Popconfirm
-              title="Are you sure you want to cancel this requisition?"
-              onConfirm={handleCancel}
-              okText="Yes"
-              cancelText="No"
-              disabled={!rekData.canCancel}
-            >
-              <Button className="action-button" danger disabled={!rekData.canCancel}>Cancel</Button>
-            </Popconfirm>
-          </Tooltip>
+          <ActionsSection data={rekData} />
         </Col>
       </Row>
+
       <Row gutter={[16, 32]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <RequisitionItemsTable data={rekData} loading={loading} />
-          {rekData.status === "PARTLY_RECEIVED" && <em>* Items in green have been received</em>}
+          <ItemsTableSection data={rekData} loading={loading} />
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <List
-            grid={{ gutter: 16, xs: 1, sm: 3, md: 1, lg: 2, xl: 2, xxl: 2 }}
-            dataSource={listData}
-            id="detail-list"
-            style={{ margin: 0 }}
-            renderItem={(item: any) => (
-              <List.Item>
-                <Card
-                  title={item.title}
-                  size="small"
-                  headStyle={{ wordWrap: "break-word" }}
-                >
-                  {loading ? <Skeleton active loading={loading} paragraph={false} /> : item.body}
-                </Card>
-              </List.Item>
-            )}
-          />
+          <InfoCardsSection data={rekData} loading={loading} />
         </Col>
       </Row>
-      <Steps
-        current={loading ? -1 : StatusToStep(rekData.status)}
-        labelPlacement="vertical"
-        size={screenWidth < 768 ? "small" : "default"}
-        direction={screenWidth < 768 ? "vertical" : "horizontal"}
-      >
-        <Step title="Draft" />
-        <Step title="Submitted" />
-        <Step title="Ready to Order" />
-        <Step title="Ordered" />
-        <Step title="Received" />
-        <Step title="Closed" />
-      </Steps>
-      <RequisitionExpenseSection requisition={rekData} />
+
+      <StatusStepsSection data={rekData} loading={loading} />
+      <PaymentsTableSection data={rekData} />
+      <ManageStatusSection data={rekData} />
+
       <Pagination
         pageSize={1}
         defaultCurrent={projectRequisitionId}
