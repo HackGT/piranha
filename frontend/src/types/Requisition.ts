@@ -12,7 +12,7 @@ export type RequisitionStatus =
   "PENDING_CHANGES" |
   "READY_TO_ORDER" |
   "ORDERED" |
-  "PARTLY_RECEIVED" |
+  "PARTIALLY_RECEIVED" |
   "RECEIVED" |
   "CLOSED" |
   "CANCELLED";

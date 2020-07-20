@@ -44,7 +44,7 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
       case "READY_TO_ORDER":
         return <ReadyToOrderExpense requisition={data} />;
       case "ORDERED":
-      case "PARTLY_RECEIVED":
+      case "PARTIALLY_RECEIVED":
         return <OrderedExpense requisition={data} />;
       case "RECEIVED":
         return <ReceivedExpense requisition={data} />;

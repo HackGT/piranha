@@ -10,6 +10,10 @@ type RequisitionItemRow = RequisitionItem & { isNotesRow: boolean }
 
 const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
+
+  // Boolean determines whether to show green highlights and table footer
+  const showReceived = data.status === "PARTIALLY_RECEIVED";
+  const greenColor = "#f6ffed";
   
   const columns = [
     {
@@ -21,7 +25,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
             children: <Text>{record.notes}</Text>,
             props: {
               colSpan: 3,
-              style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+              style: { background: record.received && showReceived ? greenColor : "" }
             }
           };
         }
@@ -31,7 +35,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         return {
           children: <Link href={record.link} target="_blank">{record.name}</Link>,
           props: {
-            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && showReceived ? greenColor : "" }
           }
         };
       }
@@ -52,7 +56,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         return {
           children: `${record.quantity} @ ${formatPrice(record.unitPrice)}`,
           props: {
-            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && showReceived ? greenColor : "" }
           }
         };
       }
@@ -70,7 +74,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         return {
           children: formatPrice(record.quantity * record.unitPrice),
           props: {
-            style: { background: record.received && data.status === "PARTLY_RECEIVED" ? "#f6ffed" : "" }
+            style: { background: record.received && showReceived ? greenColor : "" }
           }
         };
       }
@@ -94,7 +98,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       size="small"
       bordered
       scroll={{ x: true }}
-      footer={data.status === "PARTLY_RECEIVED" ? () => <em>* Items in green have been received</em> : undefined}
+      footer={showReceived ? () => <em>* Items in green have been received</em> : undefined}
       summary={() => (loading ? null
         : (
           <>
