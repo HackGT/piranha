@@ -19,7 +19,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     } else if (numReceived === Object.keys(values).length) {
       status = "RECEIVED";
     } else {
-      status = "PARTLY_RECEIVED";
+      status = "PARTIALLY_RECEIVED";
     }
 
     const mutationData = {

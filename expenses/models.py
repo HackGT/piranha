@@ -24,7 +24,7 @@ class RequisitionStatus(models.Model):
     PENDING_CHANGES = "Pending Changes"
     READY_TO_ORDER = "Ready to Order"
     ORDERED = "Ordered"
-    PARTLY_RECEIVED = "Partly Received"
+    PARTIALLY_RECEIVED = "Partially Received"
     RECEIVED = "Received"
     CLOSED = "Closed"
     CANCELLED = "Cancelled"
@@ -34,7 +34,7 @@ class RequisitionStatus(models.Model):
                (PENDING_CHANGES, PENDING_CHANGES),
                (READY_TO_ORDER, READY_TO_ORDER),
                (ORDERED, ORDERED),
-               (PARTLY_RECEIVED, PARTLY_RECEIVED),
+               (PARTIALLY_RECEIVED, PARTIALLY_RECEIVED),
                (RECEIVED, RECEIVED),
                (CLOSED, CLOSED),
                (CANCELLED, CANCELLED)
