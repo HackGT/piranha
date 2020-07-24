@@ -11,7 +11,7 @@ const ProjectList: React.FC = () => {
   const { loading, data, error } = useQuery(PROJECT_LIST_QUERY);
 
   if (error || (data && !data.projects)) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const projectData = loading ? [

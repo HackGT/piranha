@@ -32,8 +32,7 @@ const RequisitionDetail: React.FC = () => {
   });
 
   if (error || (data && !data.requisition)) {
-    console.error(JSON.parse(JSON.stringify(error)));
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   // @ts-ignore

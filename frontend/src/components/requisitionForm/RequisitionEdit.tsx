@@ -18,7 +18,7 @@ const RequisitionEdit: React.FC = () => {
   });
 
   if (error || (data && !data.requisition)) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
   
   if (loading) {
