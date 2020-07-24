@@ -38,7 +38,7 @@ to a new file called `.env`.
 | ------ | -----|
 | DEBUG | "true" if you're using a local development build.  In production, set this to "false"
 | SECRET_KEY | Generate using https://djecrety.ir/.  You'll probably need to put the value in "quotes" because it contains special characters |
-| DATABASE_URL | Connection string for a Postgres database.  Format: `postgres://USERNAME:PASSWORD@localhost:5432/DATABASE_NAME` |
+| POSTGRES_URL | Connection string for a Postgres database.  Format: `postgres://USERNAME:PASSWORD@localhost:5432/DATABASE_NAME` |
 | GROUND_TRUTH_URL | URL to a [Ground Truth](https://github.com/hackgt/ground-truth) login service for authenticating users.  |
 | GROUND_TRUTH_CLIENT_ID | Obtain from Ground Truth admin panel |
 | GROUND_TRUTH_CLIENT_SECRET | Obtain from Ground Truth admin panel |
