@@ -18,5 +18,5 @@ COPY . /usr/src/piranha
 COPY --from=build /usr/src/piranha/frontend/ /usr/src/piranha/frontend/
 
 EXPOSE 8000
-RUN ["chmod", "+x", "/usr/src/piranha/entrypoint.sh"]
-ENTRYPOINT ["/usr/src/piranha/entrypoint.sh"]
+RUN ["chmod", "+x", "/usr/src/piranha/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/src/piranha/docker-entrypoint.sh"]
