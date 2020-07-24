@@ -18,4 +18,5 @@ COPY . /usr/src/piranha
 COPY --from=build /usr/src/piranha/frontend/ /usr/src/piranha/frontend/
 
 EXPOSE 8000
-CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "piranha.wsgi:application"]
+RUN ["chmod", "+x", "entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
