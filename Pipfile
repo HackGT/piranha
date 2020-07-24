@@ -41,6 +41,7 @@ Django = "==3.0.7"
 PyJWT = "==1.7.1"
 Rx = "==1.6.1"
 Unidecode = "==1.1.1"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
