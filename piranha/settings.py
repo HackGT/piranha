@@ -90,7 +90,7 @@ DATABASES = {
     # }
 }
 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES['default'] = dj_database_url.config(default=os.environ["POSTGRES_URL"])
 
 AUTH_USER_MODEL = "seaport.User"
 
