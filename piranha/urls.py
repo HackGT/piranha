@@ -14,15 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 
 from piranha.views import index
 from seaport.views import PrivateGraphQLView
 
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
-    path("api/graphql", PrivateGraphQLView.as_view(graphiql=True)),
+    path('api/graphql', PrivateGraphQLView.as_view(graphiql=True)),
+    re_path('api/admin/?', admin.site.urls),
     path('api', include('expenses.urls')),
-    path('admin/', admin.site.urls),
-    path("", index, name="index")
+    re_path("", index, name="index")
 ]
