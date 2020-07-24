@@ -1,0 +1,15 @@
+git:
+  branch: master
+
+wants:
+  postgres: true
+
+secrets:
+  - SECRET_KEY
+  - GROUND_TRUTH_CLIENT_ID
+  - GROUND_TRUTH_CLIENT_SECRET
+
+env:
+  GROUND_TRUTH_URL: https://login.hack.gt
+  DEBUG: false
+  TIME_ZONE: America/New_York
