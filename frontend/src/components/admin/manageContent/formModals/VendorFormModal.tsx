@@ -6,7 +6,7 @@ import ManageContentModal from "../ManageContentModal";
 import { CREATE_VENDOR_MUTATION, UPDATE_VENDOR_MUTATION, VENDOR_LIST_QUERY } from "../../../../types/Vendor";
 import { FormModalProps } from "./FormModalProps";
 
-const VendorFormModal: React.FC<FormModalProps> = (props) => (
+const VendorFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
     visible={props.modalState.visible}
     initialValues={props.modalState.initialValues}
