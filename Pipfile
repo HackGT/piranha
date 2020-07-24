@@ -42,6 +42,7 @@ PyJWT = "==1.7.1"
 Rx = "==1.6.1"
 Unidecode = "==1.1.1"
 gunicorn = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.7"
