@@ -19,10 +19,13 @@ from django.urls import path, re_path, include
 from piranha.views import index
 from seaport.views import PrivateGraphQLView
 
+# This will redirect the rest of the urls to this handler, will only display when DEBUG is false
+handler404 = 'piranha.views.handler404'
+
 urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
     path('api/graphql', PrivateGraphQLView.as_view(graphiql=True)),
     re_path('api/admin/?', admin.site.urls),
     path('api', include('expenses.urls')),
-    re_path("", index, name="index")
+    path('', index, name="index")
 ]
