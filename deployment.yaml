@@ -15,3 +15,4 @@ env:
   GROUND_TRUTH_URL: https://login.hack.gt
   DEBUG: false
   TIME_ZONE: America/New_York
+  PRODUCTION: true
