@@ -43,6 +43,7 @@ to a new file called `.env`.
 | GROUND_TRUTH_CLIENT_ID | Obtain from Ground Truth admin panel |
 | GROUND_TRUTH_CLIENT_SECRET | Obtain from Ground Truth admin panel |
 | TIME_ZONE | The [TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for whatever timezone you want the application to use |
+| PRODUCTION | Use `true` to enable production settings |
 
 A few steps to finish up:
 1. Open a terminal in the root directory of this repo

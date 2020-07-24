@@ -26,6 +26,8 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ["DEBUG"].lower() == "true")
 
+PRODUCTION = (os.environ["PRODUCTION"].lower() == "true")
+
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -142,6 +144,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 SOCIAL_AUTH_GROUND_TRUTH_CLIENT_ID = os.getenv("GROUND_TRUTH_CLIENT_ID")
 SOCIAL_AUTH_GROUND_TRUTH_CLIENT_SECRET = os.getenv("GROUND_TRUTH_CLIENT_SECRET")
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = PRODUCTION
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -189,6 +192,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 LOGIN_URL = "/login/ground_truth"
+SESSION_COOKIE_SECURE = PRODUCTION
 
 GRAPHENE = {
     'SCHEMA': 'piranha.schema.schema'
