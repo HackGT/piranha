@@ -1,7 +1,7 @@
 # Create your models here.
 import uuid
 
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Group
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,6 +19,10 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+
+        member_group = Group.objects.get(name="member")
+        user.groups.add(member_group)
+
         return user
 
     def create_user(self, email, password=None, **extra_fields):
