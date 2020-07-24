@@ -36,7 +36,7 @@ const ManageContentList: React.FC<Props> = (props) => {
   };
 
   if (error) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const sortedData = data ? props.sortData(data) : [];

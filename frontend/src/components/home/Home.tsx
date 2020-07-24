@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   const { loading, data, error } = useQuery(OPEN_REQUISITIONS_QUERY);
 
   if (error || (data && !data.requisitions)) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const emptyRek = {

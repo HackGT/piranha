@@ -13,7 +13,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   const { loading, data, error } = useQuery(ALL_USERS_QUERY);
 
   if (error) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const leadOptions = loading ? [] : data.users.map((user: any) => ({

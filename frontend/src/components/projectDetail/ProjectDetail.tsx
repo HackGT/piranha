@@ -36,7 +36,7 @@ const ProjectDetail: React.FC = () => {
   });
 
   if (error || (data && !data.project)) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const columns = [
@@ -135,7 +135,7 @@ const ProjectDetail: React.FC = () => {
     if (expandedRows.length === rows.length) {
       setExpandedRows([]);
     } else {
-      const rowKeys = rows.map((row) => row.projectRequisitionId);
+      const rowKeys = rows.map(row => row.projectRequisitionId);
       setExpandedRows(rowKeys);
     }
   };
@@ -144,7 +144,7 @@ const ProjectDetail: React.FC = () => {
     if (expanded) {
       setExpandedRows(expandedRows.concat([record.projectRequisitionId]));
     } else {
-      setExpandedRows(expandedRows.filter((item) => item !== record.projectRequisitionId));
+      setExpandedRows(expandedRows.filter(item => item !== record.projectRequisitionId));
     }
   };
 

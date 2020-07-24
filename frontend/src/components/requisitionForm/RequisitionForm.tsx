@@ -31,7 +31,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
   
   if (error) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const projectOptions = loading ? [] : data.projects.map((project: any) => ({

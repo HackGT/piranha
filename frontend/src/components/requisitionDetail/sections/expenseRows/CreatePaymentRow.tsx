@@ -14,7 +14,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createPayment] = useMutation(CREATE_PAYMENT_MUTATION);
 
   if (error) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const onFinish = async (values: any, form: FormInstance) => {

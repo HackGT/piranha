@@ -23,7 +23,7 @@ const App:React.FC = () => {
   const { loading, data, error } = useQuery(USER_INFO_QUERY);
 
   if (error || (data && !data.user)) {
-    return <ErrorDisplay message={error?.message} />;
+    return <ErrorDisplay error={error} />;
   }
 
   const user: User = data && data.user;
