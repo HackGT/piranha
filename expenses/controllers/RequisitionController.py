@@ -31,6 +31,10 @@ class RequisitionController:
 
             requisition = Requisition.objects.create(**new_data)
 
+            # Exits if requisition items are not provided in query
+            if "requisitionitemSet" not in data:
+                return requisition
+
             for item in data.requisitionitemSet:
                 item_new_data = {
                     "requisition": requisition
@@ -45,13 +49,22 @@ class RequisitionController:
         if info.context.user.has_perm("expenses.change_requisition"):
             query = Requisition.objects.filter(id=id)
 
-            new_data = {
-                "project": Project.objects.get(id=data["project"]),
-                "vendor": Vendor.objects.get(id=data["vendor"]) if "vendor" in data else None,
-            }
-            new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "project", "vendor"]})
+            new_data = {}
 
+            project = Project.objects.get(id=data["project"])
+
+            # If project changed, recalculate project requisition id
+            if int(data.project) != int(query.first().project.id):
+                id_max = Requisition.objects.filter(project=project).aggregate(Max('project_requisition_id'))
+
+                new_data = {
+                    "project": project,
+                    "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
+                }
+
+            new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet"]})
             query.update(**new_data)
+
             requisition = query.first()
 
             # Exits if requisition items are not provided in query
