@@ -28,6 +28,9 @@ class RequisitionStatus(models.Model):
     RECEIVED = "Received"
     CLOSED = "Closed"
     CANCELLED = "Cancelled"
+    READY_FOR_REIMBURSEMENT = "Ready for Reimbursement"
+    AWAITING_INFORMATION = "Awaiting Information"
+    REIMBURSEMENT_IN_PROGRESS = "Reimbursement in Progress"
 
     choices = [(DRAFT, DRAFT),
                (SUBMITTED, SUBMITTED),
@@ -37,7 +40,10 @@ class RequisitionStatus(models.Model):
                (PARTIALLY_RECEIVED, PARTIALLY_RECEIVED),
                (RECEIVED, RECEIVED),
                (CLOSED, CLOSED),
-               (CANCELLED, CANCELLED)
+               (CANCELLED, CANCELLED),
+               (READY_FOR_REIMBURSEMENT, READY_FOR_REIMBURSEMENT),
+               (AWAITING_INFORMATION, AWAITING_INFORMATION),
+               (REIMBURSEMENT_IN_PROGRESS, REIMBURSEMENT_IN_PROGRESS)
                ]
 
     class Meta:
@@ -55,8 +61,14 @@ class Requisition(TimestampedModel):
     project_requisition_id = PositiveIntegerField()
     payment_required_by = DateField(null=True, blank=True)
     other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
+    is_reimbursement = BooleanField(default=False)
+
+    # Only used for non-reimbursements
     shipping_location = CharField(max_length=150, blank=True)
     order_date = DateField(null=True, blank=True)
+
+    # Only used for reimbursements
+    funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
 
     class Meta:
         rules_permissions = {
@@ -124,6 +136,8 @@ class Vendor(TimestampedModel):
 
 class PaymentMethod(TimestampedModel):
     name = CharField(max_length=150, unique=True)
+    reimbursement_instructions = TextField(blank=True)
+    is_direct_payment = BooleanField(default=False)
     is_active = BooleanField(default=True)
 
     def __str__(self):

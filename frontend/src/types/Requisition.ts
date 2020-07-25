@@ -6,6 +6,7 @@ import { Vendor } from "./Vendor";
 import { Approval } from "./Approval";
 import { Payment } from "./Payment";
 import { File } from "./File";
+import { PaymentMethod } from "./PaymentMethod";
 
 export type RequisitionStatus =
   "DRAFT" |
@@ -16,7 +17,10 @@ export type RequisitionStatus =
   "PARTIALLY_RECEIVED" |
   "RECEIVED" |
   "CLOSED" |
-  "CANCELLED";
+  "CANCELLED" |
+  "READY_FOR_REIMBURSEMENT" |
+  "AWAITING_INFORMATION" |
+  "REIMBURSEMENT_IN_PROGRESS";
 
 export type Requisition = {
   id: number,
@@ -39,7 +43,9 @@ export type Requisition = {
   canExpense: boolean,
   otherFees: number,
   shippingLocation: string,
-  orderDate: string
+  orderDate: string,
+  isReimbursement: boolean
+  fundingSource: PaymentMethod
 }
 
 export type RequisitionItem = {
@@ -58,6 +64,7 @@ export type RequisitionFormData = {
   vendor: string | undefined;
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
+  isReimbursement: boolean;
   requisitionitemSet: RequisitionItem[];
   status: RequisitionStatus;
   fileSet: any[];
@@ -97,6 +104,7 @@ export const OPEN_REQUISITIONS_QUERY = gql`
         unitPrice
       }
       otherFees
+      isReimbursement
     }
   }
 `;
@@ -169,6 +177,13 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     otherFees
     shippingLocation
     orderDate
+    isReimbursement
+    fundingSource {
+      id
+      name    
+      reimbursementInstructions
+      isDirectPayment
+    }
   }
 `;
 

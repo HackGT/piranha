@@ -3,6 +3,8 @@ import { gql } from "@apollo/client";
 export type PaymentMethod = {
   id: number,
   name: string,
+  reimbursementInstructions: string;
+  isDirectPayment: boolean;
   isActive: boolean
 }
 
@@ -19,6 +21,8 @@ export const PAYMENT_METHOD_INFO_FRAGMENT = gql`
   fragment PaymentMethodInfoFragment on PaymentMethod {
     id
     name
+    reimbursementInstructions
+    isDirectPayment
     isActive
   }
 `;
