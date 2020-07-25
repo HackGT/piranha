@@ -3,7 +3,7 @@ import { Button, Result } from "antd";
 import { ApolloError } from "@apollo/client";
 
 interface Props {
-  error: ApolloError | undefined;
+  error: ApolloError | Error | undefined;
 }
 
 const ErrorDisplay: React.FC<Props> = (props) => {
