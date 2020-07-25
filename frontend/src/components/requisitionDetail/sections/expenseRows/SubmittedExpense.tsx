@@ -10,7 +10,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
-    if (isApproving && !props.requisition.vendor.isActive) {
+    if (isApproving && !props.requisition.vendor?.isActive) {
       message.error("Vendor must be active before approval.", 2);
       return;
     }
