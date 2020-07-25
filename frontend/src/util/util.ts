@@ -15,6 +15,9 @@ export const StatusToColor = (status: RequisitionStatus): PresetColorType | unde
     case "RECEIVED": return "purple";
     case "CLOSED": return undefined;
     case "CANCELLED": return "red";
+    case "READY_FOR_REIMBURSEMENT": return "green";
+    case "AWAITING_INFORMATION": return "orange";
+    case "REIMBURSEMENT_IN_PROGRESS": return "blue";
     default: return undefined;
   }
 };
@@ -30,6 +33,9 @@ export const StatusToString = (status: RequisitionStatus) => {
     case "RECEIVED": return "Received";
     case "CLOSED": return "Closed";
     case "CANCELLED": return "Cancelled";
+    case "READY_FOR_REIMBURSEMENT": return "Ready for Reimbursement";
+    case "AWAITING_INFORMATION": return "Awaiting Information";
+    case "REIMBURSEMENT_IN_PROGRESS": return "Reimbursement in Progress";
     default: return "Unknown";
   }
 };
@@ -45,6 +51,7 @@ export const StatusToStep = (status: RequisitionStatus) => {
     case "RECEIVED": return 4;
     case "CLOSED": return 5;
     case "CANCELLED": return -1;
+    // TODO: Setup status steps with new reimbursements
     default: return 0;
   }
 };
