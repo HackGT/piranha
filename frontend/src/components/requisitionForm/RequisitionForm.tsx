@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message, Upload } from "antd";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message, Switch, Upload } from "antd";
 import { PlusOutlined, QuestionCircleOutlined, UploadOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData,
-  CREATE_REQUISITION_MUTATION,
-  UPDATE_REQUISITION_MUTATION,
-  REQUISITION_FORM_QUERY,
-  RequisitionStatus } from "../../types/Requisition";
+import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 import ErrorDisplay from "../../util/ErrorDisplay";
 
@@ -31,7 +27,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
   const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION);
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-  
+
   if (error) {
     return <ErrorDisplay error={error} />;
   }
@@ -59,6 +55,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       vendor: values.vendor || undefined,
       paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
       otherFees: values.otherFees,
+      isReimbursement: values.isReimbursement,
       requisitionitemSet: values.requisitionitemSet.map((item: any) => ({
         name: item.name,
         link: item.link,
@@ -242,6 +239,22 @@ const RequisitionForm: React.FC<Props> = (props) => {
               )}
             >
               <Input prefix="$" type="number" placeholder="68.72" />
+            </Form.Item>
+          </Col>
+          <Col {...halfLayout}>
+            <Form.Item
+              name="isReimbursement"
+              valuePropName="checked"
+              label={(
+                <span>
+                  {"Is this a Reimbursement? "}
+                  <Tooltip title="Select yes if you have paid for this requisition already. Otherwise, HackGT will pay for and order the items.">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
+              <Switch checkedChildren="Yes" unCheckedChildren="No" />
             </Form.Item>
           </Col>
         </Row>
