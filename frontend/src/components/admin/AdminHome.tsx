@@ -19,9 +19,9 @@ const AdminHome: React.FC = () => (
         <ManageContentList
           query={PROJECT_LIST_QUERY}
           title="Projects"
-          tag={(item) => <Tag color={item.archived ? "gold" : "green"} style={{ margin: 0 }}>{item.archived ? "Archived" : "Active"}</Tag>}
-          sortData={(data) => data.projects.concat().sort((a: any, b: any) => b.year - a.year)}
-          name={(item) => `${item.name} (${item.year})`}
+          tag={item => <Tag color={item.archived ? "gold" : "green"} style={{ margin: 0 }}>{item.archived ? "Archived" : "Active"}</Tag>}
+          sortData={data => data.projects.concat().sort((a: any, b: any) => b.year - a.year)}
+          name={item => `${item.name} (${item.year})`}
           modal={ProjectFormModal}
         />
       </TabPane>
@@ -29,9 +29,9 @@ const AdminHome: React.FC = () => (
         <ManageContentList
           query={VENDOR_LIST_QUERY}
           title="Vendors"
-          tag={(item) => <Tag color={item.isActive ? "green" : "red"} style={{ margin: 0 }}>{item.isActive ? "Active" : "Inactive"}</Tag>}
-          sortData={(data) => data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
-          name={(item) => item.name}
+          tag={item => <Tag color={item.isActive ? "green" : "red"} style={{ margin: 0 }}>{item.isActive ? "Active" : "Inactive"}</Tag>}
+          sortData={data => data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+          name={item => item.name}
           modal={VendorFormModal}
         />
       </TabPane>
@@ -39,9 +39,9 @@ const AdminHome: React.FC = () => (
         <ManageContentList
           query={PAYMENT_METHOD_LIST_QUERY}
           title="Payment Methods"
-          tag={(item) => <Tag color={item.isActive ? "green" : "red"} style={{ margin: 0 }}>{item.isActive ? "Active" : "Inactive"}</Tag>}
-          sortData={(data) => data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
-          name={(item) => item.name}
+          tag={item => <Tag color={item.isActive ? "green" : "red"} style={{ margin: 0 }}>{item.isActive ? "Active" : "Inactive"}</Tag>}
+          sortData={data => data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+          name={item => item.name}
           modal={PaymentMethodFormModal}
         />
       </TabPane>
