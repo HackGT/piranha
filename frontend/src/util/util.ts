@@ -51,7 +51,9 @@ export const StatusToStep = (status: RequisitionStatus) => {
     case "RECEIVED": return 4;
     case "CLOSED": return 5;
     case "CANCELLED": return -1;
-    // TODO: Setup status steps with new reimbursements
+    case "READY_FOR_REIMBURSEMENT": return 2;
+    case "AWAITING_INFORMATION": return 3;
+    case "REIMBURSEMENT_IN_PROGRESS": return 4;
     default: return 0;
   }
 };
