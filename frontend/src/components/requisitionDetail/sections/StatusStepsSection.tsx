@@ -11,6 +11,32 @@ const StatusStepsSection: React.FC<RequisitionSectionProps> = (props) => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   useEffect(screenWidthHook(setScreenWidth));
 
+  let content = null;
+
+  if (data.isReimbursement) {
+    content = (
+      <>
+        <Step title="Draft" />
+        <Step title="Submitted" />
+        <Step title="Ready for Reimbursement" />
+        <Step title="Awaiting Information" />
+        <Step title="Reimbursement in Progress" />
+        <Step title="Closed" />
+      </>
+    );
+  } else {
+    content = (
+      <>
+        <Step title="Draft" />
+        <Step title="Submitted" />
+        <Step title="Ready to Order" />
+        <Step title="Ordered" />
+        <Step title="Received" />
+        <Step title="Closed" />
+      </>
+    );
+  }
+
   return (
     <Steps
       current={loading ? -1 : StatusToStep(data.status)}
@@ -19,12 +45,7 @@ const StatusStepsSection: React.FC<RequisitionSectionProps> = (props) => {
       direction={screenWidth < 768 ? "vertical" : "horizontal"}
       style={{ marginTop: "10px" }}
     >
-      <Step title="Draft" />
-      <Step title="Submitted" />
-      <Step title="Ready to Order" />
-      <Step title="Ordered" />
-      <Step title="Received" />
-      <Step title="Closed" />
+      {content}
     </Steps>
   );
 };
