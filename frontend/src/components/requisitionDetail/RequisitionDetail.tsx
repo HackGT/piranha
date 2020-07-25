@@ -13,6 +13,7 @@ import InfoCardsSection from "./sections/InfoCardsSection";
 import PaymentsTableSection from "./sections/PaymentsTableSection";
 import "./index.css";
 import StatusStepsSection from "./sections/StatusStepsSection";
+import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 
 const { Text, Title } = Typography;
 
@@ -67,6 +68,7 @@ const RequisitionDetail: React.FC = () => {
       </Row>
 
       <StatusStepsSection data={rekData} loading={loading} />
+      <ReimbursementInstructionsSection data={rekData} />
       <PaymentsTableSection data={rekData} />
       <ManageStatusSection data={rekData} />
 

@@ -74,7 +74,7 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
 
   return (
     <>
-      <Title level={3} style={{ marginTop: "10px" }}>Manage Status</Title>
+      <Title level={3} style={{ marginTop: "30px" }}>Manage Status</Title>
       {content}
     </>
   );
