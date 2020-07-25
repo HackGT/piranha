@@ -11,9 +11,10 @@ import RequisitionTag from "../../util/RequisitionTag";
 import ActionsSection from "./sections/ActionsSection";
 import InfoCardsSection from "./sections/InfoCardsSection";
 import PaymentsTableSection from "./sections/PaymentsTableSection";
-import "./index.css";
 import StatusStepsSection from "./sections/StatusStepsSection";
 import UploadedFilesSection from "./sections/UploadedFilesSection";
+import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
+import "./index.css";
 
 const { Text, Title } = Typography;
 
@@ -69,6 +70,7 @@ const RequisitionDetail: React.FC = () => {
       </Row>
 
       <StatusStepsSection data={rekData} loading={loading} />
+      <ReimbursementInstructionsSection data={rekData} />
       <PaymentsTableSection data={rekData} />
       <ManageStatusSection data={rekData} />
 
