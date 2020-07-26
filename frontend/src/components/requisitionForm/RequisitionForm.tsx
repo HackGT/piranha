@@ -47,6 +47,12 @@ const RequisitionForm: React.FC<Props> = (props) => {
   // Determines if requisition is submitting for review or just editing to save changes by an admin
   const submittalMode = !props.requisitionData || ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status);
 
+  // Determines if draft button shows on bottom of screen
+  const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
+
+  // Determines if a requisition can be changed between reimbursement and non-reimbursement
+  const reimbursementToggleEnabled = !props.requisitionData || (props.editMode && ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status));
+
   vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
 
   const saveDataToServer = async (values: any, requisitionStatus: RequisitionStatus) => {
@@ -122,8 +128,6 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const fullLayout = {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
-
-  const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
 
   return (
     <>
@@ -243,7 +247,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
                 </span>
               )}
             >
-              <Switch checkedChildren="Yes" unCheckedChildren="No" />
+              <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={!reimbursementToggleEnabled} />
             </Form.Item>
           </Col>
         </Row>
