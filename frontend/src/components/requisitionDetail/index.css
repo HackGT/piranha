@@ -13,3 +13,10 @@
   margin-right: 15px;
   margin-bottom: 15px;
 }
+
+@media only screen and (max-width: 650px) {
+  div.ant-collapse-extra {
+    float: unset !important;
+    margin-top: 5px !important;
+  }
+}
