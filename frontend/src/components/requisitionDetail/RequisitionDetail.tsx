@@ -11,10 +11,10 @@ import { RequisitionTag } from "../../util/CustomTags";
 import ActionsSection from "./sections/ActionsSection";
 import InfoCardsSection from "./sections/InfoCardsSection";
 import PaymentsTableSection from "./sections/PaymentsTableSection";
-import "./index.css";
 import StatusStepsSection from "./sections/StatusStepsSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 import ProjectBreadcrumb from "../projectDetail/ProjectBreadcrumb";
+import "./index.css";
 
 const { Text, Title } = Typography;
 
