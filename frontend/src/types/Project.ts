@@ -42,6 +42,7 @@ export const PROJECT_DETAIL_QUERY = gql`
         status
         canEdit
         otherFees
+        isReimbursement
         project {
           referenceString
         }

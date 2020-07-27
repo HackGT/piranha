@@ -3,13 +3,21 @@ import { Tag } from "antd";
 import { RequisitionStatus } from "../types/Requisition";
 import { StatusToColor, StatusToString } from "./util";
 
-interface Props {
+interface RequisitionTagProps {
   status: RequisitionStatus;
   style?: CSSProperties;
 }
 
-const RequisitionTag: React.FC<Props> = (props) => (
+export const RequisitionTag: React.FC<RequisitionTagProps> = props => (
   <Tag color={StatusToColor(props.status)} style={props.style}>{StatusToString(props.status)}</Tag>
 );
 
-export default RequisitionTag;
+
+
+interface ReimbursementTagProps {
+  style?: CSSProperties;
+}
+
+export const ReimbursementTag: React.FC<ReimbursementTagProps> = props => (
+  <Tag style={props.style}>R</Tag>
+);

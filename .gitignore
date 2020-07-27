@@ -9,3 +9,5 @@ db.sqlite3
 
 expenses/config/**
 !expenses/config/google-application-key-example.json
+
+/demos
