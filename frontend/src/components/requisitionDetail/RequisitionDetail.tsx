@@ -50,7 +50,7 @@ const RequisitionDetail: React.FC = () => {
             secondItem={loading ? shortCode : rekData.project.name}
             thirdItem={rekData.referenceString || "Loading"}
           />
-          <RequisitionTag status={rekData.status} />
+          <RequisitionTag status={rekData.status} style={{ marginBottom: "5px" }} />
           {rekData.isReimbursement && <Tag>Reimbursement</Tag>}
           <Title level={2} style={{ marginBottom: "10px" }}>{loading ? "Loading..." : rekData.headline}</Title>
           <Text style={{ display: "block" }}>{rekData.description}</Text>
