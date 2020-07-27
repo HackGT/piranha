@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Col, PageHeader, Pagination, Row, Typography } from "antd";
+import { Col, PageHeader, Pagination, Row, Tag, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
 import { parseRequisitionParams } from "../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import ManageStatusSection from "./sections/ManageStatusSection";
-import RequisitionTag from "../../util/RequisitionTag";
+import { RequisitionTag } from "../../util/CustomTags";
 import ActionsSection from "./sections/ActionsSection";
 import InfoCardsSection from "./sections/InfoCardsSection";
 import PaymentsTableSection from "./sections/PaymentsTableSection";
@@ -49,6 +49,7 @@ const RequisitionDetail: React.FC = () => {
             subTitle={loading ? shortCode : `${rekData.project.name} Requisitions`}
             style={{ padding: 0, marginBottom: "10px" }}
           />
+          <Tag>{rekData.referenceString || "Loading"}</Tag>
           <RequisitionTag status={rekData.status} />
           <Title level={2} style={{ marginBottom: "0.25em", marginTop: "0.1em" }}>{loading ? "Loading..." : rekData.headline}</Title>
           <Text strong>{rekData.description}</Text>
