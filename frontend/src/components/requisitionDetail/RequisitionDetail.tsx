@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Col, PageHeader, Pagination, Row, Tag, Typography } from "antd";
+import { Col, Pagination, Row, Tag, Typography } from "antd";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
 import { parseRequisitionParams } from "../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
@@ -14,6 +14,7 @@ import PaymentsTableSection from "./sections/PaymentsTableSection";
 import StatusStepsSection from "./sections/StatusStepsSection";
 import UploadedFilesSection from "./sections/UploadedFilesSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
+import ProjectBreadcrumb from "../projectDetail/ProjectBreadcrumb";
 import "./index.css";
 
 const { Text, Title } = Typography;
@@ -44,16 +45,15 @@ const RequisitionDetail: React.FC = () => {
     <>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
-          <PageHeader
-            onBack={() => history.push(`/project/${projectReference}`)}
-            title=""
-            subTitle={loading ? shortCode : `${rekData.project.name} Requisitions`}
-            style={{ padding: 0, marginBottom: "10px" }}
+          <ProjectBreadcrumb
+            projectReference={projectReference}
+            secondItem={loading ? shortCode : rekData.project.name}
+            thirdItem={rekData.referenceString || "Loading"}
           />
-          <Tag>{rekData.referenceString || "Loading"}</Tag>
           <RequisitionTag status={rekData.status} />
-          <Title level={2} style={{ marginBottom: "0.25em", marginTop: "0.1em" }}>{loading ? "Loading..." : rekData.headline}</Title>
-          <Text strong>{rekData.description}</Text>
+          {rekData.isReimbursement && <Tag>Reimbursement</Tag>}
+          <Title level={2} style={{ marginBottom: "10px" }}>{loading ? "Loading..." : rekData.headline}</Title>
+          <Text style={{ display: "block" }}>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <ActionsSection data={rekData} loading={loading} />
