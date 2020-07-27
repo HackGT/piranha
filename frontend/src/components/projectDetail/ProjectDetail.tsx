@@ -10,6 +10,7 @@ import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHo
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import { ReimbursementTag } from "../../util/CustomTags";
+import ProjectBreadcrumb from "./ProjectBreadcrumb";
 
 const { Text, Title } = Typography;
 
@@ -154,7 +155,8 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <>
-      <Title>{data ? data.project.name : "Loading..."}</Title>
+      <ProjectBreadcrumb secondItem={loading ? shortCode : data.project.name} />
+      <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
       <Table
         columns={columns}
         dataSource={rows}
