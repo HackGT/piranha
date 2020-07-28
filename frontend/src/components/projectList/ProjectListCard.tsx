@@ -12,7 +12,7 @@ interface Props {
   loading: boolean;
 }
 
-const ProjectListCard: React.FC<Props> = (props) => (
+const ProjectListCard: React.FC<Props> = props => (
   <Link to={`/project/${props.item.referenceString}`}>
     <Card
       title={(
@@ -33,7 +33,7 @@ const ProjectListCard: React.FC<Props> = (props) => (
           <List.Item>
             <Text>
               <UserOutlined style={{ marginRight: "5px" }} />
-              {`${lead.preferredName} ${lead.lastName}`}
+              {lead.fullName}
             </Text>
           </List.Item>
         )}

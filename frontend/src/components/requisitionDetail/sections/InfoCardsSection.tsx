@@ -14,7 +14,7 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     },
     {
       title: "Created By",
-      body: (loading || !data.createdBy) ? "Not Set" : `${data.createdBy.preferredName} ${data.createdBy.lastName}`
+      body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.fullName
     },
     {
       title: "Vendor",
@@ -31,9 +31,9 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     const timeDisplay = time.diff() < 86400000 ? time.fromNow() : `on ${time.format("M/D/YY")}`; // Checks if requisition was approved less than a day ago
 
     if (approval.isApproving) {
-      text = `Approved by ${approval.approver.preferredName} ${approval.approver.lastName} ${timeDisplay}`;
+      text = `Approved by ${approval.approver.fullName} ${timeDisplay}`;
     } else {
-      text = `${approval.approver.preferredName} ${approval.approver.lastName} requested changes ${timeDisplay}. Notes: ${approval.notes}`;
+      text = `${approval.approver.fullName} requested changes ${timeDisplay}. Notes: ${approval.notes}`;
     }
 
     listData.push({

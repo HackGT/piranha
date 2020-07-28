@@ -90,3 +90,7 @@ class UserController:
             return user.social_auth.get(provider="ground_truth").uid
         except:
             return None
+
+    @classmethod
+    def get_full_name(cls, user):
+        return user.full_name

@@ -22,6 +22,11 @@ class UserType(DjangoObjectType):
     def resolve_ground_truth_id(self, info):
         return UserController.get_ground_truth_id(self)
 
+    full_name = graphene.String()
+
+    def resolve_full_name(self, info):
+        return UserController.get_full_name(self)
+
     class Meta:
         model = auth.get_user_model()
         name = "User"

@@ -25,8 +25,7 @@ export const PROJECT_INFO_FRAGMENT = gql`
     shortCode
     leads {
       id
-      preferredName
-      lastName
+      fullName
     }
   }
 `;

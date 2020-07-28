@@ -78,8 +78,8 @@ const AdminHome: React.FC = () => {
             query={USER_LIST_QUERY}
             title="Users"
             tag={getUserTag}
-            sortData={data => data.users.concat().sort((a: any, b: any) => a.preferredName.localeCompare(b.preferredName))}
-            name={item => `${item.preferredName} ${item.lastName}`}
+            sortData={data => data.users.concat().sort((a: any, b: any) => a.fullName.localeCompare(b.fullName))}
+            name={item => item.fullName}
             modal={UserFormModal}
             hideAddButton
           />

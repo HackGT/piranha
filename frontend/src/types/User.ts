@@ -12,6 +12,7 @@ export type User = {
   firstName: string,
   preferredName: string,
   lastName: string,
+  fullName: string,
   email: string,
   hasAdminAccess: boolean,
   isActive: boolean,
@@ -22,8 +23,7 @@ export const ALL_USERS_QUERY = gql`
   query allUsers {
     users(where: {isActive: true}) {
       id
-      preferredName
-      lastName
+      fullName
     }
   }
 `;
@@ -33,8 +33,7 @@ export const USER_INFO_QUERY = gql`
     user {
       id
       groundTruthId
-      preferredName
-      lastName
+      fullName
       email
       hasAdminAccess
     }
@@ -45,6 +44,7 @@ export const USER_INFO_FRAGMENT = gql`
   fragment UserInfoFragment on User {
     id
     groundTruthId
+    fullName
     firstName
     preferredName
     lastName
