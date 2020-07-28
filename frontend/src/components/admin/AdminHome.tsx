@@ -1,5 +1,6 @@
 import React from "react";
 import { Tabs, Tag, Typography } from "antd";
+import { useParams, useHistory } from "react-router-dom";
 import ManageContentList from "./manageContent/ManageContentList";
 import { PROJECT_LIST_QUERY } from "../../types/Project";
 import { VENDOR_LIST_QUERY } from "../../types/Vendor";
@@ -15,6 +16,15 @@ const { Title } = Typography;
 const { TabPane } = Tabs;
 
 const AdminHome: React.FC = () => {
+  const { activeTab } = useParams();
+  const history = useHistory();
+
+  const tabKeys = ["projects", "vendors", "payment-methods", "users"];
+
+  if (!tabKeys.includes(activeTab)) {
+    history.replace(`/admin/${tabKeys[0]}`);
+  }
+  
   const getUserTag = (item: any) => {
     switch (item.accessLevel as UserAccessLevel) {
       case UserAccessLevel.ADMIN:
@@ -32,8 +42,8 @@ const AdminHome: React.FC = () => {
   return (
     <>
       <Title>Admin Panel</Title>
-      <Tabs defaultActiveKey="1">
-        <TabPane tab="Projects" key="1">
+      <Tabs activeKey={activeTab} defaultActiveKey="projects" onTabClick={key => history.push(`/admin/${key}`)}>
+        <TabPane tab="Projects" key={tabKeys[0]}>
           <ManageContentList
             query={PROJECT_LIST_QUERY}
             title="Projects"
@@ -43,7 +53,7 @@ const AdminHome: React.FC = () => {
             modal={ProjectFormModal}
           />
         </TabPane>
-        <TabPane tab="Vendors" key="2">
+        <TabPane tab="Vendors" key={tabKeys[1]}>
           <ManageContentList
             query={VENDOR_LIST_QUERY}
             title="Vendors"
@@ -53,7 +63,7 @@ const AdminHome: React.FC = () => {
             modal={VendorFormModal}
           />
         </TabPane>
-        <TabPane tab="Payment Methods" key="3">
+        <TabPane tab="Payment Methods" key={tabKeys[2]}>
           <ManageContentList
             query={PAYMENT_METHOD_LIST_QUERY}
             title="Payment Methods"
@@ -63,7 +73,7 @@ const AdminHome: React.FC = () => {
             modal={PaymentMethodFormModal}
           />
         </TabPane>
-        <TabPane tab="Users" key="4">
+        <TabPane tab="Users" key={tabKeys[3]}>
           <ManageContentList
             query={USER_LIST_QUERY}
             title="Users"
