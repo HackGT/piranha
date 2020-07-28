@@ -1,12 +1,16 @@
 import React from "react";
 import { Form, Input, Radio, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
+import { useApolloClient } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
-import { UPDATE_USER_MUTATION, UserAccessLevel } from "../../../../types/User";
+import { UPDATE_USER_MUTATION, USER_INFO_QUERY, UserAccessLevel } from "../../../../types/User";
 
 const UserFormModal: React.FC<FormModalProps> = (props) => {
+  const client = useApolloClient();
+  const { user: currentUser } = client.readQuery({ query: USER_INFO_QUERY })!;
+
   const accessLevelOptions = [
     {
       value: UserAccessLevel.NONE,
@@ -57,7 +61,7 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
             label={(
               <span>
                 {"Preferred Name "}
-                <Tooltip title="This the name that is used in Piranha.">
+                <Tooltip title="This is the name that is used in Piranha.">
                   <QuestionCircleOutlined />
                 </Tooltip>
               </span>
@@ -88,7 +92,11 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
           >
             <Radio.Group>
               {accessLevelOptions.map((item: any) => (
-                <Radio style={{ display: "block", height: "30px", lineHeight: "30px" }} value={item.value}>
+                <Radio
+                  style={{ display: "block", height: "30px", lineHeight: "30px" }}
+                  value={item.value}
+                  disabled={initialValues && initialValues.id === currentUser.id} // You can't change your own access level
+                >
                   {`${item.label} `}
                   <Tooltip title={item.helpText}>
                     <QuestionCircleOutlined />
