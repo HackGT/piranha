@@ -9,6 +9,7 @@ export enum UserAccessLevel {
 
 export type User = {
   id: string,
+  groundTruthId: string,
   firstName: string,
   preferredName: string,
   lastName: string,

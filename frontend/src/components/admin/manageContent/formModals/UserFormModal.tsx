@@ -1,11 +1,13 @@
 import React from "react";
-import { Form, Input, Radio, Tooltip } from "antd";
+import { Form, Input, Radio, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { useApolloClient } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
 import { UPDATE_USER_MUTATION, USER_INFO_QUERY, UserAccessLevel } from "../../../../types/User";
+
+const { Text } = Typography;
 
 const UserFormModal: React.FC<FormModalProps> = (props) => {
   const client = useApolloClient();
@@ -79,12 +81,6 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
             <Input placeholder="Depp" />
           </Form.Item>
           <Form.Item
-            name="email"
-            label="Email"
-          >
-            <Input placeholder={initialValues && initialValues.email} disabled />
-          </Form.Item>
-          <Form.Item
             name="accessLevel"
             rules={[FORM_RULES.requiredRule]}
             label="Access Level"
@@ -105,6 +101,21 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
               ))}
             </Radio.Group>
           </Form.Item>
+          <Text strong>Email</Text>
+          <br />
+          <Text>{initialValues?.email || "Not Set"}</Text>
+          <br />
+          <br />
+          <Text strong>Django Id</Text>
+          <br />
+          <Text>{initialValues?.id || "Not Set"}</Text>
+          <br />
+          <br />
+          <Text strong>Ground Truth Id</Text>
+          <br />
+          <Text>{initialValues?.groundTruthId || "Not Set"}</Text>
+          <br />
+          <br />
         </>
       )}
     </ManageContentModal>
