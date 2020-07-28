@@ -32,6 +32,7 @@ export const USER_INFO_QUERY = gql`
   query user {
     user {
       id
+      groundTruthId
       preferredName
       lastName
       email
@@ -43,6 +44,7 @@ export const USER_INFO_QUERY = gql`
 export const USER_INFO_FRAGMENT = gql`
   fragment UserInfoFragment on User {
     id
+    groundTruthId
     firstName
     preferredName
     lastName

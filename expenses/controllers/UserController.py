@@ -83,3 +83,10 @@ class UserController:
     @classmethod
     def get_user_access_level(cls, user):
         return get_access_level(user)
+
+    @classmethod
+    def get_ground_truth_id(cls, user):
+        try:
+            return user.social_auth.get(provider="ground_truth").uid
+        except:
+            return None
