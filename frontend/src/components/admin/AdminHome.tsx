@@ -51,6 +51,7 @@ const AdminHome: React.FC = () => {
             sortData={data => data.projects.concat().sort((a: any, b: any) => b.year - a.year)}
             name={item => `${item.name} (${item.year})`}
             modal={ProjectFormModal}
+            searchFilterField="name"
           />
         </TabPane>
         <TabPane tab="Vendors" key={tabKeys[1]}>
@@ -61,6 +62,7 @@ const AdminHome: React.FC = () => {
             sortData={data => data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
             name={item => item.name}
             modal={VendorFormModal}
+            searchFilterField="name"
           />
         </TabPane>
         <TabPane tab="Payment Methods" key={tabKeys[2]}>
@@ -71,6 +73,7 @@ const AdminHome: React.FC = () => {
             sortData={data => data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
             name={item => item.name}
             modal={PaymentMethodFormModal}
+            searchFilterField="name"
           />
         </TabPane>
         <TabPane tab="Users" key={tabKeys[3]}>
@@ -81,6 +84,7 @@ const AdminHome: React.FC = () => {
             sortData={data => data.users.concat().sort((a: any, b: any) => a.fullName.localeCompare(b.fullName))}
             name={item => item.fullName}
             modal={UserFormModal}
+            searchFilterField="fullName"
             hideAddButton
           />
         </TabPane>

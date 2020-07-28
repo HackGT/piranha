@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Button, List, Typography } from "antd";
+import { Button, List, Typography, Input } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
 import { FormModalProps } from "./formModals/FormModalProps";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 
 const { Title, Text } = Typography;
+const { Search } = Input;
 
 export type ModalState = {
   visible: boolean;
@@ -19,6 +20,7 @@ interface Props {
   name: (item: any) => string;
   modal: React.FC<FormModalProps>;
   hideAddButton?: boolean;
+  searchFilterField: string;
 }
 
 const ManageContentList: React.FC<Props> = (props) => {
@@ -26,6 +28,7 @@ const ManageContentList: React.FC<Props> = (props) => {
     visible: false,
     initialValues: null
   } as ModalState);
+  const [searchText, setSearchText] = useState("");
 
   const { loading, data, error } = useQuery(props.query);
 
@@ -40,18 +43,27 @@ const ManageContentList: React.FC<Props> = (props) => {
     return <ErrorDisplay error={error} />;
   }
 
-  const sortedData = data ? props.sortData(data) : [];
+  const updatedData = data
+    ? props.sortData(data).filter((item: any) => item[props.searchFilterField!].toLowerCase().includes(searchText.toLowerCase()))
+    : [];
+
   const Modal = props.modal;
 
   return (
     <>
       <Title level={3}>{props.title}</Title>
-      {!props.hideAddButton && <Button style={{ marginBottom: "10px" }} onClick={() => openModal(null)}>Add +</Button>}
+      {!props.hideAddButton && <Button style={{ marginRight: "10px" }} onClick={() => openModal(null)}>Add +</Button>}
+      <Search
+        placeholder="Search"
+        style={{ width: "200px" }}
+        value={searchText}
+        onChange={event => setSearchText(event.target.value)}
+      />
       <List
         bordered
         loading={loading}
-        dataSource={sortedData}
-        style={{ maxWidth: "800px", margin: "0 auto" }}
+        dataSource={updatedData}
+        style={{ maxWidth: "800px", margin: "15px auto 0 auto" }}
         renderItem={(item: any) => (
           <List.Item>
             {props.tag(item)}
