@@ -6,18 +6,19 @@ interface Props {
   visible: boolean;
   closeModal: () => void;
   initialValues?: any;
-  createMutation: DocumentNode;
+  createMutation?: DocumentNode;
   updateMutation: DocumentNode;
   name: string;
-  updateCache: (cache: ApolloCache<any>, createMutationData: any) => void;
+  updateCache?: (cache: ApolloCache<any>, createMutationData: any) => void;
 }
 
 const ManageContentModal: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
 
-  const [createMutation] = useMutation(props.createMutation, {
+  // For types without create option (ex. users), default to using update mutation, since this will not be called anyways
+  const [createMutation] = useMutation(props.createMutation || props.updateMutation, {
     update(cache, { data: createMutationData }) {
-      props.updateCache(cache, createMutationData);
+      props.updateCache?.(cache, createMutationData);
     }
   });
   const [updateMutation] = useMutation(props.updateMutation);
@@ -59,6 +60,7 @@ const ManageContentModal: React.FC<Props> = (props) => {
         cancelText="Cancel"
         onCancel={props.closeModal}
         onOk={onSubmit}
+        bodyStyle={{ paddingBottom: 0 }}
       >
         <Form
           form={form}

@@ -18,6 +18,7 @@ interface Props {
   sortData: (data: any) => any;
   name: (item: any) => string;
   modal: React.FC<FormModalProps>;
+  hideAddButton?: boolean;
 }
 
 const ManageContentList: React.FC<Props> = (props) => {
@@ -45,7 +46,7 @@ const ManageContentList: React.FC<Props> = (props) => {
   return (
     <>
       <Title level={3}>{props.title}</Title>
-      <Button style={{ marginBottom: "10px" }} onClick={() => openModal(null)}>Add +</Button>
+      {!props.hideAddButton && <Button style={{ marginBottom: "10px" }} onClick={() => openModal(null)}>Add +</Button>}
       <List
         bordered
         loading={loading}
