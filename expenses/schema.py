@@ -1,7 +1,7 @@
 import graphene
 from django.contrib import auth
 from graphene_django import DjangoObjectType
-from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Approval, Payment
+from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Approval, Payment, File
 from expenses.rules import is_exec, is_project_lead
 
 
@@ -88,3 +88,14 @@ class PaymentType(DjangoObjectType):
     class Meta:
         model = Payment
         name = "Payment"
+
+
+class FileType(DjangoObjectType):
+    # Only returns active files
+    @classmethod
+    def get_queryset(cls, queryset, info):
+        return queryset.filter(is_active=True)
+
+    class Meta:
+        model = File
+        name = "File"

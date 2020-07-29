@@ -139,3 +139,13 @@ class Payment(TimestampedModel):
 
     def __str__(self):
         return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)
+
+
+class File(TimestampedModel):
+    requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
+    name = CharField(max_length=150)
+    google_name = CharField(max_length=200, unique=True)
+    is_active = BooleanField(default=True)
+
+    def __str__(self):
+        return "{} for {}".format(self.name, self.requisition)

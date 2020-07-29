@@ -2,6 +2,7 @@ import graphene
 from graphene import Mutation, ObjectType
 from expenses.schema import ProjectType, VendorType, RequisitionType, PaymentMethodType, PaymentType, ApprovalType
 from graphene_django_extras import DjangoInputObjectType
+from graphene_file_upload.scalars import Upload
 
 from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Payment, Approval
 
@@ -94,10 +95,11 @@ class RequisitionItemInput(DjangoInputObjectType):
 
 class RequisitionInput(DjangoInputObjectType):
     requisitionitemSet = graphene.List(RequisitionItemInput)
+    fileSet = graphene.List(Upload)
 
     class Meta:
         model = Requisition
-        exclude_fields = ["approval", "payment", "created_by", "project_requisition_id", "requisitionitem"]
+        exclude_fields = ["approval", "payment", "created_by", "project_requisition_id", "requisitionitem", "file"]
 
 
 class CreateRequisitionMutation(Mutation):
