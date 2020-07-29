@@ -145,6 +145,7 @@ class File(TimestampedModel):
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
     name = CharField(max_length=150)
     google_name = CharField(max_length=200, unique=True)
+    type = CharField(max_length=50)
     is_active = BooleanField(default=True)
 
     def __str__(self):

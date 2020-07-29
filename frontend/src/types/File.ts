@@ -5,4 +5,5 @@ export type File = {
   requisition: Requisition;
   name: string;
   googleName: string;
+  type: string;
 }

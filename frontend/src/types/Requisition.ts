@@ -160,6 +160,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       id
       name
       googleName
+      type
     }
     canEdit
     canCancel
