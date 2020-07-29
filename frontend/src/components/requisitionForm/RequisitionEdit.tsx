@@ -37,7 +37,8 @@ const RequisitionEdit: React.FC = () => {
     paymentRequiredBy: data.requisition.paymentRequiredBy ? moment(data.requisition.paymentRequiredBy) : null,
     otherFees: data.requisition.otherFees,
     requisitionitemSet: data.requisition.requisitionitemSet.length === 0 ? [{}] : data.requisition.requisitionitemSet,
-    status: data.requisition.status
+    status: data.requisition.status,
+    fileSet: data.requisition.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })) // https://github.com/ant-design/ant-design/issues/4120
   };
 
   return (

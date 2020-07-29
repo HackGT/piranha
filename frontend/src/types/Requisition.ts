@@ -5,6 +5,7 @@ import { Project } from "./Project";
 import { Vendor } from "./Vendor";
 import { Approval } from "./Approval";
 import { Payment } from "./Payment";
+import { File } from "./File";
 
 export type RequisitionStatus =
   "DRAFT" |
@@ -31,6 +32,7 @@ export type Requisition = {
   requisitionitemSet: RequisitionItem[],
   approvalSet: Approval[],
   paymentSet: Payment[],
+  fileSet: File[],
   referenceString: string,
   canEdit: boolean,
   canCancel: boolean,
@@ -58,6 +60,7 @@ export type RequisitionFormData = {
   otherFees: string;
   requisitionitemSet: RequisitionItem[];
   status: RequisitionStatus;
+  fileSet: any[];
 }
 
 export const REQUISITION_FORM_QUERY = gql`
@@ -152,6 +155,11 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         name
       }
       date
+    }
+    fileSet {
+      id
+      name
+      googleName
     }
     canEdit
     canCancel

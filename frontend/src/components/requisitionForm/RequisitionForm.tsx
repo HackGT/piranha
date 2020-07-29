@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
-import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message, Upload } from "antd";
+import { PlusOutlined, QuestionCircleOutlined, UploadOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
+import { RcFile } from "antd/es/upload";
 import RequisitionItemCard from "./RequisitionItemCard";
 import { RequisitionFormData,
   CREATE_REQUISITION_MUTATION,
@@ -64,7 +65,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
         unitPrice: item.unitPrice,
         notes: item.notes
       })),
-      status: requisitionStatus
+      status: requisitionStatus,
+      fileSet: values.fileSet
     };
 
     const hide = message.loading("Saving requisition...", 0);
@@ -120,6 +122,18 @@ const RequisitionForm: React.FC<Props> = (props) => {
   };
   const fullLayout = {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
+  };
+
+  const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"];
+  const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3 MB
+  const FILE_ERROR_STRING = "Please upload a png, jpeg, or pdf file less than 3 MB";
+
+  const checkFileUpload = (file: RcFile, fileList: RcFile[]) => {
+    if (!ACCEPTED_FILE_TYPES.includes(file.type) || file.size > MAX_FILE_SIZE) {
+      message.error(FILE_ERROR_STRING);
+      fileList.shift();
+    }
+    return false;
   };
 
   const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
@@ -259,6 +273,31 @@ const RequisitionForm: React.FC<Props> = (props) => {
             </div>
           )}
         </Form.List>
+
+        <Row justify="center">
+          <Col {...fullLayout}>
+            <Form.Item
+              name="fileSet"
+              label={(
+                <span>
+                  {"Upload Files "}
+                  <Tooltip title="Add any invoices, receipts, or other documents associated with the requisition.">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+              valuePropName="fileList"
+              getValueFromEvent={(event: any) => (Array.isArray(event) ? event : event && event.fileList)}
+            >
+              <Upload listType="picture" name="file" accept={ACCEPTED_FILE_TYPES.join(",")} beforeUpload={checkFileUpload}>
+                <Button>
+                  <UploadOutlined />
+                  {" Click to Upload"}
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
 
         <Row gutter={[0, 16]} justify="center">
           <Col {...fullLayout}>
