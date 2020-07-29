@@ -11,7 +11,7 @@ def upload_file(file, requisition):
 
     blob = bucket.blob(google_name)
     blob.upload_from_file(file["originFileObj"])
-    return File.objects.create(requisition=requisition, name=name, google_name=google_name, is_active=True).id
+    return File.objects.create(requisition=requisition, name=name, google_name=google_name, type=file["type"]).id
 
 
 class RequisitionController:
@@ -71,10 +71,10 @@ class RequisitionController:
             active_file_ids = []
 
             for file in data.get("fileSet", []):
-                if ("originFileObj" in file): # Checks if it's a new file being uploaded
+                if ("originFileObj" in file):  # Checks if it's a new file being uploaded
                     active_file_ids.append(upload_file(file, requisition))
                 else:
-                    active_file_ids.append(file["id"])
+                    active_file_ids.append(int(file["id"]))
 
             for existing_file in requisition.file_set.iterator():
                 if existing_file.id in active_file_ids:
