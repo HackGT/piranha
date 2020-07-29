@@ -26,6 +26,6 @@ urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
     path('api/graphql', PrivateGraphQLView.as_view(graphiql=True)),
     re_path('api/admin/?', admin.site.urls),
-    path('api', include('expenses.urls')),
+    path('content/', include('expenses.urls')),
     path('', index, name="index")
 ]

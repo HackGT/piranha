@@ -1,8 +1,6 @@
 from django.urls import path
-
-from expenses.views import *
+from expenses.views import get_file
 
 urlpatterns = [
-    path("", current_datetime),
-    path("accounts/profile/", my_account)
+    path("<file_name>", get_file),
 ]
