@@ -2,7 +2,6 @@ from graphene import Enum
 from django.contrib import auth
 from django.contrib.auth.models import Group
 from seaport.models import User
-from expenses.rules import is_exec
 
 
 class UserAccessLevel(Enum):
@@ -11,18 +10,6 @@ class UserAccessLevel(Enum):
     EXEC = 2
     ADMIN = 3
 
-
-def get_access_level(user):
-    if not user or not user.is_active:
-        return UserAccessLevel.NONE
-
-    groups = user.groups
-
-    if groups.filter(name="admin").exists():
-        return UserAccessLevel.ADMIN
-    elif groups.filter(name="exec").exists():
-        return UserAccessLevel.EXEC
-    return UserAccessLevel.MEMBER
 
 class UserController:
     @classmethod
@@ -77,12 +64,23 @@ class UserController:
 
     @classmethod
     def get_has_admin_access(cls, user):
-        access_level = get_access_level(user)
+        access_level = cls.get_user_access_level(user)
         return access_level == UserAccessLevel.ADMIN or access_level == UserAccessLevel.EXEC
 
     @classmethod
     def get_user_access_level(cls, user):
-        return get_access_level(user)
+        if not user or not user.is_active:
+            return UserAccessLevel.NONE
+
+        groups = user.groups
+
+        if groups.filter(name="admin").exists():
+            return UserAccessLevel.ADMIN
+        elif groups.filter(name="exec").exists():
+            return UserAccessLevel.EXEC
+        elif groups.filter(name="member").exists():
+            return UserAccessLevel.MEMBER
+        return UserAccessLevel.NONE
 
     @classmethod
     def get_ground_truth_id(cls, user):
