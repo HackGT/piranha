@@ -44,7 +44,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
           label={(
             <span>
               {"Reimbursement Instructions "}
-              <Tooltip title="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc.">
+              <Tooltip title="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc. Note: Any URL will be converted into a link for easier access.">
                 <QuestionCircleOutlined />
               </Tooltip>
             </span>
