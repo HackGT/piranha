@@ -15,6 +15,7 @@ import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
+const { Dragger } = Upload;
 
 interface Props {
   editMode?: boolean;
@@ -289,12 +290,10 @@ const RequisitionForm: React.FC<Props> = (props) => {
               valuePropName="fileList"
               getValueFromEvent={(event: any) => (Array.isArray(event) ? event : event && event.fileList)}
             >
-              <Upload listType="picture" name="file" accept={ACCEPTED_FILE_TYPES.join(",")} beforeUpload={checkFileUpload}>
-                <Button>
-                  <UploadOutlined />
-                  {" Click to Upload"}
-                </Button>
-              </Upload>
+              <Dragger listType="picture" name="file" accept={ACCEPTED_FILE_TYPES.join(",")} beforeUpload={checkFileUpload} multiple>
+                <UploadOutlined style={{ color: "#40a9ff", fontSize: "36px", marginBottom: "5px" }} />
+                <p>Click or drag file to this area to upload</p>
+              </Dragger>
             </Form.Item>
           </Col>
         </Row>
