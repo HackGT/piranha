@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography } from "antd";
+import Linkify from "react-linkify";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 
 const { Title, Text } = Typography;
@@ -14,7 +15,9 @@ const ReimbursementInstructionsSection: React.FC<RequisitionSectionProps> = (pro
   return (
     <>
       <Title level={3} style={{ marginTop: "30px" }}>Reimbursement Instructions</Title>
-      <Text>{data.fundingSource.reimbursementInstructions}</Text>
+      <Linkify>
+        <Text>{data.fundingSource.reimbursementInstructions}</Text>
+      </Linkify>
     </>
   );
 };
