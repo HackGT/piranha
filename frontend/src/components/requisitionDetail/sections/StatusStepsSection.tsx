@@ -17,6 +17,7 @@ const StatusStepsSection: React.FC<RequisitionSectionProps> = (props) => {
       labelPlacement="vertical"
       size={screenWidth < 768 ? "small" : "default"}
       direction={screenWidth < 768 ? "vertical" : "horizontal"}
+      style={{ marginTop: "10px" }}
     >
       <Step title="Draft" />
       <Step title="Submitted" />

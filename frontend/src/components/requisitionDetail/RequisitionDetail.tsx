@@ -13,6 +13,7 @@ import InfoCardsSection from "./sections/InfoCardsSection";
 import PaymentsTableSection from "./sections/PaymentsTableSection";
 import "./index.css";
 import StatusStepsSection from "./sections/StatusStepsSection";
+import UploadedFilesSection from "./sections/UploadedFilesSection";
 
 const { Text, Title } = Typography;
 
@@ -57,9 +58,10 @@ const RequisitionDetail: React.FC = () => {
         </Col>
       </Row>
 
-      <Row gutter={[16, 32]}>
+      <Row gutter={[16, 0]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <ItemsTableSection data={rekData} loading={loading} />
+          <UploadedFilesSection data={rekData} loading={loading} />
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <InfoCardsSection data={rekData} loading={loading} />
