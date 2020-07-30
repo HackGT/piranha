@@ -25,6 +25,7 @@ export const ALL_USERS_QUERY = gql`
     users(where: {isActive: true}) {
       id
       fullName
+      email
     }
   }
 `;

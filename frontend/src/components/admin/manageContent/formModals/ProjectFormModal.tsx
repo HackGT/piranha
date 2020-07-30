@@ -17,7 +17,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   }
 
   const leadOptions = loading ? [] : data.users.map((user: any) => ({
-    label: user.fullName,
+    label: `${user.fullName} [${user.email}]`,
     value: user.id
   }));
 
