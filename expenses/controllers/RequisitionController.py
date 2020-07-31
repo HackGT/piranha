@@ -2,10 +2,14 @@ from django.db.models import Max
 from itertools import zip_longest
 from expenses.models import Requisition, Project, Vendor, RequisitionItem, File
 from expenses.config import bucket
+from graphql import GraphQLError
 import time
 
 
 def upload_file(file, requisition):
+    if file["type"] not in ["image/jpeg", "image/png", "application/pdf", "text/plain"]: # Has frontend validation as well
+        raise GraphQLError("File type is not accepted.")
+
     name = file["name"]
     google_name = name + "_" + str(int(time.time()))
 

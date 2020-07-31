@@ -125,7 +125,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
 
-  const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"];
+  const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"]; // Has backend validation as well
   const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3 MB
   const FILE_ERROR_STRING = "Please upload a png, jpeg, or pdf file less than 3 MB";
 
