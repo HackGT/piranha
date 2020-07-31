@@ -15,7 +15,7 @@ files:
   /etc/piranha:
     secret: true
     contents:
-      google_application_credentials.json:
+      google-application-key.json:
         env: GOOGLE_APPLICATION_CREDENTIALS
 
 env:
