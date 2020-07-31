@@ -10,6 +10,13 @@ secrets:
   - SECRET_KEY
   - GROUND_TRUTH_CLIENT_ID
   - GROUND_TRUTH_CLIENT_SECRET
+  
+files:
+  /etc/piranha:
+    secret: true
+    contents:
+      google_application_credentials.json:
+        env: GOOGLE_APPLICATION_CREDENTIALS
 
 env:
   GROUND_TRUTH_URL: https://login.hack.gt
