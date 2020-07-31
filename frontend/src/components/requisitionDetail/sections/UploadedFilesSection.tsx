@@ -9,7 +9,7 @@ const UploadedFilesSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
   const BASE_URL = "/content/";
 
-  if (loading) {
+  if (loading || !data.fileSet || data.fileSet.length === 0) {
     return null;
   }
 
