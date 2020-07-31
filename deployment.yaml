@@ -10,7 +10,7 @@ secrets:
   - SECRET_KEY
   - GROUND_TRUTH_CLIENT_ID
   - GROUND_TRUTH_CLIENT_SECRET
-  
+
 files:
   /etc/piranha:
     secret: true
@@ -23,3 +23,4 @@ env:
   DEBUG: false
   TIME_ZONE: America/New_York
   PRODUCTION: true
+  GOOGLE_STORAGE_BUCKET: piranha-uploads

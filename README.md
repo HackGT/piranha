@@ -44,6 +44,8 @@ to a new file called `.env`.
 | GROUND_TRUTH_CLIENT_SECRET | Obtain from Ground Truth admin panel |
 | TIME_ZONE | The [TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for whatever timezone you want the application to use |
 | PRODUCTION | Use `true` to enable production settings |
+| GOOGLE_APPLICATION_CREDENTIALS | Stores path to service account credentials for Google Cloud |
+| GOOGLE_STORAGE_BUCKET | Name of storage bucket in Google Cloud |
 
 A few steps to finish up:
 1. Open a terminal in the root directory of this repo
