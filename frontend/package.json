@@ -9,7 +9,7 @@
     "@testing-library/react": "^10.4.3",
     "@testing-library/user-event": "^12.1.0",
     "antd": "^4.5.1",
-    "graphql": "^14.6.0",
+    "graphql": "^14.7.0",
     "js-cookie": "^2.2.1",
     "moment": "^2.27.0",
     "nan": "^2.14.1",
