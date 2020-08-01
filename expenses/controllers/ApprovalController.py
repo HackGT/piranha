@@ -19,7 +19,9 @@ class ApprovalController:
 
             approval = Approval.objects.create(**new_data)
 
-            if data["is_approving"]:
+            if data["is_approving"] and requisition.is_reimbursement:
+                requisition.status = RequisitionStatus.READY_FOR_REIMBURSEMENT
+            elif data["is_approving"] and not requisition.is_reimbursement:
                 requisition.status = RequisitionStatus.READY_TO_ORDER
             else:
                 requisition.status = RequisitionStatus.PENDING_CHANGES

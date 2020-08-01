@@ -56,7 +56,7 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
 
   return (
     <>
-      <Title level={3} style={{ marginTop: "10px" }}>Payments</Title>
+      <Title level={3} style={{ marginTop: "30px" }}>Payments</Title>
       <Table
         columns={columns}
         dataSource={data.paymentSet}

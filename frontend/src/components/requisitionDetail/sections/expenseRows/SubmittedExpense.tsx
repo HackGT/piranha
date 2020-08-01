@@ -10,7 +10,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
-    if (isApproving && !props.requisition.vendor.isActive) {
+    if (isApproving && !props.requisition.vendor?.isActive) {
       message.error("Vendor must be active before approval.", 2);
       return;
     }
@@ -28,7 +28,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     <Collapse>
       <RequisitionExpenseRow
         onFinish={values => onFinish(values, true)}
-        newStatus="READY_TO_ORDER"
+        newStatus={props.requisition.isReimbursement ? "READY_FOR_REIMBURSEMENT" : "READY_TO_ORDER"}
         title="Approve Requisition"
         description="This will approve the requisition. You are signifying that this is a valid purchase."
         key="approve"

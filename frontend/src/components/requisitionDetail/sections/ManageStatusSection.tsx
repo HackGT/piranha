@@ -7,6 +7,9 @@ import OrderedExpense from "./expenseRows/OrderedExpense";
 import ReadyToOrderExpense from "./expenseRows/ReadyToOrderExpense";
 import ReceivedExpense from "./expenseRows/ReceivedExpense";
 import { RequisitionSectionProps } from "../RequisitionDetail";
+import ReadyForReimbursementExpense from "./expenseRows/ReadyForReimbursementExpense";
+import AwaitingInformationExpense from "./expenseRows/AwaitingInformationExpense";
+import ReimbursementInProgressExpense from "./expenseRows/ReimbursementInProgressExpense";
 
 const { Title } = Typography;
 
@@ -41,6 +44,7 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
         return <CancelledExpense requisition={data} />;
       case "SUBMITTED":
         return <SubmittedExpense requisition={data} />;
+
       case "READY_TO_ORDER":
         return <ReadyToOrderExpense requisition={data} />;
       case "ORDERED":
@@ -48,6 +52,14 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
         return <OrderedExpense requisition={data} />;
       case "RECEIVED":
         return <ReceivedExpense requisition={data} />;
+
+      case "READY_FOR_REIMBURSEMENT":
+        return <ReadyForReimbursementExpense requisition={data} />;
+      case "AWAITING_INFORMATION":
+        return <AwaitingInformationExpense requisition={data} />;
+      case "REIMBURSEMENT_IN_PROGRESS":
+        return <ReimbursementInProgressExpense requisition={data} />;
+
       case "DRAFT":
       case "PENDING_CHANGES":
       case "CLOSED":
@@ -62,7 +74,7 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
 
   return (
     <>
-      <Title level={3} style={{ marginTop: "10px" }}>Manage Status</Title>
+      <Title level={3} style={{ marginTop: "30px" }}>Manage Status</Title>
       {content}
     </>
   );

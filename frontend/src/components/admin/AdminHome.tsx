@@ -58,7 +58,7 @@ const AdminHome: React.FC = () => {
           <ManageContentList
             query={VENDOR_LIST_QUERY}
             title="Vendors"
-            tag={item => (<Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>)}
+            tag={item => <Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>}
             sortData={data => data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
             name={item => item.name}
             modal={VendorFormModal}
@@ -69,7 +69,7 @@ const AdminHome: React.FC = () => {
           <ManageContentList
             query={PAYMENT_METHOD_LIST_QUERY}
             title="Payment Methods"
-            tag={item => (<Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>)}
+            tag={item => <Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>}
             sortData={data => data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
             name={item => item.name}
             modal={PaymentMethodFormModal}

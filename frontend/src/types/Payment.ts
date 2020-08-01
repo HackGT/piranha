@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import { PaymentMethod } from "./PaymentMethod";
 import { Vendor } from "./Vendor";
-import { Requisition } from "./Requisition";
+import { Requisition, REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export type Payment = {
   amount: number;
@@ -11,25 +11,50 @@ export type Payment = {
   date: Date;
 }
 
+export const PAYMENT_INFO_FRAGMENT = gql`
+  fragment PaymentInfoFragment on Payment {
+    id
+    requisition {
+      id
+      status
+      paymentSet {
+        id
+        amount
+        fundingSource {
+          id
+          name
+        }
+        date
+      }
+    }
+  }
+`;
+
 export const CREATE_PAYMENT_MUTATION = gql`
   mutation createPayment($data: PaymentInput!) {
     createPayment(data: $data) {
       payment {
-        id
-        requisition {
-          id
-          status
-          paymentSet {
-            id
-            amount
-            fundingSource {
-              id
-              name
-            }
-            date
-          }
-        }
+        ...PaymentInfoFragment
       }
     }
   }
+  ${PAYMENT_INFO_FRAGMENT}
+`;
+
+export const UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION = gql`
+  mutation updateRequisitionAndCreatePayment($requisitionData: RequisitionInput!, $id: ID!, $paymentData: PaymentInput!) {
+    updateRequisition(data: $requisitionData, id: $id) {
+      requisition {
+        ...RequisitionInfoFragment
+      }
+    }
+    
+    createPayment(data: $paymentData) {
+      payment {
+        ...PaymentInfoFragment
+      }
+    }
+  }
+  ${REQUISITION_INFO_FRAGMENT}
+  ${PAYMENT_INFO_FRAGMENT}
 `;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message } from "antd";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message, Switch } from "antd";
 import { PlusOutlined, QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
 import RequisitionItemCard from "./RequisitionItemCard";
@@ -47,6 +47,12 @@ const RequisitionForm: React.FC<Props> = (props) => {
   // Determines if requisition is submitting for review or just editing to save changes by an admin
   const submittalMode = !props.requisitionData || ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status);
 
+  // Determines if draft button shows on bottom of screen
+  const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
+
+  // Determines if a requisition can be changed between reimbursement and non-reimbursement
+  const reimbursementToggleEnabled = !props.requisitionData || (props.editMode && ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status));
+
   vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
 
   const saveDataToServer = async (values: any, requisitionStatus: RequisitionStatus) => {
@@ -57,6 +63,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       vendor: values.vendor || undefined,
       paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
       otherFees: values.otherFees,
+      isReimbursement: values.isReimbursement,
       requisitionitemSet: values.requisitionitemSet.map((item: any) => ({
         name: item.name,
         link: item.link,
@@ -121,8 +128,6 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const fullLayout = {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
-
-  const showDraftButton = !props.editMode || (props.editMode && props.requisitionData?.status === "DRAFT");
 
   return (
     <>
@@ -227,6 +232,22 @@ const RequisitionForm: React.FC<Props> = (props) => {
               )}
             >
               <Input prefix="$" type="number" placeholder="68.72" />
+            </Form.Item>
+          </Col>
+          <Col {...halfLayout}>
+            <Form.Item
+              name="isReimbursement"
+              valuePropName="checked"
+              label={(
+                <span>
+                  {"Is this a Reimbursement? "}
+                  <Tooltip title="Select yes if you have paid for this requisition already. Otherwise, HackGT will pay for and order the items.">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
+              <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={!reimbursementToggleEnabled} />
             </Form.Item>
           </Col>
         </Row>

@@ -9,6 +9,8 @@ import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHo
 
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import { ReimbursementTag } from "../../util/CustomTags";
+import ProjectBreadcrumb from "./ProjectBreadcrumb";
 
 const { Text, Title } = Typography;
 
@@ -58,9 +60,12 @@ const ProjectDetail: React.FC = () => {
           };
         }
         return (
-          <Link to={`/project/${projectReference}/requisition/${record.projectRequisitionId}`} style={{ fontWeight: "bold" }}>
-            {record.headline}
-          </Link>
+          <>
+            {record.isReimbursement && <ReimbursementTag />}
+            <Link to={`/project/${projectReference}/requisition/${record.projectRequisitionId}`} style={{ fontWeight: "bold" }}>
+              {record.headline}
+            </Link>
+          </>
         );
       }
     },
@@ -150,16 +155,25 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <>
-      <Title>{data ? data.project.name : "Loading..."}</Title>
+      <ProjectBreadcrumb secondItem={loading ? shortCode : data.project.name} />
+      <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
       <Table
         columns={columns}
         dataSource={rows}
         pagination={false}
         loading={loading}
         footer={() => (
-          <Button onClick={handleRowsButton}>
-            {expandedRows.length === rows.length ? "Hide Details" : "Show Details"}
-          </Button>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <Button onClick={handleRowsButton}>
+                {expandedRows.length === rows.length ? "Close All" : "Expand All"}
+              </Button>
+            </div>
+            <div>
+              <ReimbursementTag style={{ lineHeight: "20px" }} />
+              <p style={{ display: "inline" }}> = Reimbursement</p>
+            </div>
+          </div>
         )}
         expandedRowKeys={expandedRows}
         expandable={{

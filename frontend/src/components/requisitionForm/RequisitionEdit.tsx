@@ -36,6 +36,7 @@ const RequisitionEdit: React.FC = () => {
     vendor: data.requisition.vendor ? data.requisition.vendor.id : null,
     paymentRequiredBy: data.requisition.paymentRequiredBy ? moment(data.requisition.paymentRequiredBy) : null,
     otherFees: data.requisition.otherFees,
+    isReimbursement: data.requisition.isReimbursement,
     requisitionitemSet: data.requisition.requisitionitemSet.length === 0 ? [{}] : data.requisition.requisitionitemSet,
     status: data.requisition.status
   };
