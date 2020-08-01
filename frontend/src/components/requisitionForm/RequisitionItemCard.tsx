@@ -17,7 +17,7 @@ interface Props {
   remove: (index: number) => void;
 }
 
-const RequisitionItemCard: React.FC<Props> = (props) => (
+const RequisitionItemCard: React.FC<Props> = props => (
   <Card
     size="small"
     title={`Item ${props.field.name + 1}`}
@@ -61,7 +61,7 @@ const RequisitionItemCard: React.FC<Props> = (props) => (
             </span>
           )}
         >
-          <Input type="url" placeholder="http://rubberducks.com" />
+          <Input placeholder="http://rubberducks.com" />
         </Form.Item>
       </Col>
     </Row>
