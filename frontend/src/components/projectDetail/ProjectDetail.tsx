@@ -43,13 +43,12 @@ const ProjectDetail: React.FC = () => {
 
   const columns = [
     {
-      title: "Id",
+      title: "Reference Code",
       responsive: ["md"] as Breakpoint[],
-      render: (record: any) => ("isChild" in record ? null : record.projectRequisitionId)
+      render: (record: any) => ("isChild" in record ? null : record.referenceString)
     },
     {
       title: "Name",
-      ellipsis: true,
       render: (record: any) => {
         if ("isChild" in record) {
           return {
@@ -85,19 +84,6 @@ const ProjectDetail: React.FC = () => {
     {
       title: "Total Cost",
       render: (record: any) => ("isChild" in record ? record.cost : formatPrice(getTotalCost(record, true)))
-    },
-    {
-      title: "Action",
-      render: (record: any) => {
-        if ("isChild" in record || !record.canEdit) {
-          return null;
-        }
-        return (
-          <Link to={`/project/${projectReference}/requisition/${record.projectRequisitionId}/edit`}>
-            Edit
-          </Link>
-        );
-      }
     }
   ];
 
