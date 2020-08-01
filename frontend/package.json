@@ -52,7 +52,7 @@
     "@types/react-router-dom": "^5.1.5",
     "babel-plugin-relay": "^2.0.0",
     "eslint-config-airbnb": "^18.2.0",
-    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-import-resolver-typescript": "^2.2.0",
     "fb-watchman": "^2.0.1"
   }
 }
