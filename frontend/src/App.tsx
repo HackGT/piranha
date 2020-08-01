@@ -16,6 +16,7 @@ import { User, USER_INFO_QUERY } from "./types/User";
 import PrivateRoute from "./util/PrivateRoute";
 import NotFound from "./components/NotFound";
 import ErrorDisplay from "./util/ErrorDisplay";
+import ScrollToTop from "./util/ScrollToTop";
 
 const { Header, Content, Footer } = Layout;
 
@@ -30,6 +31,7 @@ const App:React.FC = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <Layout className="App" style={{ minHeight: "100vh" }}>
         <Header style={{ padding: "0px 30px" }}>
           <Navigation user={user} />
