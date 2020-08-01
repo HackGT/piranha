@@ -3,18 +3,34 @@ from django.contrib import auth
 from graphene_django import DjangoObjectType
 from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Approval, Payment, File
 from expenses.rules import is_exec, is_project_lead
+from expenses.controllers.UserController import UserController, UserAccessLevel
 
 
 class UserType(DjangoObjectType):
     has_admin_access = graphene.Boolean()
 
     def resolve_has_admin_access(self, info):
-        return is_exec(info.context.user)
+        return UserController.get_has_admin_access(self)
+
+    access_level = UserAccessLevel()
+
+    def resolve_access_level(self, info):
+        return UserController.get_user_access_level(self)
+
+    ground_truth_id = graphene.UUID()
+
+    def resolve_ground_truth_id(self, info):
+        return UserController.get_ground_truth_id(self)
+
+    full_name = graphene.String()
+
+    def resolve_full_name(self, info):
+        return UserController.get_full_name(self)
 
     class Meta:
         model = auth.get_user_model()
         name = "User"
-        fields = ["id", "preferred_name", "last_name", "is_staff", "is_active", "email", "has_admin_access"]
+        fields = ["id", "first_name", "preferred_name", "last_name", "is_active", "email", "has_admin_access"]
 
 
 class ProjectType(DjangoObjectType):

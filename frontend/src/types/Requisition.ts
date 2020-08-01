@@ -117,8 +117,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     status
     createdBy {
       id
-      preferredName
-      lastName
+      fullName
     }
     project {
       id
@@ -149,8 +148,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       isApproving
       approver {
         id
-        preferredName
-        lastName
+        fullName
       }
       notes
       createdAt

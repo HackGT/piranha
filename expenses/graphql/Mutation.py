@@ -1,17 +1,40 @@
 import graphene
 from graphene import Mutation, ObjectType
-from expenses.schema import ProjectType, VendorType, RequisitionType, PaymentMethodType, PaymentType, ApprovalType
+from expenses.schema import UserType, ProjectType, VendorType, RequisitionType, PaymentMethodType, PaymentType, ApprovalType
 from graphene_django_extras import DjangoInputObjectType
 from graphene_file_upload.scalars import Upload
 
+from seaport.models import User
 from expenses.models import Project, Vendor, Requisition, RequisitionItem, PaymentMethod, Payment, Approval
 
+from expenses.controllers.UserController import UserController, UserAccessLevel
 from expenses.controllers.RequisitionController import RequisitionController
 from expenses.controllers.VendorController import VendorController
 from expenses.controllers.ProjectController import ProjectController
 from expenses.controllers.PaymentMethodController import PaymentMethodController
 from expenses.controllers.PaymentController import PaymentController
 from expenses.controllers.ApprovalController import ApprovalController
+
+# -------------------------------- User Schema ------------------------------- #
+
+
+class UserInput(DjangoInputObjectType):
+    access_level = UserAccessLevel()
+
+    class Meta:
+        model = User
+        only_fields = ["first_name", "preferred_name", "last_name"]
+
+
+class UpdateUserMutation(Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        id = graphene.UUID(required=True)
+        data = graphene.Argument(UserInput, required=True)
+
+    def mutate(self, info, id, data):
+        return UpdateUserMutation(user=UserController.update_user(info, id, data))
 
 
 # ------------------------------ Project Schema ------------------------------ #
@@ -201,6 +224,8 @@ class CreateApprovalMutation(Mutation):
 
 
 class Mutation(ObjectType):
+    update_user = UpdateUserMutation.Field()
+
     create_project = CreateProjectMutation.Field()
     update_project = UpdateProjectMutation.Field()
 

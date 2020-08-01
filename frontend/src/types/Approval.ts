@@ -23,8 +23,7 @@ export const CREATE_APPROVAL_MUTATION = gql`
             isApproving
             approver {
               id
-              preferredName
-              lastName
+              fullName
             }
             notes
             createdAt
