@@ -23,8 +23,8 @@ const RequisitionExpenseRow: React.FC<Props> = (props) => {
     <Panel
       extra={props.newStatus && (
         <>
-          <Text>New Status:</Text>
-          <RequisitionTag status={props.newStatus} style={{ margin: "0 0 0 10px" }} />
+          <Text>Update status to</Text>
+          <RequisitionTag status={props.newStatus} style={{ margin: "0 0 0 8px" }} />
         </>
       )}
       {...props} // https://github.com/ant-design/ant-design/issues/4853
