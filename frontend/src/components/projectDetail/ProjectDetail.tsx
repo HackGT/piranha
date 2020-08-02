@@ -98,7 +98,11 @@ const ProjectDetail: React.FC = () => {
         key: `${requisition.projectRequisitionId.toString()}-${index}`,
         nameElement: (
           <>
-            <Typography.Link className="table-first-element" href={item.link || undefined} target="_blank">{item.name || `Item ${index + 1}`}</Typography.Link>
+            {
+              item.link
+                ? <Typography.Link className="table-first-element" href={item.link} target="_blank">{item.name || `Item ${index + 1}`}</Typography.Link>
+                : <Text className="table-first-element">{item.name || `Item ${index + 1}`}</Text>
+            }
             <Text>
               {(item.quantity && item.unitPrice) && `: ${item.quantity} @ ${formatPrice(item.unitPrice)}`}
             </Text>
