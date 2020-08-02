@@ -78,7 +78,7 @@ const ProjectDetail: React.FC = () => {
             }
           };
         }
-        return <Tag color={StatusToColor(record.status)}>{StatusToString(record.status)}</Tag>;
+        return <Tag color={StatusToColor(record.status)} style={{ margin: 0 }}>{StatusToString(record.status)}</Tag>;
       }
     },
     {
@@ -172,6 +172,7 @@ const ProjectDetail: React.FC = () => {
           indentSize: 1
         }}
         scroll={{ x: true }}
+        bordered={screenWidth < 525}
         size={screenWidth < 768 ? "small" : undefined}
         id="table"
       />
