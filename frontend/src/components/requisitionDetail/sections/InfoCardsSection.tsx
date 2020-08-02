@@ -9,10 +9,6 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
   
   const listData = [
     {
-      title: "Payment Required By",
-      body: (loading || !data.paymentRequiredBy) ? "Not Set" : moment(data.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
-    },
-    {
       title: "Created By",
       body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.fullName
     },
@@ -21,6 +17,13 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
       body: (loading || !data.vendor) ? "Not Set" : data.vendor.name
     }
   ];
+
+  if (data.paymentRequiredBy) {
+    listData.push({
+      title: "Payment Required By",
+      body: moment(data.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
+    });
+  }
 
   if (data.approvalSet && data.approvalSet.length > 0) {
     const approval: Approval = data.approvalSet[data.approvalSet.length - 1]; // Gets last approval

@@ -51,7 +51,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
         <Form.Item
           name={[props.field.name, "link"]}
           fieldKey={[props.field.fieldKey, "link"]}
-          rules={[FORM_RULES.requiredRule, FORM_RULES.urlRule]}
+          rules={[FORM_RULES.urlRule]}
           label={(
             <span>
               {"Link "}
