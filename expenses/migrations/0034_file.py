@@ -8,7 +8,7 @@ import rules.contrib.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('expenses', '0028_permissions_and_groups'),
+        ('expenses', '0033_auto_20200724_2305'),
     ]
 
     operations = [
