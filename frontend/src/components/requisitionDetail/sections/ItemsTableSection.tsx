@@ -22,7 +22,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       render: (text: string, record: RequisitionItemRow, index: number) => {
         if (record.isNotesRow) {
           return {
-            children: <Text>{record.notes}</Text>,
+            children: <Text>{`Notes: ${record.notes}`}</Text>,
             props: {
               colSpan: 3,
               style: { background: record.received && showReceived ? greenColor : "" }
