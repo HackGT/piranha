@@ -34,7 +34,8 @@ const ProjectDetail: React.FC = () => {
   const [year, shortCode] = (projectReference || "").split("-");
 
   const { loading, data, error } = useQuery(PROJECT_DETAIL_QUERY, {
-    variables: { year, shortCode }
+    variables: { year, shortCode },
+    fetchPolicy: "network-only" // Never cache in case requisition status updates
   });
 
   if (error || (data && !data.project)) {
