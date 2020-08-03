@@ -5,7 +5,7 @@ import { PlusOutlined, QuestionCircleOutlined, UploadOutlined } from "@ant-desig
 import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, RequisitionStatus } from "../../types/Requisition";
+import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 import ErrorDisplay from "../../util/ErrorDisplay";
 
@@ -25,7 +25,23 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const [runningTotal, setRunningTotal] = useState(getTotalCost(props.requisitionData, true));
 
   const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
-  const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION);
+
+  // This updates the cache so the requisition appears on the users home page after creation
+  const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION, {
+    update(cache, { data: createMutationData }) {
+      try {
+        // @ts-ignore
+        const { requisitions } = cache.readQuery({ query: OPEN_REQUISITIONS_QUERY });
+        cache.writeQuery({
+          query: OPEN_REQUISITIONS_QUERY,
+          data: { requisitions: requisitions.concat([createMutationData.createRequisition.requisition]) }
+        });
+      } finally {
+        // Home screen hasn't been loaded yet
+      }
+    }
+  });
+
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   if (error) {
