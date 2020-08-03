@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Typography } from "antd";
 import moment from "moment";
-import { formatPrice } from "../../../util/util";
+import { formatPrice, getTotalCost } from "../../../util/util";
 import { Payment } from "../../../types/Payment";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 
@@ -37,7 +37,8 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   ];
 
   const summaryRow = (rowData: Payment[]) => {
-    const total = rowData.reduce((prev, curr) => prev + curr.amount, 0);
+    const requisitionTotal = getTotalCost(data, true);
+    const paymentsTotal = rowData.reduce((prev, curr) => prev + curr.amount, 0);
 
     return (
       <>
@@ -46,7 +47,15 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
             <Text strong>Total Paid</Text>
           </Summary.Cell>
           <Summary.Cell colSpan={2} index={2}>
-            <Text strong>{formatPrice(total)}</Text>
+            <Text strong>{formatPrice(paymentsTotal)}</Text>
+          </Summary.Cell>
+        </Summary.Row>
+        <Summary.Row>
+          <Summary.Cell index={1}>
+            <Text strong>Remaining Balance</Text>
+          </Summary.Cell>
+          <Summary.Cell colSpan={2} index={2}>
+            <Text strong>{formatPrice(requisitionTotal - paymentsTotal)}</Text>
           </Summary.Cell>
         </Summary.Row>
       </>

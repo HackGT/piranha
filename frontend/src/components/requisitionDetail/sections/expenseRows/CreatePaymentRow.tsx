@@ -1,10 +1,10 @@
 import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { DatePicker, Form, Input, Select } from "antd";
-import { FormInstance } from "antd/es/form";
+import { FormInstance, Rule } from "antd/es/form";
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../types/PaymentMethod";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
-import { FORM_RULES } from "../../../../util/util";
+import { FORM_RULES, getTotalCost } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { CREATE_PAYMENT_MUTATION } from "../../../../types/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
@@ -15,6 +15,14 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
 
   if (error) {
     return <ErrorDisplay error={error} />;
+  }
+
+  const totalAlreadyPaid = props.requisition.paymentSet?.reduce((prev, curr) => prev + curr.amount, 0) || 0;
+  const remainingBalance = getTotalCost(props.requisition, true) - totalAlreadyPaid;
+  const maxAmountRule: Rule = { max: remainingBalance, type: "number", message: "Payment amount cannot be more than the remaining balance" };
+
+  if (remainingBalance <= 0) {
+    return null;
   }
 
   const onFinish = async (values: any, form: FormInstance) => {
@@ -47,11 +55,11 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
     >
       <Form.Item
         name="amount"
-        rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
+        rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule, maxAmountRule]}
         normalize={(value: any) => (value ? parseFloat(value) : null)}
         label="Amount Paid"
       >
-        <Input prefix="$" type="number" placeholder="23.90" />
+        <Input prefix="$" type="number" placeholder={remainingBalance.toString()} />
       </Form.Item>
       <Form.Item
         name="fundingSource"
