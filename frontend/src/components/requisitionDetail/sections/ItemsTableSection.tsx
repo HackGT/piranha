@@ -14,7 +14,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   // Boolean determines whether to show green highlights and table footer
   const showReceived = data.status === "PARTIALLY_RECEIVED";
   const greenColor = "#f6ffed";
-  
+
   const columns = [
     {
       title: "Item",
@@ -96,6 +96,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       pagination={false}
       loading={loading}
       size="small"
+      style={{ marginBottom: "15px" }}
       bordered
       scroll={{ x: true }}
       footer={showReceived ? () => <em>* Items in green have been received</em> : undefined}
