@@ -45,6 +45,7 @@ gunicorn = "*"
 whitenoise = "*"
 google-cloud-storage = "*"
 graphene-file-upload = "*"
+sentry-sdk = "*"
 
 [requires]
 python_version = "3.7"
