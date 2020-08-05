@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'expenses.apps.ExpensesConfig',
+    'budgets.apps.BudgetsConfig',
     'seaport',
     'social_django',
     'graphene_django',
