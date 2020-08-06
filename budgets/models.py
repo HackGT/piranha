@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import CharField, PositiveIntegerField, DecimalField, ForeignKey, TextChoices
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -11,9 +11,20 @@ class BudgetGroup(models.Model):
         return self.name
 
 
+class Category(models.Model):
+    name = CharField(max_length=150)
+    budget_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    budget_object_id = models.PositiveIntegerField()
+    budget = GenericForeignKey('budget_content_type', 'budget_object_id')
+
+    def __str__(self):
+        return self.name
+
+
 class Budget(models.Model):
     name = CharField(max_length=150)
     group = ForeignKey('BudgetGroup', on_delete=models.PROTECT)
+    categories = GenericRelation(Category, content_type_field="budget_content_type", object_id_field="budget_object_id")
 
     def __str__(self):
         return "{} ({})".format(self.name, self.group.name)
@@ -37,19 +48,10 @@ class Month(TextChoices):
 class OperatingBudget(models.Model):
     month = models.CharField(choices=Month.choices, max_length=20)
     year = PositiveIntegerField()
+    categories = GenericRelation(Category, content_type_field="budget_content_type", object_id_field="budget_object_id")
 
     def __str__(self):
         return "{} {}".format(self.month, self.year)
-
-
-class Category(models.Model):
-    name = CharField(max_length=150)
-    budget_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    budget_object_id = models.PositiveIntegerField()
-    budget = GenericForeignKey('budget_content_type', 'budget_object_id')
-
-    def __str__(self):
-        return self.name
 
 
 class LineItem(models.Model):
