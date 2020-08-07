@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Col, Form, Input, InputNumber, Popconfirm, Row, Tooltip } from "antd";
+import { Button, Card, Cascader, Col, Form, Input, InputNumber, Popconfirm, Row, Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { FORM_RULES } from "../../util/util";
 
@@ -15,6 +15,7 @@ interface Props {
   field: FieldData;
   deleteButton: boolean;
   remove: (index: number) => void;
+  lineItemOptions: any;
 }
 
 const RequisitionItemCard: React.FC<Props> = props => (
@@ -93,6 +94,31 @@ const RequisitionItemCard: React.FC<Props> = props => (
           normalize={(value: any) => (value ? parseFloat(value) : null)}
         >
           <Input prefix="$" type="number" placeholder="99.99" />
+        </Form.Item>
+      </Col>
+    </Row>
+
+    <Row gutter={[8, 0]} justify="center">
+      <Col xs={24} sm={12}>
+        <Form.Item
+          name={[props.field.name, "lineItem"]}
+          fieldKey={[props.field.fieldKey, "lineItem"]}
+          rules={[FORM_RULES.requiredRule]}
+          label={(
+            <span>
+              {"Line Item "}
+              <Tooltip title="The specific line item from the budget separated by category. Please select a budget first.">
+                <QuestionCircleOutlined />
+              </Tooltip>
+            </span>
+          )}
+        >
+          <Cascader
+            options={props.lineItemOptions}
+            fieldNames={{ label: "name", value: "id", children: "lineitemSet" }}
+            disabled={props.lineItemOptions.length === 0}
+            placeholder=""
+          />
         </Form.Item>
       </Col>
     </Row>
