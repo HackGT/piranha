@@ -36,7 +36,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           query: OPEN_REQUISITIONS_QUERY,
           data: { requisitions: requisitions.concat([createMutationData.createRequisition.requisition]) }
         });
-      } finally {
+      } catch {
         // Home screen hasn't been loaded yet
       }
     }
