@@ -23,6 +23,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
   const history = useHistory();
   const [runningTotal, setRunningTotal] = useState(getTotalCost(props.requisitionData, true));
+  const [selectedBudget, setSelectedBudget] = useState<string | undefined>(props.requisitionData?.budget);
 
   const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
 
@@ -58,6 +59,15 @@ const RequisitionForm: React.FC<Props> = (props) => {
     value: vendor.id
   }));
 
+  const budgetOptions = loading ? [] : data.budgets.map((budget: any) => ({
+    label: budget.name,
+    value: budget.id
+  }));
+
+  const lineItemOptions = (loading || !selectedBudget) ? [] : data.budgets.find((budget: any) => (
+    budget.id === selectedBudget
+  )).categorySet;
+
   // Determines if requisition is submitting for review or just editing to save changes by an admin
   const submittalMode = !props.requisitionData || ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status);
 
@@ -75,6 +85,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       project: values.project,
       description: values.description,
       vendor: values.vendor || undefined,
+      budget: values.budget || undefined,
       paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
       otherFees: values.otherFees,
       isReimbursement: values.isReimbursement,
@@ -83,7 +94,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
         link: item.link,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
-        notes: item.notes
+        notes: item.notes,
+        lineItem: item.lineItem && item.lineItem[1] // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
       fileSet: values.fileSet
@@ -135,6 +147,14 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   const onValuesChange = (changedValues: any, allValues: any) => {
     setRunningTotal(getTotalCost(allValues, true));
+  };
+
+  const onBudgetChange = (newValue: any) => {
+    setSelectedBudget(newValue);
+
+    // Resets existing line item selections
+    const newItemValues = form.getFieldsValue().requisitionitemSet.map((item: any) => ({ ...item, lineItem: null }));
+    form.setFieldsValue({ requisitionitemSet: newItemValues });
   };
 
   const halfLayout = {
@@ -278,6 +298,25 @@ const RequisitionForm: React.FC<Props> = (props) => {
           </Col>
         </Row>
 
+        <Row gutter={[32, 8]} justify="center">
+          <Col {...halfLayout}>
+            <Form.Item
+              name="budget"
+              rules={[FORM_RULES.requiredRule]}
+              label={(
+                <span>
+                  {"Budget "}
+                  <Tooltip title="The name of the budget used to draw funds. It is usually the same name as the project.">
+                    <QuestionCircleOutlined />
+                  </Tooltip>
+                </span>
+              )}
+            >
+              <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Form.List name="requisitionitemSet">
           {(fields, { add, remove }) => (
             <div>
@@ -288,6 +327,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
                       deleteButton={fields.length > 1}
                       field={field}
                       remove={remove}
+                      lineItemOptions={lineItemOptions}
                     />
                   </Col>
                 </Row>

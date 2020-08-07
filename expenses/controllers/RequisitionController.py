@@ -1,5 +1,7 @@
 from django.db.models import Max
 from itertools import zip_longest
+
+from budgets.models import Budget, LineItem
 from expenses.models import Requisition, Project, Vendor, RequisitionItem, File
 from expenses.config import bucket
 from graphql import GraphQLError
@@ -39,10 +41,11 @@ class RequisitionController:
             new_data = {
                 "project": project,
                 "vendor": Vendor.objects.get(id=data["vendor"]) if "vendor" in data else None,
+                "budget": Budget.objects.get(id=data["budget"]) if "budget" in data else None,
                 "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 "created_by": info.context.user
             }
-            new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "project", "vendor", "fileSet"]})
+            new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "project", "vendor", "fileSet", "budget"]})
 
             requisition = Requisition.objects.create(**new_data)
 
@@ -55,9 +58,10 @@ class RequisitionController:
 
             for item in data.requisitionitemSet:
                 item_new_data = {
-                    "requisition": requisition
+                    "requisition": requisition,
+                    "line_item": LineItem.objects.get(id=item["line_item"]) if "line_item" in item else None,
                 }
-                item_new_data.update(item)
+                item_new_data.update({k: v for k, v in item.items() if k not in ["line_item"]})
                 RequisitionItem.objects.create(**item_new_data)
 
             return requisition
@@ -88,7 +92,7 @@ class RequisitionController:
             active_file_ids = []
 
             for file in data.get("fileSet", []):
-                if ("originFileObj" in file):  # Checks if it's a new file being uploaded
+                if "originFileObj" in file:  # Checks if it's a new file being uploaded
                     active_file_ids.append(upload_file(file, requisition))
                 else:
                     active_file_ids.append(int(file["id"]))
@@ -108,14 +112,20 @@ class RequisitionController:
             for new_item, existing_item in zip_longest(data["requisitionitemSet"], list(RequisitionItem.objects.filter(requisition=requisition))):
                 if not existing_item:
                     item_new_data = {
-                        "requisition": requisition
+                        "requisition": requisition,
+                        "line_item": LineItem.objects.get(id=new_item["line_item"]) if "line_item" in new_item else None,
                     }
-                    item_new_data.update(new_item)
+                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
                     RequisitionItem.objects.create(**item_new_data)
                 elif not new_item:
                     existing_item.delete()
                 else:
-                    for (key, value) in new_item.items():
+                    item_new_data = {
+                        "line_item": LineItem.objects.get(id=new_item["line_item"]) if "line_item" in new_item else None,
+                    }
+                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
+
+                    for (key, value) in item_new_data.items():
                         setattr(existing_item, key, value)
                     existing_item.save()
 

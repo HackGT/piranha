@@ -29,23 +29,31 @@ const RequisitionEdit: React.FC = () => {
     return <Redirect to={`/project/${projectReference}/requisition/${requisitionReference}`} />;
   }
 
-  const requisitionData: RequisitionFormData = {
-    headline: data.requisition.headline,
-    project: data.requisition.project.id,
-    description: data.requisition.description,
-    vendor: data.requisition.vendor ? data.requisition.vendor.id : null,
-    paymentRequiredBy: data.requisition.paymentRequiredBy ? moment(data.requisition.paymentRequiredBy) : null,
-    otherFees: data.requisition.otherFees,
-    isReimbursement: data.requisition.isReimbursement,
-    requisitionitemSet: data.requisition.requisitionitemSet.length === 0 ? [{}] : data.requisition.requisitionitemSet,
-    status: data.requisition.status,
-    fileSet: data.requisition.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })) // https://github.com/ant-design/ant-design/issues/4120
+  const rekData = data.requisition;
+
+  const requisitionFormData: RequisitionFormData = {
+    headline: rekData.headline,
+    project: rekData.project.id,
+    description: rekData.description,
+    vendor: rekData.vendor ? rekData.vendor.id : null,
+    budget: rekData.budget ? rekData.budget.id : null,
+    paymentRequiredBy: rekData.paymentRequiredBy ? moment(rekData.paymentRequiredBy) : null,
+    otherFees: rekData.otherFees,
+    isReimbursement: rekData.isReimbursement,
+    requisitionitemSet: rekData.requisitionitemSet.length === 0
+      ? [{}]
+      : rekData.requisitionitemSet.map((item: any) => ({
+        ...item,
+        lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id]
+      })),
+    status: rekData.status,
+    fileSet: rekData.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })) // https://github.com/ant-design/ant-design/issues/4120
   };
 
   return (
     <RequisitionForm
-      requisitionData={requisitionData}
-      requisitionId={data.requisition.id}
+      requisitionData={requisitionFormData}
+      requisitionId={rekData.id}
       editMode
     />
   );

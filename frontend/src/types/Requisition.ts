@@ -7,6 +7,7 @@ import { Approval } from "./Approval";
 import { Payment } from "./Payment";
 import { File } from "./File";
 import { PaymentMethod } from "./PaymentMethod";
+import { LineItem } from "./Budget";
 
 export type RequisitionStatus =
   "DRAFT" |
@@ -54,7 +55,8 @@ export type RequisitionItem = {
   quantity: number,
   link: string,
   notes: string,
-  received: boolean
+  received: boolean,
+  lineItem: LineItem
 }
 
 export type RequisitionFormData = {
@@ -62,6 +64,7 @@ export type RequisitionFormData = {
   project: string;
   description: string;
   vendor: string | undefined;
+  budget: string | undefined;
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
   isReimbursement: boolean;
@@ -71,7 +74,7 @@ export type RequisitionFormData = {
 }
 
 export const REQUISITION_FORM_QUERY = gql`
-  query projects {
+  query requisitionForm {
     projects(where: {archived: false}) {
       id
       name
@@ -81,6 +84,23 @@ export const REQUISITION_FORM_QUERY = gql`
     vendors(where: {isActive: true}) {
       id
       name
+    }
+    
+    budgets {
+      id
+      name
+      group {
+        id
+        name
+      }
+      categorySet {
+        id
+        name
+        lineitemSet {
+          id
+          name
+        }
+      }
     }
   }
 `;
@@ -142,6 +162,14 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       link
       notes
       received
+      lineItem {
+        id
+        name
+        category {
+          id
+          name
+        }
+      }
     }
     approvalSet {
       id
@@ -181,6 +209,14 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       name    
       reimbursementInstructions
       isDirectPayment
+    }
+    budget {
+      id
+      name
+      group {
+        id
+        name
+      }
     }
   }
 `;
