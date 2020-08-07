@@ -62,6 +62,7 @@ class Requisition(TimestampedModel):
     payment_required_by = DateField(null=True, blank=True)
     other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
     is_reimbursement = BooleanField(default=False)
+    budget = ForeignKey('budgets.Budget', on_delete=models.PROTECT, null=True, blank=True)
 
     # Only used for non-reimbursements
     shipping_location = CharField(max_length=150, blank=True)
@@ -96,6 +97,7 @@ class RequisitionItem(models.Model):
     link = URLField(blank=True)
     notes = TextField(blank=True)
     received = BooleanField(default=False)
+    line_item = ForeignKey('budgets.LineItem', on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return self.name

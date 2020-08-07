@@ -1,6 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
-from budgets.models import BudgetGroup, Budget, OperatingBudget, Category, LineItem
+from budgets.models import BudgetGroup, Budget, Category, LineItem, OperatingBudget, OperatingLineItem
 
 
 class BudgetGroupType(DjangoObjectType):
@@ -9,10 +9,10 @@ class BudgetGroupType(DjangoObjectType):
         name = "BudgetGroup"
 
 
-class LineItemType(DjangoObjectType):
+class BudgetType(DjangoObjectType):
     class Meta:
-        model = LineItem
-        name = "LineItem"
+        model = Budget
+        name = "Budget"
 
 
 class CategoryType(DjangoObjectType):
@@ -21,23 +21,19 @@ class CategoryType(DjangoObjectType):
         name = "Category"
 
 
-class BudgetType(DjangoObjectType):
-    category_set = graphene.List(CategoryType)
-
-    def resolve_category_set(self, info):
-        return self.categories.all()
-
+class LineItemType(DjangoObjectType):
     class Meta:
-        model = Budget
-        name = "Budget"
+        model = LineItem
+        name = "LineItem"
 
 
 class OperatingBudgetType(DjangoObjectType):
-    category_set = graphene.List(CategoryType)
-
-    def resolve_category_set(self, info):
-        return self.categories.all()
-
     class Meta:
         model = OperatingBudget
         name = "OperatingBudget"
+
+
+class OperatingLineItemType(DjangoObjectType):
+    class Meta:
+        model = OperatingLineItem
+        name = "OperatingLineItem"

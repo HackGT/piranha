@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import CharField, PositiveIntegerField, DecimalField, ForeignKey, TextChoices
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -11,23 +10,30 @@ class BudgetGroup(models.Model):
         return self.name
 
 
+class Budget(models.Model):
+    name = CharField(max_length=150)
+    group = ForeignKey('BudgetGroup', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.group.name)
+
+
 class Category(models.Model):
     name = CharField(max_length=150)
-    budget_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    budget_object_id = models.PositiveIntegerField()
-    budget = GenericForeignKey('budget_content_type', 'budget_object_id')
+    budget = ForeignKey('Budget', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 
-class Budget(models.Model):
+class LineItem(models.Model):
     name = CharField(max_length=150)
-    group = ForeignKey('BudgetGroup', on_delete=models.PROTECT)
-    categories = GenericRelation(Category, content_type_field="budget_content_type", object_id_field="budget_object_id")
+    quantity = PositiveIntegerField()
+    unit_cost = DecimalField(max_digits=15, decimal_places=4)
+    category = ForeignKey('Category', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.group.name)
+        return "{} ({})".format(self.name, self.category)
 
 
 class Month(TextChoices):
@@ -48,17 +54,15 @@ class Month(TextChoices):
 class OperatingBudget(models.Model):
     month = models.CharField(choices=Month.choices, max_length=20)
     year = PositiveIntegerField()
-    categories = GenericRelation(Category, content_type_field="budget_content_type", object_id_field="budget_object_id")
 
     def __str__(self):
         return "{} {}".format(self.month, self.year)
 
 
-class LineItem(models.Model):
+class OperatingLineItem(models.Model):
     name = CharField(max_length=150)
-    quantity = PositiveIntegerField()
-    unit_cost = DecimalField(max_digits=15, decimal_places=4)
-    category = ForeignKey('Category', on_delete=models.CASCADE)
+    cost = DecimalField(max_digits=15, decimal_places=4)
+    operating_budget = ForeignKey('OperatingBudget', on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.category)
+        return "{} ({})".format(self.name, self.operating_budget)
