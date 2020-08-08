@@ -113,7 +113,7 @@ class RequisitionController:
                 if not existing_item:
                     item_new_data = {
                         "requisition": requisition,
-                        "line_item": LineItem.objects.get(id=new_item["line_item"]) if "line_item" in new_item else None,
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
                     }
                     item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
                     RequisitionItem.objects.create(**item_new_data)
@@ -121,7 +121,7 @@ class RequisitionController:
                     existing_item.delete()
                 else:
                     item_new_data = {
-                        "line_item": LineItem.objects.get(id=new_item["line_item"]) if "line_item" in new_item else None,
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
                     }
                     item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
 

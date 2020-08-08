@@ -95,7 +95,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
-        lineItem: item.lineItem && item.lineItem[1] // Get id of line item, index 0 is category
+        lineItem: item.lineItem ? item.lineItem[1] : null // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
       fileSet: values.fileSet
