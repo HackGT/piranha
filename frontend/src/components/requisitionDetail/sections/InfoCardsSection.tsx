@@ -15,6 +15,10 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     {
       title: "Vendor",
       body: (loading || !data.vendor) ? "Not Set" : data.vendor.name
+    },
+    {
+      title: "Budget",
+      body: (loading || !data.budget) ? "Not Set" : data.budget.name
     }
   ];
 
