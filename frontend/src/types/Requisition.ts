@@ -7,7 +7,7 @@ import { Approval } from "./Approval";
 import { Payment } from "./Payment";
 import { File } from "./File";
 import { PaymentMethod } from "./PaymentMethod";
-import { LineItem } from "./Budget";
+import { Budget, LineItem } from "./Budget";
 
 export type RequisitionStatus =
   "DRAFT" |
@@ -46,7 +46,8 @@ export type Requisition = {
   shippingLocation: string,
   orderDate: string,
   isReimbursement: boolean
-  fundingSource: PaymentMethod
+  fundingSource: PaymentMethod,
+  budget: Budget
 }
 
 export type RequisitionItem = {

@@ -6,7 +6,7 @@ import { RequisitionSectionProps } from "../RequisitionDetail";
 
 const { Text, Link } = Typography;
 
-type RequisitionItemRow = RequisitionItem & { isNotesRow: boolean }
+type RequisitionItemRow = RequisitionItem & { isDetailsRow: boolean }
 
 const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
@@ -20,9 +20,24 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       title: "Item",
       dataIndex: "name",
       render: (text: string, record: RequisitionItemRow, index: number) => {
-        if (record.isNotesRow) {
+        if (record.isDetailsRow) {
           return {
-            children: <Text>{`Notes: ${record.notes}`}</Text>,
+            children: (
+              <>
+                {record.notes && (
+                  <Text style={{ display: "block" }}>
+                    <strong>Notes: </strong>
+                    {record.notes}
+                  </Text>
+                )}
+                {record.lineItem && (
+                  <Text style={{ display: "block" }}>
+                    <strong>Line Item: </strong>
+                    {`${record.lineItem.category.name} / ${record.lineItem.name}`}
+                  </Text>
+                )}
+              </>
+            ),
             props: {
               colSpan: 3,
               style: { background: record.received && showReceived ? greenColor : "" }
@@ -43,7 +58,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
     {
       title: "Quantity",
       render: (text: number, record: RequisitionItemRow, index: number) => {
-        if (record.isNotesRow) {
+        if (record.isDetailsRow) {
           return {
             props: {
               colSpan: 0
@@ -64,7 +79,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
     {
       title: "Subtotal",
       render: (text: string, record: RequisitionItemRow, index: number) => {
-        if (record.isNotesRow) {
+        if (record.isDetailsRow) {
           return {
             props: {
               colSpan: 0
@@ -83,10 +98,10 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
 
   // Duplicates the rows so that items with notes have an extra row
   const rows = loading ? [] : data.requisitionitemSet.flatMap((item) => {
-    if (item.notes) {
-      return [{ ...item, isNotesRow: false }, { ...item, isNotesRow: true }];
+    if (item.notes || item.lineItem) {
+      return [{ ...item, isDetailsRow: false }, { ...item, isDetailsRow: true }];
     }
-    return [{ ...item, isNotesRow: false }];
+    return [{ ...item, isDetailsRow: false }];
   });
 
   return (
