@@ -4,7 +4,7 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../types/PaymentMethod";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
-import { FORM_RULES, getTotalCost } from "../../../../util/util";
+import { FORM_RULES, formatPrice, getTotalCost } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { CREATE_PAYMENT_MUTATION } from "../../../../types/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
@@ -59,7 +59,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
         normalize={(value: any) => (value ? parseFloat(value) : null)}
         label="Amount Paid"
       >
-        <Input prefix="$" type="number" placeholder={remainingBalance.toString()} />
+        <Input prefix="$" type="number" placeholder={formatPrice(remainingBalance, true)} />
       </Form.Item>
       <Form.Item
         name="fundingSource"

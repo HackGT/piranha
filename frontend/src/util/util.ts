@@ -58,12 +58,12 @@ export const StatusToStep = (status: RequisitionStatus) => {
   }
 };
 
-export const formatPrice = (num: number) => {
+export const formatPrice = (num: number, noDollarSign: boolean = false) => {
   const options = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-    style: "currency",
-    currency: "USD"
+    style: noDollarSign ? undefined : "currency",
+    currency: noDollarSign ? undefined : "USD"
   };
 
   return (num || 0).toLocaleString("en-US", options);
