@@ -41,22 +41,18 @@ class UserController:
 
             if data["access_level"] == UserAccessLevel.NONE:
                 user.groups.clear()
-                user.is_active = False
                 user.is_staff = False
                 user.is_superuser = False
             elif data["access_level"] == UserAccessLevel.MEMBER:
                 user.groups.set([member_group])
-                user.is_active = True
                 user.is_staff = False
                 user.is_superuser = False
             elif data["access_level"] == UserAccessLevel.EXEC:
                 user.groups.set([member_group, exec_group])
-                user.is_active = True
                 user.is_staff = False
                 user.is_superuser = False
             elif data["access_level"] == UserAccessLevel.ADMIN:
                 user.groups.set([member_group, exec_group, admin_group])
-                user.is_active = True
                 user.is_staff = True
 
             user.save()

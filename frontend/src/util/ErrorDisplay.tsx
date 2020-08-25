@@ -7,7 +7,11 @@ interface Props {
 }
 
 const ErrorDisplay: React.FC<Props> = (props) => {
-  console.error(JSON.parse(JSON.stringify(props.error)));
+  try {
+    console.error(JSON.parse(JSON.stringify(props.error)));
+  } catch {
+    console.error(props.error);
+  }
 
   // @ts-ignore
   if (props.error?.networkError?.statusCode === 403) {
