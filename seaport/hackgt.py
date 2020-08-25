@@ -26,7 +26,7 @@ class GroundTruthOAuth2(BaseOAuth2):
         email = response.get('email')
         name_parts = response.get('nameParts')
         first_name = name_parts.get("first")
-        preferred_name = name_parts.get("preferred", first_name)
+        preferred_name = name_parts.get("preferred", first_name) or first_name
         last_name = name_parts.get("last")
         return {
             'email': email,
