@@ -35,7 +35,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
           name="name"
           rules={[FORM_RULES.requiredRule]}
           label="Name"
-          initialValue={initialValues && initialValues.name}
+          initialValue={initialValues ? initialValues.name : ""}
         >
           <Input placeholder="Gringotts Wizarding Bank" />
         </Form.Item>
@@ -49,7 +49,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
               </Tooltip>
             </span>
           )}
-          initialValue={initialValues && initialValues.reimbursementInstructions}
+          initialValue={initialValues ? initialValues.reimbursementInstructions : ""}
         >
           <TextArea
             autoSize={{ minRows: 4 }}
@@ -67,7 +67,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
             </span>
           )}
           valuePropName="checked"
-          initialValue={initialValues && initialValues.isDirectPayment}
+          initialValue={initialValues ? initialValues.isDirectPayment : false}
         >
           <Switch checkedChildren="Yes" unCheckedChildren="No" />
         </Form.Item>
