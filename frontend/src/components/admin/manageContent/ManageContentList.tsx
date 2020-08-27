@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, List, Typography, Input } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
+import { Helmet } from "react-helmet";
 import { FormModalProps } from "./formModals/FormModalProps";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 
@@ -51,6 +52,9 @@ const ManageContentList: React.FC<Props> = (props) => {
 
   return (
     <>
+      <Helmet>
+        <title>{`Piranha - Admin - ${props.title}`}</title>
+      </Helmet>
       <Title level={3}>{props.title}</Title>
       {!props.hideAddButton && <Button style={{ marginRight: "10px" }} onClick={() => openModal(null)}>Add +</Button>}
       <Search

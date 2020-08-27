@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Typography, Table, Tag, Button } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
+import { Helmet } from "react-helmet";
 import { PROJECT_DETAIL_QUERY } from "../../types/Project";
 import { Requisition } from "../../types/Requisition";
 import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook } from "../../util/util";
@@ -146,6 +147,9 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{data && `Piranha - ${data.project.name}`}</title>
+      </Helmet>
       <ProjectBreadcrumb secondItem={loading ? shortCode : data.project.name} />
       <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
       <Table

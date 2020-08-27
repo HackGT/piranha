@@ -4,6 +4,7 @@ import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip,
 import { PlusOutlined, QuestionCircleOutlined, UploadOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
+import { Helmet } from "react-helmet";
 import RequisitionItemCard from "./RequisitionItemCard";
 import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
@@ -178,6 +179,9 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   return (
     <>
+      <Helmet>
+        <title>{props.editMode ? "Piranha - Edit Requisition" : "Piranha - Create Requisition"}</title>
+      </Helmet>
       <Title>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
       <Form
         name="create"
