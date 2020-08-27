@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { List, Typography } from "antd";
+import { Helmet } from "react-helmet";
 import { Project, PROJECT_LIST_QUERY } from "../../types/Project";
 import ProjectListCard from "./ProjectListCard";
 import ErrorDisplay from "../../util/ErrorDisplay";
@@ -24,6 +25,9 @@ const ProjectList: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Piranha - Projects</title>
+      </Helmet>
       <Title>{loading ? "Loading..." : "Projects"}</Title>
       <Title style={{ textAlign: "center" }} level={3}>Active Projects</Title>
       <List

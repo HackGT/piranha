@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Col, Pagination, Row, Tag, Typography } from "antd";
+import { Helmet } from "react-helmet";
 import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
 import { parseRequisitionParams } from "../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
@@ -43,6 +44,9 @@ const RequisitionDetail: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{rekData.referenceString && `Piranha - ${rekData.referenceString}`}</title>
+      </Helmet>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={24} md={15} lg={15} xl={15}>
           <ProjectBreadcrumb
