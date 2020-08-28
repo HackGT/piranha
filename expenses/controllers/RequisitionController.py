@@ -40,8 +40,8 @@ class RequisitionController:
             id_max = Requisition.objects.filter(project=project).aggregate(Max('project_requisition_id'))
             new_data = {
                 "project": project,
-                "vendor": Vendor.objects.get(id=data["vendor"]) if "vendor" in data else None,
-                "budget": Budget.objects.get(id=data["budget"]) if "budget" in data else None,
+                "vendor": Vendor.objects.filter(id=data["vendor"]).first() if "vendor" in data else None,
+                "budget": Budget.objects.filter(id=data["budget"]).first() if "budget" in data else None,
                 "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 "created_by": info.context.user
             }
@@ -59,7 +59,7 @@ class RequisitionController:
             for item in data.requisitionitemSet:
                 item_new_data = {
                     "requisition": requisition,
-                    "line_item": LineItem.objects.get(id=item["line_item"]) if "line_item" in item else None,
+                    "line_item": LineItem.objects.filter(id=item["line_item"]).first() if "line_item" in item else None,
                 }
                 item_new_data.update({k: v for k, v in item.items() if k not in ["line_item"]})
                 RequisitionItem.objects.create(**item_new_data)
@@ -113,7 +113,7 @@ class RequisitionController:
                 if not existing_item:
                     item_new_data = {
                         "requisition": requisition,
-                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None
                     }
                     item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
                     RequisitionItem.objects.create(**item_new_data)
@@ -121,7 +121,7 @@ class RequisitionController:
                     existing_item.delete()
                 else:
                     item_new_data = {
-                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None
                     }
                     item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
 
