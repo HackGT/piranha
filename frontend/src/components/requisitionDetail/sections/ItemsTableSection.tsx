@@ -20,6 +20,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       title: "Item",
       dataIndex: "name",
       render: (text: string, record: RequisitionItemRow, index: number) => {
+        // If the row shows details, render the appropriate info based on what is currently filled out
         if (record.isDetailsRow) {
           return {
             children: (
@@ -44,11 +45,14 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
             }
           };
         }
+
+        // If the record name is not yet filled out in a draft, show a default item label
         if (!record.name) {
           return `Item ${index / 2 + 1}`;
         }
+        
         return {
-          children: <Link href={record.link} target="_blank">{record.name}</Link>,
+          children: record.link ? <Link href={record.link} target="_blank">{record.name}</Link> : <Text>{record.name}</Text>,
           props: {
             style: { background: record.received && showReceived ? greenColor : "" }
           }
