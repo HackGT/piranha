@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Card, Cascader, Col, Form, Input, InputNumber, Popconfirm, Row, Tooltip } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons/lib";
+import { Button, Card, Cascader, Col, Form, Input, InputNumber, Popconfirm, Row } from "antd";
 import { FORM_RULES } from "../../util/util";
+import QuestionIconLabel from "../../util/QuestionIconLabel";
 
 const { TextArea } = Input;
 
@@ -53,14 +53,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
           name={[props.field.name, "link"]}
           fieldKey={[props.field.fieldKey, "link"]}
           rules={[FORM_RULES.urlRule]}
-          label={(
-            <span>
-              {"Link "}
-              <Tooltip title="The link to the item you want to purchase">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Link" helpText="The link to this item (if applicable)" />}
         >
           <Input placeholder="http://rubberducks.com" />
         </Form.Item>
@@ -104,14 +97,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
           name={[props.field.name, "lineItem"]}
           fieldKey={[props.field.fieldKey, "lineItem"]}
           rules={[FORM_RULES.requiredRule]}
-          label={(
-            <span>
-              {"Line Item "}
-              <Tooltip title="The specific line item from the budget separated by category. Please select a budget first.">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Line Item" helpText="The specific line item from the budget separated by category. Please select a budget first." />}
         >
           <Cascader
             options={props.lineItemOptions}
@@ -128,14 +114,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
         <Form.Item
           name={[props.field.name, "notes"]}
           fieldKey={[props.field.fieldKey, "notes"]}
-          label={(
-            <span>
-              {"Notes "}
-              <Tooltip title="Any notes about the item such as specific colors or sizes">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Notes" helpText="Any notes about the item such as specific colors or sizes" />}
         >
           <TextArea
             autoSize={{ minRows: 2 }}

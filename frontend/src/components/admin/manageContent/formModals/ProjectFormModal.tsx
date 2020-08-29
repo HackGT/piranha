@@ -1,13 +1,13 @@
 import React from "react";
-import { Form, Input, InputNumber, Select, Switch, Tooltip } from "antd";
+import { Form, Input, InputNumber, Select, Switch } from "antd";
 import { ApolloCache, useQuery } from "@apollo/client";
-import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { FORM_RULES } from "../../../../util/util";
 import { CREATE_PROJECT_MUTATION, PROJECT_LIST_QUERY, UPDATE_PROJECT_MUTATION } from "../../../../types/Project";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
 import { ALL_USERS_QUERY } from "../../../../types/User";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
+import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 
 const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   const { loading, data, error } = useQuery(ALL_USERS_QUERY);
@@ -68,14 +68,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
           <Form.Item
             name="shortCode"
             rules={[FORM_RULES.requiredRule]}
-            label={(
-              <span>
-                {"Short Code "}
-                <Tooltip title="A short, 2-5 character code to represent this project">
-                  <QuestionCircleOutlined />
-                </Tooltip>
-              </span>
-            )}
+            label={<QuestionIconLabel label="Short Code" helpText="A short, 2-5 character code to represent this project" />}
             initialValue={initialValues && initialValues.shortCode}
           >
             <Input placeholder="HACK8" />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, Tooltip, message, Switch, Upload } from "antd";
-import { PlusOutlined, QuestionCircleOutlined, UploadOutlined } from "@ant-design/icons/lib";
+import { Button, DatePicker, Form, Input, Select, Typography, Col, Row, message, Switch, Upload } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons/lib";
 import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import { Helmet } from "react-helmet";
@@ -9,6 +9,7 @@ import RequisitionItemCard from "./RequisitionItemCard";
 import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import QuestionIconLabel from "../../util/QuestionIconLabel";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
@@ -222,14 +223,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
             <Form.Item
               name="description"
               rules={[FORM_RULES.requiredRule]}
-              label={(
-                <span>
-                  {"Description "}
-                  <Tooltip title="The description of what you want to order and why you need it">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Description" helpText="The description of what you want to order and why you need it" />}
             >
               <TextArea
                 autoSize={{ minRows: 2 }}
@@ -251,17 +245,10 @@ const RequisitionForm: React.FC<Props> = (props) => {
           </Col>
 
           <Col {...halfLayout}>
+            {/* TODO: Fill in actual payment required by policy */}
             <Form.Item
               name="paymentRequiredBy"
-              label={(
-                <span>
-                  {"Payment Required By "}
-                  {/* TODO: Fill in actual payment required by policy */}
-                  <Tooltip title="If you need the payment by a certain date, list it here (Should be at least 3 days from today)">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Payment Required By" helpText="If you need the payment by a certain date, list it here (Should be at least 3 days from today)" />}
             >
               <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
             </Form.Item>
@@ -274,14 +261,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
               name="otherFees"
               rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
               normalize={(value: any) => (value ? parseFloat(value) : null)}
-              label={(
-                <span>
-                  {"Other Fees "}
-                  <Tooltip title="Any other fees associated with this requisition (Such as shipping and handling, processing fees, etc)">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Other Fees" helpText="Any other fees associated with this requisition (Such as shipping and handling, processing fees, etc)" />}
             >
               <Input prefix="$" type="number" placeholder="68.72" />
             </Form.Item>
@@ -290,14 +270,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
             <Form.Item
               name="isReimbursement"
               valuePropName="checked"
-              label={(
-                <span>
-                  {"Is this a Reimbursement? "}
-                  <Tooltip title="Select yes if you have paid for this requisition already. Otherwise, HackGT will pay for and order the items.">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Is this a Reimbursement?" helpText="Select yes if you have paid for this requisition already. Otherwise, HackGT will pay for and order the items." />}
             >
               <Switch
                 checkedChildren="Yes"
@@ -314,14 +287,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
             <Form.Item
               name="budget"
               rules={[FORM_RULES.requiredRule]}
-              label={(
-                <span>
-                  {"Budget "}
-                  <Tooltip title="The name of the budget used to draw funds. It is usually the same name as the project.">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Budget" helpText="The name of the budget used to draw funds. It is usually the same name as the project." />}
             >
               <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
             </Form.Item>
@@ -332,14 +298,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
               <Form.Item
                 name="purchaseDate"
                 rules={[FORM_RULES.requiredRule]}
-                label={(
-                  <span>
-                    {"Purchase Date "}
-                    <Tooltip title="For reimbursements, select the date your purchase was made.">
-                      <QuestionCircleOutlined />
-                    </Tooltip>
-                  </span>
-                )}
+                label={<QuestionIconLabel label="Purchase Date" helpText="For reimbursements, select the date your purchase was made." />}
               >
                 <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
               </Form.Item>
@@ -381,14 +340,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           <Col {...fullLayout}>
             <Form.Item
               name="fileSet"
-              label={(
-                <span>
-                  {"Upload Files "}
-                  <Tooltip title="Add any invoices, receipts, or other documents associated with the requisition.">
-                    <QuestionCircleOutlined />
-                  </Tooltip>
-                </span>
-              )}
+              label={<QuestionIconLabel label="Upload Files" helpText="Add any invoices, receipts, or other documents associated with the requisition." />}
               valuePropName="fileList"
               getValueFromEvent={(event: any) => (Array.isArray(event) ? event : event && event.fileList)}
             >

@@ -1,11 +1,11 @@
 import React from "react";
-import { Form, Input, Switch, Tooltip } from "antd";
+import { Form, Input, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
-import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { CREATE_PAYMENT_METHOD_MUTATION, UPDATE_PAYMENT_METHOD_MUTATION, PAYMENT_METHOD_LIST_QUERY } from "../../../../types/PaymentMethod";
 import { FormModalProps } from "./FormModalProps";
+import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 
 const { TextArea } = Input;
 
@@ -41,14 +41,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
         </Form.Item>
         <Form.Item
           name="reimbursementInstructions"
-          label={(
-            <span>
-              {"Reimbursement Instructions "}
-              <Tooltip title="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc. Note: Any URL will be converted into a link for easier access.">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Reimbursement Instructions" helpText="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc. Note: Any URL will be converted into a link for easier access." />}
           initialValue={initialValues ? initialValues.reimbursementInstructions : ""}
         >
           <TextArea
@@ -58,14 +51,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
         </Form.Item>
         <Form.Item
           name="isDirectPayment"
-          label={(
-            <span>
-              {"Direct Payment "}
-              <Tooltip title="For reimbursements, select yes for direct payment if the funding source can immediately send funds after approval. If the funding source requires forms or other documents to be submitted, select no for direct payment.">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Direct Payment" helpText="For reimbursements, select yes for direct payment if the funding source can immediately send funds after approval. If the funding source requires forms or other documents to be submitted, select no for direct payment." />}
           valuePropName="checked"
           initialValue={initialValues ? initialValues.isDirectPayment : false}
         >

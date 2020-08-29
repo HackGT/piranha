@@ -6,6 +6,7 @@ import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
 import { UPDATE_USER_MUTATION, USER_INFO_QUERY, UserAccessLevel } from "../../../../types/User";
+import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 
 const { Text } = Typography;
 
@@ -60,14 +61,7 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
           <Form.Item
             name="preferredName"
             rules={[FORM_RULES.requiredRule]}
-            label={(
-              <span>
-                {"Preferred Name "}
-                <Tooltip title="This is the name that is used in Piranha.">
-                  <QuestionCircleOutlined />
-                </Tooltip>
-              </span>
-            )}
+            label={<QuestionIconLabel label="Preferred Name" helpText="This is the name that is used in Piranha." />}
             initialValue={initialValues && initialValues.preferredName}
           >
             <Input placeholder="Alvin" />

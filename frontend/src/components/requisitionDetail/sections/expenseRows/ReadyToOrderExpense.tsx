@@ -1,12 +1,12 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input, Tooltip } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons/lib";
+import { Collapse, DatePicker, Form, Input } from "antd";
 import { FORM_RULES } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import { UPDATE_REQUISITION_MUTATION } from "../../../../types/Requisition";
 import CreatePaymentRow from "./CreatePaymentRow";
+import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 
 const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
@@ -43,14 +43,7 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
         </Form.Item>
         <Form.Item
           name="shippingLocation"
-          label={(
-            <span>
-              {"Shipping Location "}
-              <Tooltip title="If applicable, list the location the item(s) will be shipped. Ex. Storage Unit, Klaus, Submitter's Apartment.">
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
+          label={<QuestionIconLabel label="Shipping Location" helpText="If applicable, list the location the item(s) will be shipped. Ex. Storage Unit, Klaus, Submitter's Apartment." />}
         >
           <Input placeholder="Storage Unit" />
         </Form.Item>
