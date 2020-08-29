@@ -70,6 +70,7 @@ class Requisition(TimestampedModel):
 
     # Only used for reimbursements
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
+    purchase_date = DateField(null=True, blank=True)
 
     class Meta:
         rules_permissions = {

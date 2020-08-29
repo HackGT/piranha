@@ -47,7 +47,8 @@ const RequisitionEdit: React.FC = () => {
         lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id]
       })),
     status: rekData.status,
-    fileSet: rekData.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })) // https://github.com/ant-design/ant-design/issues/4120
+    fileSet: rekData.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })), // https://github.com/ant-design/ant-design/issues/4120
+    purchaseDate: rekData.purchaseDate ? moment(rekData.purchaseDate) : null
   };
 
   return (

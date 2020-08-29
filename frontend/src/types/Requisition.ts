@@ -44,7 +44,8 @@ export type Requisition = {
   canExpense: boolean,
   otherFees: number,
   shippingLocation: string,
-  orderDate: string,
+  orderDate: string, // Used for non-reimbursements
+  purchaseDate: string, // Used for reimbursements
   isReimbursement: boolean
   fundingSource: PaymentMethod,
   budget: Budget
@@ -72,6 +73,7 @@ export type RequisitionFormData = {
   requisitionitemSet: RequisitionItem[];
   status: RequisitionStatus;
   fileSet: any[];
+  purchaseDate: moment.Moment | null;
 }
 
 export const REQUISITION_FORM_QUERY = gql`
@@ -205,6 +207,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     shippingLocation
     orderDate
     isReimbursement
+    purchaseDate
     fundingSource {
       id
       name    

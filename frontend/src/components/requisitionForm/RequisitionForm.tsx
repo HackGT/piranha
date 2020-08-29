@@ -25,6 +25,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const history = useHistory();
   const [runningTotal, setRunningTotal] = useState(getTotalCost(props.requisitionData, true));
   const [selectedBudget, setSelectedBudget] = useState<string | undefined>(props.requisitionData?.budget);
+  const [isReimbursement, setIsReimbursement] = useState(props.requisitionData?.isReimbursement || false);
 
   const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, { fetchPolicy: "network-only" });
 
@@ -99,7 +100,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
         lineItem: item.lineItem ? item.lineItem[1] : null // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
-      fileSet: values.fileSet
+      fileSet: values.fileSet,
+      purchaseDate: values.purchaseDate ? values.purchaseDate.format("YYYY-MM-DD") : null
     };
 
     const hide = message.loading("Saving requisition...", 0);
@@ -297,7 +299,12 @@ const RequisitionForm: React.FC<Props> = (props) => {
                 </span>
               )}
             >
-              <Switch checkedChildren="Yes" unCheckedChildren="No" disabled={!reimbursementToggleEnabled} />
+              <Switch
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                disabled={!reimbursementToggleEnabled}
+                onChange={(newValue: boolean) => setIsReimbursement(newValue)}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -319,6 +326,25 @@ const RequisitionForm: React.FC<Props> = (props) => {
               <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
             </Form.Item>
           </Col>
+
+          {isReimbursement && (
+            <Col {...halfLayout}>
+              <Form.Item
+                name="purchaseDate"
+                rules={[FORM_RULES.requiredRule]}
+                label={(
+                  <span>
+                    {"Purchase Date "}
+                    <Tooltip title="For reimbursements, select the date your purchase was made.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </span>
+                )}
+              >
+                <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          )}
         </Row>
 
         <Form.List name="requisitionitemSet">

@@ -29,6 +29,13 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     });
   }
 
+  if (data.purchaseDate) {
+    listData.push({
+      title: "Purchase Date",
+      body: moment(data.purchaseDate).format("dddd, MMMM Do, YYYY")
+    });
+  }
+
   if (data.approvalSet && data.approvalSet.length > 0) {
     const approval: Approval = data.approvalSet[data.approvalSet.length - 1]; // Gets last approval
     let text = "";
