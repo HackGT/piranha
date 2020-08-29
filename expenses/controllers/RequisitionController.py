@@ -24,9 +24,9 @@ class RequisitionController:
     @classmethod
     def get_requisition(cls, info, year, short_code, project_requisition_id):
         if info.context.user.has_perm("expenses.view_requisition"):
-            return Requisition.objects.get(project__year=year,
-                                           project__short_code=short_code,
-                                           project_requisition_id=project_requisition_id)
+            return Requisition.objects.filter(project__year=year,
+                                              project__short_code=short_code,
+                                              project_requisition_id=project_requisition_id).first()
 
     @classmethod
     def get_requisitions(cls, info):
@@ -51,7 +51,7 @@ class RequisitionController:
 
             for file in data.get("fileSet", []):
                 upload_file(file, requisition)
-                
+
             # Exits if requisition items are not provided in query
             if "requisitionitemSet" not in data:
                 return requisition

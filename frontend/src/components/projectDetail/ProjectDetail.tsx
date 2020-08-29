@@ -12,6 +12,7 @@ import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import { ReimbursementTag } from "../../util/CustomTags";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
+import NotFound from "../NotFound";
 
 const { Text, Title } = Typography;
 
@@ -39,8 +40,10 @@ const ProjectDetail: React.FC = () => {
     fetchPolicy: "network-only" // Never cache in case requisition status updates
   });
 
-  if (error || (data && !data.project)) {
+  if (error) {
     return <ErrorDisplay error={error} />;
+  } if (data && !data.project) {
+    return <NotFound />;
   }
 
   const columns = [

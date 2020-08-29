@@ -17,6 +17,7 @@ import UploadedFilesSection from "./sections/UploadedFilesSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 import ProjectBreadcrumb from "../projectDetail/ProjectBreadcrumb";
 import "./index.css";
+import NotFound from "../NotFound";
 
 const { Text, Title } = Typography;
 
@@ -35,8 +36,10 @@ const RequisitionDetail: React.FC = () => {
     variables: { year, shortCode, projectRequisitionId }
   });
 
-  if (error || (data && !data.requisition)) {
+  if (error) {
     return <ErrorDisplay error={error} />;
+  } if (data && !data.requisition) {
+    return <NotFound />;
   }
 
   // @ts-ignore

@@ -6,7 +6,7 @@ class ProjectController:
     @classmethod
     def get_project(cls, info, year, short_code):
         if info.context.user.has_perm("expenses.view_project"):
-            return Project.objects.get(year=year, short_code=short_code)
+            return Project.objects.filter(year=year, short_code=short_code).first()
 
     @classmethod
     def get_projects(cls, info, where):
