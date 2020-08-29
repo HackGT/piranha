@@ -11,14 +11,15 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Quick-start development settings - unsuitable for production
 # See https://docspi.djangoproject.com/en/3.0/howto/deployment/checklist/
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["SECRET_KEY"]
@@ -27,8 +28,11 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = (os.environ["DEBUG"].lower() == "true")
 
 PRODUCTION = (os.environ["PRODUCTION"].lower() == "true")
-
 ALLOWED_HOSTS = ['*']
+
+# If you wish to associate users to errors (when using django.contrib.auth) enable sending PII data
+if PRODUCTION:
+    sentry_sdk.init(integrations=[DjangoIntegration()], send_default_pii=True)
 
 # Application definition
 

@@ -24,3 +24,5 @@ env:
   TIME_ZONE: America/New_York
   PRODUCTION: true
   GOOGLE_STORAGE_BUCKET: piranha-uploads
+  SENTRY_DSN: https://e8b44e96bfad4e8b96e6409aced24175@o429043.ingest.sentry.io/5376069
+  REACT_APP_SENTRY_DSN: https://17d02e33bc724aefbd37dbae1e37e50c@o429043.ingest.sentry.io/5410188

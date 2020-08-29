@@ -5,7 +5,12 @@ import "./index.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Cookies from "js-cookie";
 import { createUploadLink } from "apollo-upload-client";
+import * as Sentry from "@sentry/react";
 import App from "./App";
+
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({ dsn: process.env.REACT_APP_SENTRY_DSN });
+}
 
 // To work with Django's CSRF protection, this function takes the unique CSRF token provided in a cookie by Django
 // and sends it with every GraphQL request from Apollo as a header so that the requests pass Django's
