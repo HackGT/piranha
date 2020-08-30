@@ -17,7 +17,8 @@ export type User = {
   email: string,
   hasAdminAccess: boolean,
   isActive: boolean,
-  accessLevel: UserAccessLevel
+  accessLevel: UserAccessLevel,
+  slackId: string
 }
 
 export const ALL_USERS_QUERY = gql`
@@ -53,6 +54,7 @@ export const USER_INFO_FRAGMENT = gql`
     email
     hasAdminAccess
     accessLevel
+    slackId
   }
 `;
 

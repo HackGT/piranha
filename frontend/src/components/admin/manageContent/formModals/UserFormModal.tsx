@@ -75,6 +75,13 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
             <Input placeholder="Depp" />
           </Form.Item>
           <Form.Item
+            name="slackId"
+            label={<QuestionIconLabel label="Slack Id" helpText="The Slack Id of the user used to send notifications. Note: this is not the user's slack username or profile name. If no id is specified, the user will not receive notifications." />}
+            initialValue={initialValues && initialValues.slackId}
+          >
+            <Input placeholder="US3EHAOWN" />
+          </Form.Item>
+          <Form.Item
             name="accessLevel"
             rules={[FORM_RULES.requiredRule]}
             label="Access Level"
