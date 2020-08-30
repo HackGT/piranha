@@ -10,6 +10,7 @@ secrets:
   - SECRET_KEY
   - GROUND_TRUTH_CLIENT_ID
   - GROUND_TRUTH_CLIENT_SECRET
+  - SLACK_API_TOKEN
 
 files:
   /etc/piranha:
