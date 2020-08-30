@@ -34,7 +34,7 @@ def send_slack_notification(requisition):
             response = slack_client.chat_postMessage(channel=requisition.created_by.slack_id, text=message)
         except SlackApiError as err:
             if err.response["error"] == "channel_not_found":
-                print(f"Invalid user slack id for {requisition}")
+                print(f"Invalid user slack id for {requisition.created_by}")
             elif err.response["error"] == "invalid_auth":
                 print("Invalid slack setup. Please check config")
             else:
