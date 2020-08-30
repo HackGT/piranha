@@ -46,6 +46,7 @@ whitenoise = "*"
 google-cloud-storage = "*"
 graphene-file-upload = "*"
 sentry-sdk = "*"
+slackclient = "*"
 
 [requires]
 python_version = "3.7"

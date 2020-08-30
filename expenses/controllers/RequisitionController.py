@@ -6,6 +6,7 @@ from expenses.models import Requisition, Project, Vendor, RequisitionItem, File
 from expenses.config import bucket
 from graphql import GraphQLError
 import time
+from ..config import slack_client
 
 
 def upload_file(file, requisition):
@@ -18,6 +19,18 @@ def upload_file(file, requisition):
     blob = bucket.blob(google_name)
     blob.upload_from_file(file["originFileObj"])
     return File.objects.create(requisition=requisition, name=name, google_name=google_name, type=file["type"]).id
+
+
+def send_slack_notification(requisition):
+    # Checks if slack token is provide as env var
+    if slack_client.token and requisition.created_by.slack_id:
+        message = ""
+        if requisition.status == "Submitted":
+            message = f"Thank you for submitting requisition {requisition.headline}! You will receive alerts from me when the status is changed."
+        else:
+            message = f"Requisition {requisition.headline} ({requisition}) status updated to *{requisition.status}*"
+
+        slack_client.chat_postMessage(channel=requisition.created_by.slack_id, text=message)
 
 
 class RequisitionController:
@@ -52,6 +65,9 @@ class RequisitionController:
             for file in data.get("fileSet", []):
                 upload_file(file, requisition)
 
+            if data.status != "Draft":
+                send_slack_notification(requisition)
+
             # Exits if requisition items are not provided in query
             if "requisitionitemSet" not in data:
                 return requisition
@@ -74,6 +90,7 @@ class RequisitionController:
             new_data = {}
 
             project = Project.objects.get(id=data["project"])
+            status_changed = data.status != query.first().status
 
             # If project changed, recalculate project requisition id
             if int(data.project) != int(query.first().project.id):
@@ -81,7 +98,7 @@ class RequisitionController:
 
                 new_data = {
                     "project": project,
-                    "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
+                    "project_requisitionr_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 }
 
             new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "fileSet"]})
@@ -103,6 +120,9 @@ class RequisitionController:
                 else:
                     existing_file.is_active = False
                 existing_file.save()
+
+            if status_changed:
+                send_slack_notification(requisition)
 
             # Exits if requisition items are not provided in query
             if "requisitionitemSet" not in data:
