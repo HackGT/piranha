@@ -30,7 +30,7 @@ class UserType(DjangoObjectType):
     class Meta:
         model = auth.get_user_model()
         name = "User"
-        fields = ["id", "first_name", "preferred_name", "last_name", "is_active", "email", "has_admin_access"]
+        fields = ["id", "first_name", "preferred_name", "last_name", "is_active", "email", "has_admin_access", "slack_id"]
 
 
 class ProjectType(DjangoObjectType):

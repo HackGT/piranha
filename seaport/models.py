@@ -52,6 +52,7 @@ class User(AbstractUser):
     preferred_name = models.CharField(_('preferred name'), max_length=30, blank=True)
     REQUIRED_FIELDS = []
     objects = UserManager()
+    slack_id = models.CharField(max_length=100, blank=True)
 
     @property
     def full_name(self):
