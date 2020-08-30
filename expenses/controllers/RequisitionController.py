@@ -7,6 +7,7 @@ from expenses.config import bucket
 from graphql import GraphQLError
 import time
 from ..config import slack_client
+from slack.errors import SlackApiError
 
 
 def upload_file(file, requisition):
@@ -24,13 +25,20 @@ def upload_file(file, requisition):
 def send_slack_notification(requisition):
     # Checks if slack token is provide as env var
     if slack_client.token and requisition.created_by.slack_id:
-        message = ""
         if requisition.status == "Submitted":
             message = f"Thank you for submitting requisition {requisition.headline}! You will receive alerts from me when the status is changed."
         else:
             message = f"Requisition {requisition.headline} ({requisition}) status updated to *{requisition.status}*"
 
-        slack_client.chat_postMessage(channel=requisition.created_by.slack_id, text=message)
+        try:
+            response = slack_client.chat_postMessage(channel=requisition.created_by.slack_id, text=message)
+        except SlackApiError as err:
+            if err.response["error"] == "channel_not_found":
+                print(f"Invalid user slack id for {requisition}")
+            elif err.response["error"] == "invalid_auth":
+                print("Invalid slack setup. Please check config")
+            else:
+                raise err
 
 
 class RequisitionController:
@@ -65,6 +73,7 @@ class RequisitionController:
             for file in data.get("fileSet", []):
                 upload_file(file, requisition)
 
+            # Only send slack notification if requisition is submitted
             if data.status != "Draft":
                 send_slack_notification(requisition)
 
@@ -90,6 +99,8 @@ class RequisitionController:
             new_data = {}
 
             project = Project.objects.get(id=data["project"])
+
+            # Only send slack notification if the requisition status is updated
             status_changed = data.status != query.first().status
 
             # If project changed, recalculate project requisition id
