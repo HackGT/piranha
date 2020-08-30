@@ -1,4 +1,5 @@
 from expenses.models import Approval, Requisition, RequisitionStatus
+from ..config import send_slack_notification
 
 
 class ApprovalController:
@@ -27,5 +28,7 @@ class ApprovalController:
                 requisition.status = RequisitionStatus.PENDING_CHANGES
 
             requisition.save()
+
+            send_slack_notification(requisition)
 
             return approval

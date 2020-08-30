@@ -6,9 +6,7 @@ from expenses.models import Requisition, Project, Vendor, RequisitionItem, File
 from expenses.config import bucket
 from graphql import GraphQLError
 import time
-from ..config import slack_client
-from slack.errors import SlackApiError
-
+from ..config import send_slack_notification
 
 def upload_file(file, requisition):
     if file["type"] not in ["image/jpeg", "image/png", "application/pdf", "text/plain"]: # Has frontend validation as well
@@ -20,25 +18,6 @@ def upload_file(file, requisition):
     blob = bucket.blob(google_name)
     blob.upload_from_file(file["originFileObj"])
     return File.objects.create(requisition=requisition, name=name, google_name=google_name, type=file["type"]).id
-
-
-def send_slack_notification(requisition):
-    # Checks if slack token is provide as env var
-    if slack_client.token and requisition.created_by.slack_id:
-        if requisition.status == "Submitted":
-            message = f"Thank you for submitting requisition {requisition.headline}! You will receive alerts from me when the status is changed."
-        else:
-            message = f"Requisition {requisition.headline} ({requisition}) status updated to *{requisition.status}*"
-
-        try:
-            response = slack_client.chat_postMessage(channel=requisition.created_by.slack_id, text=message)
-        except SlackApiError as err:
-            if err.response["error"] == "channel_not_found":
-                print(f"Invalid user slack id for {requisition.created_by}")
-            elif err.response["error"] == "invalid_auth":
-                print("Invalid slack setup. Please check config")
-            else:
-                raise err
 
 
 class RequisitionController:
