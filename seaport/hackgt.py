@@ -24,15 +24,20 @@ class GroundTruthOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Ground Truth account"""
         email = response.get('email')
+
         name_parts = response.get('nameParts')
         first_name = name_parts.get("first")
         preferred_name = name_parts.get("preferred", first_name) or first_name
         last_name = name_parts.get("last")
+
+        scopes = response.get('scopes')
+        slack_id = scopes.get('slack', None) if scopes else None
         return {
             'email': email,
             'first_name': first_name,
             'preferred_name': preferred_name,
             'last_name': last_name,
+            'slack_id': slack_id
         }
 
     def user_data(self, access_token, *args, **kwargs):
