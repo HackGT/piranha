@@ -2,7 +2,7 @@ from django.db.models import Max
 from itertools import zip_longest
 
 from budgets.models import Budget, LineItem
-from expenses.models import Requisition, Project, Vendor, RequisitionItem, File
+from expenses.models import Requisition, Project, Vendor, RequisitionItem, File, RequisitionStatus
 from expenses.config import bucket
 from graphql import GraphQLError
 import time
@@ -53,7 +53,7 @@ class RequisitionController:
                 upload_file(file, requisition)
 
             # Only send slack notification if requisition is submitted
-            if data.status != "Draft":
+            if data.status != RequisitionStatus.DRAFT:
                 send_slack_notification(requisition)
 
             # Exits if requisition items are not provided in query
