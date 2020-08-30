@@ -23,7 +23,7 @@ class UserInput(DjangoInputObjectType):
 
     class Meta:
         model = User
-        only_fields = ["first_name", "preferred_name", "last_name"]
+        only_fields = ["first_name", "preferred_name", "last_name", "slack_id"]
 
 
 class UpdateUserMutation(Mutation):
