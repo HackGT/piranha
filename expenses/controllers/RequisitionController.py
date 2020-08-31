@@ -88,7 +88,7 @@ class RequisitionController:
 
                 new_data = {
                     "project": project,
-                    "project_requisitionr_id": (id_max["project_requisition_id__max"] or 0) + 1,
+                    "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 }
 
             new_data.update({k: v for k, v in data.items() if k not in ["requisitionitemSet", "fileSet"]})
