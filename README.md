@@ -48,6 +48,7 @@ to a new file called `.env`.
 | GOOGLE_STORAGE_BUCKET | Name of storage bucket in Google Cloud |
 | SENTRY_DSN | The Sentry.io URL to use for error reporting (only used in production) |
 | SLACK_API_TOKEN | Slack api bot token |
+| ROOT_URL | URL for the root of the app |
 
 A few steps to finish up:
 1. Open a terminal in the root directory of this repo
