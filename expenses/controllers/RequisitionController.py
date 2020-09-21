@@ -96,20 +96,21 @@ class RequisitionController:
 
             requisition = query.first()
 
-            active_file_ids = []
+            if "fileSet" in data:
+                active_file_ids = []
 
-            for file in data.get("fileSet", []):
-                if "originFileObj" in file:  # Checks if it's a new file being uploaded
-                    active_file_ids.append(upload_file(file, requisition))
-                else:
-                    active_file_ids.append(int(file["id"]))
+                for file in data.get("fileSet", []):
+                    if "originFileObj" in file:  # Checks if it's a new file being uploaded
+                        active_file_ids.append(upload_file(file, requisition))
+                    else:
+                        active_file_ids.append(int(file["id"]))
 
-            for existing_file in requisition.file_set.iterator():
-                if existing_file.id in active_file_ids:
-                    existing_file.is_active = True
-                else:
-                    existing_file.is_active = False
-                existing_file.save()
+                for existing_file in requisition.file_set.iterator():
+                    if existing_file.id in active_file_ids:
+                        existing_file.is_active = True
+                    else:
+                        existing_file.is_active = False
+                    existing_file.save()
 
             if status_changed:
                 send_slack_notification(requisition)
