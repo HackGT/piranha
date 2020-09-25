@@ -1,7 +1,7 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
 import { Collapse, DatePicker, Form, Input, Select } from "antd";
-import { FORM_RULES, getTotalCost } from "../../../../util/util";
+import { FORM_RULES, formatPrice, getTotalCost } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../types/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
@@ -61,7 +61,7 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
           rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
           normalize={(value: any) => (value ? parseFloat(value) : null)}
           label="Amount Paid"
-          initialValue={getTotalCost(props.requisition, true)}
+          initialValue={formatPrice(getTotalCost(props.requisition, true), true)}
         >
           <Input prefix="$" type="number" placeholder="23.90" disabled />
         </Form.Item>
