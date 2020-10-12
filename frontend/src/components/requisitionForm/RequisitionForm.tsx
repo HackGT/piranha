@@ -263,7 +263,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
               normalize={(value: any) => (value ? parseFloat(value) : null)}
               label={<QuestionIconLabel label="Other Fees" helpText="Any other fees associated with this requisition (Such as shipping and handling, processing fees, etc)" />}
             >
-              <Input prefix="$" type="number" placeholder="68.72" />
+              <Input prefix="$" type="number" step={0.01} placeholder="68.72" />
             </Form.Item>
           </Col>
           <Col {...halfLayout}>

@@ -59,7 +59,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
         normalize={(value: any) => (value ? parseFloat(value) : null)}
         label="Amount Paid"
       >
-        <Input prefix="$" type="number" placeholder={formatPrice(remainingBalance, true)} />
+        <Input prefix="$" type="number" step={0.01} placeholder={formatPrice(remainingBalance, true)} />
       </Form.Item>
       <Form.Item
         name="fundingSource"

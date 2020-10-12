@@ -63,7 +63,7 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
           label="Amount Paid"
           initialValue={formatPrice(getTotalCost(props.requisition, true), true)}
         >
-          <Input prefix="$" type="number" placeholder="23.90" disabled />
+          <Input prefix="$" type="number" placeholder="23.90" step={0.01} disabled />
         </Form.Item>
         <Form.Item
           name="fundingSource"

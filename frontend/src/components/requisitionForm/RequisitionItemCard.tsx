@@ -86,7 +86,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
           label="Unit Price"
           normalize={(value: any) => (value ? parseFloat(value) : null)}
         >
-          <Input prefix="$" type="number" placeholder="99.99" />
+          <Input prefix="$" type="number" step={0.01} placeholder="99.99" />
         </Form.Item>
       </Col>
     </Row>
