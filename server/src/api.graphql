@@ -4,12 +4,166 @@ schema {
 
 type Query {
     user: User!
+    users: [User]
 }
+
+enum AccessLevel {
+    NONE
+    MEMBER
+    EXEC
+    ADMIN
+}
+
+enum RequisitionStatus {
+    DRAFT
+    SUBMITTED
+    PENDING_CHANGES
+    READY_TO_ORDER
+    ORDERED
+    PARTIALLY_RECEIVED
+    RECEIVED
+    CLOSED
+    CANCELLED
+    READY_FOR_REIMBURSEMENT
+    AWAITING_INFORMATION
+    REIMBURSEMENT_IN_PROGRESS
+}
+
+enum Month {
+    JANUARY
+    FEBRUARY
+    MARCH
+    APRIL
+    MAY
+    JUNE
+    JULY
+    AUGUST
+    SEPTEMBER
+    OCTOBER
+    NOVEMBER
+    DECEMBER
+}
+
+scalar Date
 
 type User {
     id: ID
     uuid: String
     email: String
     name: String
-    admin: Boolean
+    accessLevel: AccessLevel
+    slackId: String
+}
+
+type RequisitionItem {
+    name: String
+    quantity: Int
+    unitPrice: Float
+    link: String
+    notes: String
+    received: Boolean
+    lineItem: LineItem
+}
+
+type Approval {
+    isApproving: Boolean
+    notes: String
+    approver: User
+}
+
+type Payment {
+    recipient: Vendor
+    amount: Float
+    fundingSource: PaymentMethod
+    date: Date
+}
+
+type File {
+    name: String
+    googleName: String
+    type: String
+    isActive: Boolean
+}
+
+type Requisition {
+    id: ID
+    headline: String
+    description: String
+    items: [RequisitionItem]
+    status: RequisitionStatus
+    createdBy: User
+    project: Project
+    vendor: Vendor
+    projectRequisitionId: Int
+    paymentRequiredBy: Date
+    otherFees: Float
+    isReimbursement: Boolean
+    budget: Budget
+    approvals: [Approval]
+    payments: [Payment]
+    files: [File]
+    shippingLocation: String
+    orderDate: Date
+    fundingSource: PaymentMethod
+    purchaseDate: Date
+}
+
+type Project {
+    id: ID
+    name: String
+    archived: Boolean
+    leads: [User]
+    shortCode: String
+    year: Int
+    referenceString: String
+}
+
+type Vendor {
+    id: ID
+    name: String
+    isActive: Boolean
+}
+
+type PaymentMethod {
+    id: ID
+    name: String
+    reimbursementInstructions: String
+    isDirectPayment: Boolean
+    isActive: Boolean
+}
+
+type LineItem {
+    id: ID
+    name: String
+    quantity: Int
+    unitCost: Float
+}
+
+type Category {
+    name: String
+    lineItems: [LineItem]
+}
+
+type Budget {
+    id: ID
+    name: String
+    categories: [Category]
+}
+
+type BudgetGroup {
+    id: ID
+    name: String
+    budgets: [Budget]
+}
+
+type OperatingLineItem{
+    name: String
+    cost: Float
+}
+
+type OperatingBudget {
+    id: ID
+    month: Month
+    year: Int
+    lineItems: [OperatingLineItem]
 }

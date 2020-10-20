@@ -78,7 +78,7 @@ export class GroundTruthStrategy extends OAuthStrategy {
         if (!user) {
             user = createNew<IUser>(User, {
                 ...profile,
-                admin: false
+                accessLevel: "MEMBER"
             });
         } else {
             user.token = accessToken;
