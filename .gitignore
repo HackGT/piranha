@@ -11,3 +11,5 @@ expenses/config/**
 !expenses/config/google-application-key-example.json
 
 /demos
+
+node_modules
