@@ -28,7 +28,6 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
       amount: values.amount,
       fundingSource: props.requisition.fundingSource.id,
       date: values.date.format("YYYY-MM-DD"),
-      recipient: props.requisition.vendor.id,
       requisition: props.requisition.id
     };
 

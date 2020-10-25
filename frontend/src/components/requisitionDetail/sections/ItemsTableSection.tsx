@@ -25,7 +25,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
           return {
             children: (
               <>
-                {record.vendor && (
+                {props.data.isReimbursement && record.vendor && (
                   <Text style={{ display: "block" }}>
                     <strong>Vendor: </strong>
                     {record.vendor.name}
@@ -108,7 +108,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
 
   // Duplicates the rows so that items with notes, line items, or vendor have an extra row
   const rows = loading ? [] : data.requisitionitemSet.flatMap((item) => {
-    if (item.notes || item.lineItem || item.vendor) {
+    if (item.notes || item.lineItem || (props.data.isReimbursement && item.vendor)) {
       return [{ ...item, isDetailsRow: false }, { ...item, isDetailsRow: true }];
     }
     return [{ ...item, isDetailsRow: false }];

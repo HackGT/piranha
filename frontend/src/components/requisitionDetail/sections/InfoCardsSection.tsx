@@ -21,7 +21,7 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
   if (!data.isReimbursement) {
     listData.push({
       title: "Vendor",
-      body: (loading || !data.vendor) ? "Not Set" : data.vendor.name
+      body: (loading || !data.requisitionitemSet[0].vendor) ? "Not Set" : data.requisitionitemSet[0].vendor.name
     });
   }
 

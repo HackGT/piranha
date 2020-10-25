@@ -87,7 +87,6 @@ const RequisitionForm: React.FC<Props> = (props) => {
       headline: values.headline,
       project: values.project,
       description: values.description,
-      vendor: values.vendor || undefined,
       budget: values.budget || undefined,
       paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
       otherFees: values.otherFees,
@@ -98,7 +97,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
-        vendor: (values.isReimbursement && item.vendor) ? item.vendor : null,
+        vendor: item.vendor || null,
         lineItem: item.lineItem ? item.lineItem[1] : null // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
@@ -159,6 +158,12 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
     // Resets existing line item selections
     const newItemValues = form.getFieldsValue().requisitionitemSet.map((item: any) => ({ ...item, lineItem: null }));
+    form.setFieldsValue({ requisitionitemSet: newItemValues });
+  };
+
+  const onVendorChange = (newValue: any) => {
+    // Set vendor for all items
+    const newItemValues = form.getFieldsValue().requisitionitemSet.map((item: any) => ({ ...item, vendor: newValue }));
     form.setFieldsValue({ requisitionitemSet: newItemValues });
   };
 
@@ -291,7 +296,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
                 rules={[FORM_RULES.requiredRule]}
                 label="Vendor"
               >
-                <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
+                <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} onChange={onVendorChange} />
               </Form.Item>
             </Col>
           )}
