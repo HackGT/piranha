@@ -64,8 +64,9 @@ class RequisitionController:
                 item_new_data = {
                     "requisition": requisition,
                     "line_item": LineItem.objects.filter(id=item["line_item"]).first() if "line_item" in item else None,
+                    "vendor": Vendor.objects.filter(id=item["vendor"]).first() if "vendor" in item else None,
                 }
-                item_new_data.update({k: v for k, v in item.items() if k not in ["line_item"]})
+                item_new_data.update({k: v for k, v in item.items() if k not in ["line_item", "vendor"]})
                 RequisitionItem.objects.create(**item_new_data)
 
             return requisition
@@ -124,17 +125,19 @@ class RequisitionController:
                 if not existing_item:
                     item_new_data = {
                         "requisition": requisition,
-                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
+                        "vendor": Vendor.objects.filter(id=new_item["vendor"]).first() if "vendor" in new_item else None
                     }
-                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
+                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item", "vendor"]})
                     RequisitionItem.objects.create(**item_new_data)
                 elif not new_item:
                     existing_item.delete()
                 else:
                     item_new_data = {
-                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None
+                        "line_item": LineItem.objects.filter(id=new_item["line_item"]).first() if "line_item" in new_item else None,
+                        "vendor": Vendor.objects.filter(id=new_item["vendor"]).first() if "vendor" in new_item else None
                     }
-                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item"]})
+                    item_new_data.update({k: v for k, v in new_item.items() if k not in ["line_item", "vendor"]})
 
                     for (key, value) in item_new_data.items():
                         setattr(existing_item, key, value)

@@ -98,6 +98,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
+        vendor: (values.isReimbursement && item.vendor) ? item.vendor : null,
         lineItem: item.lineItem ? item.lineItem[1] : null // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
@@ -236,11 +237,11 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
             <Form.Item
-              name="vendor"
+              name="budget"
               rules={[FORM_RULES.requiredRule]}
-              label="Vendor"
+              label={<QuestionIconLabel label="Budget" helpText="The name of the budget used to draw funds. It is usually the same name as the project." />}
             >
-              <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
+              <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
             </Form.Item>
           </Col>
 
@@ -283,15 +284,17 @@ const RequisitionForm: React.FC<Props> = (props) => {
         </Row>
 
         <Row gutter={[32, 8]} justify="center">
-          <Col {...halfLayout}>
-            <Form.Item
-              name="budget"
-              rules={[FORM_RULES.requiredRule]}
-              label={<QuestionIconLabel label="Budget" helpText="The name of the budget used to draw funds. It is usually the same name as the project." />}
-            >
-              <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
-            </Form.Item>
-          </Col>
+          {!isReimbursement && (
+            <Col {...halfLayout}>
+              <Form.Item
+                name="vendor"
+                rules={[FORM_RULES.requiredRule]}
+                label="Vendor"
+              >
+                <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
+              </Form.Item>
+            </Col>
+          )}
 
           {isReimbursement && (
             <Col {...halfLayout}>
@@ -317,6 +320,9 @@ const RequisitionForm: React.FC<Props> = (props) => {
                       field={field}
                       remove={remove}
                       lineItemOptions={lineItemOptions}
+                      vendorOptions={vendorOptions}
+                      isReimbursement={isReimbursement}
+                      loading={loading}
                     />
                   </Col>
                 </Row>

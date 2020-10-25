@@ -58,7 +58,8 @@ export type RequisitionItem = {
   link: string,
   notes: string,
   received: boolean,
-  lineItem: LineItem
+  lineItem: LineItem,
+  vendor: Vendor
 }
 
 export type RequisitionFormData = {
@@ -165,6 +166,10 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       link
       notes
       received
+      vendor {
+        id
+        name
+      }
       lineItem {
         id
         name
