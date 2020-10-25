@@ -44,7 +44,8 @@ const RequisitionEdit: React.FC = () => {
       ? [{}]
       : rekData.requisitionitemSet.map((item: any) => ({
         ...item,
-        lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id]
+        lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id],
+        vendor: item.vendor && item.vendor.id
       })),
     status: rekData.status,
     fileSet: rekData.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })), // https://github.com/ant-design/ant-design/issues/4120
