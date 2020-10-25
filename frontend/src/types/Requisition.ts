@@ -31,7 +31,6 @@ export type Requisition = {
   pointOfContact: User,
   createdBy: User,
   project: Project,
-  vendor: Vendor,
   projectRequisitionId: number,
   paymentRequiredBy: Date,
   requisitionitemSet: RequisitionItem[],
@@ -66,7 +65,7 @@ export type RequisitionFormData = {
   headline: string;
   project: string;
   description: string;
-  vendor: string | undefined;
+  vendor?: string | undefined;
   budget: string | undefined;
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
@@ -151,11 +150,6 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         projectRequisitionId
       }
     }
-    vendor {
-      id
-      name
-      isActive
-    }
     projectRequisitionId
     paymentRequiredBy
     requisitionitemSet {
@@ -169,6 +163,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       vendor {
         id
         name
+        isActive
       }
       lineItem {
         id

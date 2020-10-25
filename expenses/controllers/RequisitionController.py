@@ -40,7 +40,6 @@ class RequisitionController:
             id_max = Requisition.objects.filter(project=project).aggregate(Max('project_requisition_id'))
             new_data = {
                 "project": project,
-                "vendor": Vendor.objects.filter(id=data["vendor"]).first() if "vendor" in data else None,
                 "budget": Budget.objects.filter(id=data["budget"]).first() if "budget" in data else None,
                 "project_requisition_id": (id_max["project_requisition_id__max"] or 0) + 1,
                 "created_by": info.context.user

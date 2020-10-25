@@ -1,11 +1,9 @@
 import { gql } from "@apollo/client";
 import { PaymentMethod } from "./PaymentMethod";
-import { Vendor } from "./Vendor";
 import { Requisition, REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export type Payment = {
   amount: number;
-  recipient: Vendor;
   requisition: Requisition;
   fundingSource: PaymentMethod;
   date: Date;

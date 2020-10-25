@@ -35,7 +35,7 @@ const RequisitionEdit: React.FC = () => {
     headline: rekData.headline,
     project: rekData.project.id,
     description: rekData.description,
-    vendor: rekData.vendor ? rekData.vendor.id : null,
+    vendor: rekData.requisitionitemSet.length === 0 || !rekData.requisitionitemSet[0].vendor ? null : rekData.requisitionitemSet[0].vendor.id,
     budget: rekData.budget ? rekData.budget.id : null,
     paymentRequiredBy: rekData.paymentRequiredBy ? moment(rekData.paymentRequiredBy) : null,
     otherFees: rekData.otherFees,

@@ -30,7 +30,6 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
       amount: values.amount,
       fundingSource: values.fundingSource,
       date: values.date.format("YYYY-MM-DD"),
-      recipient: props.requisition.vendor.id,
       requisition: props.requisition.id
     };
 

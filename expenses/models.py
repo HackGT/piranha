@@ -150,13 +150,12 @@ class PaymentMethod(TimestampedModel):
 
 class Payment(TimestampedModel):
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
-    recipient = ForeignKey('Vendor', on_delete=models.PROTECT)
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     date = DateField()
 
     def __str__(self):
-        return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)
+        return "{} from {} for {} on {}".format(self.amount, self.funding_source, self.requisition, self.date)
 
 
 class File(TimestampedModel):
