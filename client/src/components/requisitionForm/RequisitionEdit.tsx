@@ -36,7 +36,7 @@ const RequisitionEdit: React.FC = () => {
     headline: rekData.headline,
     project: rekData.project.id,
     description: rekData.description,
-    vendor: rekData.vendor ? rekData.vendor.id : null,
+    vendor: rekData.items.length === 0 || !rekData.items[0].vendor ? null : rekData.items[0].vendor.id,
     budget: rekData.budget ? rekData.budget.id : null,
     paymentRequiredBy: rekData.paymentRequiredBy ? moment(rekData.paymentRequiredBy) : null,
     otherFees: rekData.otherFees,
@@ -45,7 +45,8 @@ const RequisitionEdit: React.FC = () => {
       ? [{}]
       : rekData.items.map((item: any) => ({
         ...item,
-        lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id]
+        lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id],
+        vendor: item.vendor && item.vendor.id
       })),
     status: rekData.status,
     files: rekData.files.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })), // https://github.com/ant-design/ant-design/issues/4120

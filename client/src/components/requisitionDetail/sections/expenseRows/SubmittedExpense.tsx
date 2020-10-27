@@ -11,10 +11,16 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisitionAndCreateApproval] = useMutation(UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
-    if (isApproving && !props.requisition.vendor?.isActive) {
-      message.error("Vendor must be active before approval.", 2);
-      return;
+    if (isApproving) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const item of props.requisition.items) {
+        if (!item.vendor?.isActive) {
+          message.error(`Vendor ${item.vendor?.name} must be active before approval.`, 2);
+          return;
+        }
+      }
     }
+
     let newRequisitionStatus: RequisitionStatus;
 
     if (isApproving && props.requisition.isReimbursement) {

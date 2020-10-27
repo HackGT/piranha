@@ -35,7 +35,8 @@ const createRequisition = async function (parent: any, args: any, context: { use
         unitPrice: item.unitPrice,
         link: item.link,
         notes: item.notes,
-        ...item.lineItem && { lineItem: { connect: { id: item.lineItem } } }
+        ...item.lineItem && { lineItem: { connect: { id: item.lineItem } } },
+        ...item.vendor && { vendor: { connect: { id: item.vendor } } }
     }))
 
     let requisition = await prisma.requisition.create({
@@ -44,7 +45,6 @@ const createRequisition = async function (parent: any, args: any, context: { use
             projectRequisitionId: aggregate.max.projectRequisitionId + 1,
             ...data.fundingSource && { fundingSource: { connect: { id: data.fundingSource } } },
             ...data.budget && { budget: { connect: { id: data.budget } } },
-            ...data.vendor && { vendor: { connect: { id: data.vendor } } },
             ...data.project && { project: { connect: { id: data.project } } },
             createdBy: { connect: { id: context.user.id } },
             items: { create: createItems }
@@ -96,6 +96,8 @@ const updateRequisition = async function (parent: any, args: any) {
                     },
                     data: {
                         ...newItems[index],
+                        ...newItems[index].vendor && { vendor: { connect: { id: newItems[index].vendor } } },
+                        ...(!newItems[index].vendor && oldItems[index].vendorId) && { vendor: { disconnect: true } },
                         ...newItems[index].lineItem && { lineItem: { connect: { id: newItems[index].lineItem } } },
                         ...(!newItems[index].lineItem && oldItems[index].lineItemId) && { lineItem: { disconnect: true } }
                     }
@@ -111,6 +113,7 @@ const updateRequisition = async function (parent: any, args: any) {
                 const item = await prisma.requisitionItem.create({
                     data: {
                         ...newItems[index],
+                        ...newItems[index].vendor && { vendor: { connect: { id: newItems[index].vendor } } },
                         ...newItems[index].lineItem && { lineItem: { connect: { id: newItems[index].lineItem } } },
                         requisition: {
                             connect: {
@@ -133,7 +136,6 @@ const updateRequisition = async function (parent: any, args: any) {
             ...data,
             ...data.fundingSource && { fundingSource: { connect: { id: data.fundingSource } } },
             ...data.budget && { budget: { connect: { id: data.budget } } },
-            ...data.vendor && { vendor: { connect: { id: data.vendor } } },
             ...data.project && { project: { connect: { id: data.project } } },
             ...itemIds.length != 0 && { items: { set: itemIds.map(id => ({ id })) } }
         },

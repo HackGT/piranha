@@ -12,7 +12,7 @@ export type RequisitionFormData = {
     headline: string;
     project: string;
     description: string;
-    vendor: string | undefined;
+    vendor?: string | undefined;
     budget: string | undefined;
     paymentRequiredBy: moment.Moment | null;
     otherFees: string;

@@ -18,7 +18,6 @@ export const REQUISITION_INCLUDE: RequisitionInclude = {
     budget: true,
     createdBy: true,
     fundingSource: true,
-    vendor: true,
     approvals: {
         include: {
             approver: true
@@ -36,7 +35,8 @@ export const REQUISITION_INCLUDE: RequisitionInclude = {
                 include: {
                     category: true
                 }
-            }
+            },
+            vendor: true
         }
     },
     project: {

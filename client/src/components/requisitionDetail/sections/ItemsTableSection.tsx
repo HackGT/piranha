@@ -25,16 +25,22 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
           return {
             children: (
               <>
-                {record.notes && (
+                {props.data.isReimbursement && record.vendor && (
                   <Text style={{ display: "block" }}>
-                    <strong>Notes: </strong>
-                    {record.notes}
+                    <strong>Vendor: </strong>
+                    {record.vendor.name}
                   </Text>
                 )}
                 {record.lineItem && (
                   <Text style={{ display: "block" }}>
                     <strong>Line Item: </strong>
                     {`${record.lineItem.category.name} / ${record.lineItem.name}`}
+                  </Text>
+                )}
+                {record.notes && (
+                  <Text style={{ display: "block" }}>
+                    <strong>Notes: </strong>
+                    {record.notes}
                   </Text>
                 )}
               </>
@@ -102,7 +108,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
 
   // Duplicates the rows so that items with notes have an extra row
   const rows = loading ? [] : data.items.flatMap((item) => {
-    if (item.notes || item.lineItem) {
+    if (item.notes || item.lineItem || (props.data.isReimbursement && item.vendor)) {
       return [{ ...item, isDetailsRow: false }, { ...item, isDetailsRow: true }];
     }
     return [{ ...item, isDetailsRow: false }];

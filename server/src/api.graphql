@@ -140,6 +140,7 @@ type RequisitionItem {
     notes: String
     received: Boolean
     lineItem: LineItem
+    vendor: Vendor
 }
 
 input RequisitionItemInput {
@@ -150,6 +151,7 @@ input RequisitionItemInput {
     notes: String
     received: Boolean
     lineItem: ID
+    vendor: ID
 }
 
 type Requisition {
@@ -160,7 +162,6 @@ type Requisition {
     status: RequisitionStatus!
     createdBy: User!
     project: Project!
-    vendor: Vendor
     projectRequisitionId: Int!
     paymentRequiredBy: String
     otherFees: Float
@@ -185,7 +186,6 @@ input RequisitionInput {
     items: [RequisitionItemInput!]
     status: RequisitionStatus!
     project: ID
-    vendor: ID
     paymentRequiredBy: String
     otherFees: Float
     isReimbursement: Boolean

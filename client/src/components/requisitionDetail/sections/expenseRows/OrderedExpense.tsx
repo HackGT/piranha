@@ -31,6 +31,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         unitPrice: item.unitPrice,
         notes: item.notes,
         lineItem: item.lineItem?.id,
+        vendor: item.vendor?.id,
         received: !!values[item.name || ""]
       })),
       status

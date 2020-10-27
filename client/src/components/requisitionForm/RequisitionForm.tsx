@@ -89,7 +89,6 @@ const RequisitionForm: React.FC<Props> = (props) => {
       headline: values.headline,
       project: values.project,
       description: values.description,
-      vendor: values.vendor || undefined,
       budget: values.budget || undefined,
       paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : undefined,
       otherFees: values.otherFees,
@@ -100,7 +99,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
-        lineItem: item.lineItem ? item.lineItem[1] : undefined // Get id of line item, index 0 is category
+        lineItem: item.lineItem ? item.lineItem[1] : undefined, // Get id of line item, index 0 is category,
+        vendor: item.vendor || undefined,
       })),
       status: requisitionStatus,
       files: values.files,
@@ -161,6 +161,12 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
     // Resets existing line item selections
     const newItemValues = form.getFieldsValue().items.map((item: any) => ({ ...item, lineItem: null }));
+    form.setFieldsValue({ items: newItemValues });
+  };
+
+  const onVendorChange = (newValue: any) => {
+    // Set vendor for all items
+    const newItemValues = form.getFieldsValue().items.map((item: any) => ({ ...item, vendor: newValue }));
     form.setFieldsValue({ items: newItemValues });
   };
 
@@ -249,11 +255,11 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Row gutter={[32, 8]} justify="center">
           <Col {...halfLayout}>
             <Form.Item
-              name="vendor"
+              name="budget"
               rules={[FORM_RULES.requiredRule]}
-              label="Vendor"
+              label={<QuestionIconLabel label="Budget" helpText="The name of the budget used to draw funds. It is usually the same name as the project." />}
             >
-              <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} />
+              <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
             </Form.Item>
           </Col>
 
@@ -296,15 +302,17 @@ const RequisitionForm: React.FC<Props> = (props) => {
         </Row>
 
         <Row gutter={[32, 8]} justify="center">
-          <Col {...halfLayout}>
-            <Form.Item
-              name="budget"
-              rules={[FORM_RULES.requiredRule]}
-              label={<QuestionIconLabel label="Budget" helpText="The name of the budget used to draw funds. It is usually the same name as the project." />}
-            >
-              <Select options={budgetOptions} showSearch optionFilterProp="label" loading={loading} onChange={onBudgetChange} />
-            </Form.Item>
-          </Col>
+          {!isReimbursement && (
+            <Col {...halfLayout}>
+              <Form.Item
+                name="vendor"
+                rules={[FORM_RULES.requiredRule]}
+                label="Vendor"
+              >
+                <Select options={vendorOptions} showSearch optionFilterProp="label" loading={loading} onChange={onVendorChange} />
+              </Form.Item>
+            </Col>
+          )}
 
           {isReimbursement && (
             <Col {...halfLayout}>
@@ -330,6 +338,9 @@ const RequisitionForm: React.FC<Props> = (props) => {
                       field={field}
                       remove={remove}
                       lineItemOptions={lineItemOptions}
+                      vendorOptions={vendorOptions}
+                      isReimbursement={isReimbursement}
+                      loading={loading}
                     />
                   </Col>
                 </Row>

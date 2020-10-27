@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Cascader, Col, Form, Input, InputNumber, Popconfirm, Row } from "antd";
+import { Button, Card, Cascader, Col, Form, Input, InputNumber, Popconfirm, Row, Select } from "antd";
 import { FORM_RULES } from "../../util/util";
 import QuestionIconLabel from "../../util/QuestionIconLabel";
 
@@ -16,6 +16,9 @@ interface Props {
   deleteButton: boolean;
   remove: (index: number) => void;
   lineItemOptions: any;
+  vendorOptions: any;
+  isReimbursement: boolean;
+  loading: boolean;
 }
 
 const RequisitionItemCard: React.FC<Props> = props => (
@@ -107,6 +110,19 @@ const RequisitionItemCard: React.FC<Props> = props => (
           />
         </Form.Item>
       </Col>
+
+      {props.isReimbursement && (
+        <Col xs={24} sm={12}>
+          <Form.Item
+            name={[props.field.name, "vendor"]}
+            fieldKey={[props.field.fieldKey, "vendor"]}
+            rules={[FORM_RULES.requiredRule]}
+            label={<QuestionIconLabel label="Vendor" helpText="For reimbursements, please specify the vendor per item." />}
+          >
+            <Select options={props.vendorOptions} showSearch optionFilterProp="label" loading={props.loading} />
+          </Form.Item>
+        </Col>
+      )}
     </Row>
 
     <Row gutter={[8, 0]}>

@@ -13,14 +13,17 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
       body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.name
     },
     {
-      title: "Vendor",
-      body: (loading || !data.vendor) ? "Not Set" : data.vendor.name
-    },
-    {
       title: "Budget",
       body: (loading || !data.budget) ? "Not Set" : data.budget.name
     }
   ];
+
+  if (!data.isReimbursement) {
+    listData.push({
+      title: "Vendor",
+      body: (loading || !data.items[0].vendor) ? "Not Set" : data.items[0].vendor.name
+    });
+  }
 
   if (data.paymentRequiredBy) {
     listData.push({

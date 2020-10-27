@@ -69,11 +69,6 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         id
       }
     }
-    vendor {
-      id
-      name
-      isActive
-    }
     projectRequisitionId
     paymentRequiredBy
     items {
@@ -83,6 +78,11 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       link
       notes
       received
+      vendor {
+        id
+        name
+        isActive
+      }
       lineItem {
         id
         name
