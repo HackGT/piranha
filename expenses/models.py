@@ -95,7 +95,7 @@ class RequisitionItem(models.Model):
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
     quantity = PositiveIntegerField(null=True, blank=True)
     unit_price = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
-    link = URLField(blank=True)
+    link = URLField(blank=True, max_length=400)
     notes = TextField(blank=True)
     received = BooleanField(default=False)
     line_item = ForeignKey('budgets.LineItem', on_delete=models.PROTECT, null=True, blank=True)
