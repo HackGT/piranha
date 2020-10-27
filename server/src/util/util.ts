@@ -1,4 +1,5 @@
 import { AccessLevel, RequisitionStatus } from "@prisma/client";
+import { ForbiddenError } from "apollo-server-express";
 
 const UNLOCKED_REQUISITION_STATUSES = [RequisitionStatus.DRAFT, RequisitionStatus.PENDING_CHANGES];
 
@@ -35,4 +36,10 @@ export const canExpense = (user: any, requisition: any) => {
 
 export const hasAdminAccess = (user: any) => {
     return isExec(user);
+}
+
+export const checkAdminAccess = (context: any) => {
+    if (!hasAdminAccess(context.user)) {
+        throw new ForbiddenError("User is not an admin.")
+    }
 }

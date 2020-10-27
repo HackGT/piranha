@@ -6,9 +6,12 @@ import { sendSlackNotification } from "../util/slack";
 import { APPROVAL_INCLUDE, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../common';
 import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationResolvers, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../generated/types';
+import { checkAdminAccess, hasAdminAccess } from '../util/util';
 
 
-const updateUser = async function (parent: any, args: MutationUpdateUserArgs) {
+const updateUser = async function (parent: any, args: MutationUpdateUserArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.user.update({
         where: {
             id: args.id
@@ -158,7 +161,9 @@ const updateRequisition = async function (parent: any, args: any) {
     return requisition;
 }
 
-const createProject = async function (parent: any, args: MutationCreateProjectArgs) {
+const createProject = async function (parent: any, args: MutationCreateProjectArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.project.create({
         data: {
             ...args.data,
@@ -173,7 +178,9 @@ const createProject = async function (parent: any, args: MutationCreateProjectAr
     });
 }
 
-const updateProject = async function (parent: any, args: MutationUpdateProjectArgs) {
+const updateProject = async function (parent: any, args: MutationUpdateProjectArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.project.update({
         where: {
             id: args.id
@@ -191,7 +198,9 @@ const updateProject = async function (parent: any, args: MutationUpdateProjectAr
     });
 }
 
-const createVendor = async function (parent: any, args: MutationCreateVendorArgs) {
+const createVendor = async function (parent: any, args: MutationCreateVendorArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.vendor.create({
         data: {
             ...args.data,
@@ -200,7 +209,9 @@ const createVendor = async function (parent: any, args: MutationCreateVendorArgs
     });
 }
 
-const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs) {
+const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.vendor.update({
         where: {
             id: args.id
@@ -212,7 +223,9 @@ const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs
     });
 }
 
-const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs) {
+const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.paymentMethod.create({
         data: {
             ...args.data,
@@ -222,7 +235,9 @@ const createPaymentMethod = async function (parent: any, args: MutationCreatePay
     });
 }
 
-const updatePaymentMethod = async function (parent: any, args: MutationUpdatePaymentMethodArgs) {
+const updatePaymentMethod = async function (parent: any, args: MutationUpdatePaymentMethodArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.paymentMethod.update({
         where: {
             id: args.id
@@ -235,7 +250,9 @@ const updatePaymentMethod = async function (parent: any, args: MutationUpdatePay
     });
 }
 
-const createPayment = async function (parent: any, args: MutationCreatePaymentArgs) {
+const createPayment = async function (parent: any, args: MutationCreatePaymentArgs, context: { user: User }) {
+    checkAdminAccess(context);
+
     return await prisma.payment.create({
         data: {
             ...args.data,
