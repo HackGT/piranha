@@ -1,22 +1,5 @@
 import { gql } from "@apollo/client";
 
-export enum UserAccessLevel {
-  NONE = "NONE",
-  MEMBER = "MEMBER",
-  EXEC = "EXEC",
-  ADMIN = "ADMIN"
-}
-
-export type User = {
-  id: string,
-  uuid: string,
-  name: string,
-  email: string,
-  hasAdminAccess: boolean,
-  accessLevel: UserAccessLevel,
-  slackId: string
-}
-
 export const ALL_USERS_QUERY = gql`
   query allUsers {
     users {

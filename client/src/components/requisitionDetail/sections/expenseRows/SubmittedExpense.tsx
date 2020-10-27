@@ -3,9 +3,9 @@ import { Collapse, Form, Input, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION } from "../../../../types/Approval";
+import { UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION } from "../../../../queries/Approval";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import { RequisitionStatus } from "../../../../types/Requisition";
+import { RequisitionStatus } from "../../../../generated/types";
 
 const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisitionAndCreateApproval] = useMutation(UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION);

@@ -1,18 +1,4 @@
 import { gql } from "@apollo/client";
-import { User } from "./User";
-import { Requisition } from "./Requisition";
-
-export type Project = {
-  id: number,
-  updatedAt: string,
-  name: string,
-  year: number,
-  archived: boolean,
-  shortCode: string,
-  leads: [User],
-  requisitions: Requisition[],
-  referenceString: string
-}
 
 export const PROJECT_INFO_FRAGMENT = gql`
   fragment ProjectInfoFragment on Project {

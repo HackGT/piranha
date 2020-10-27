@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Skeleton, Tag, Typography } from "antd";
-import { Requisition } from "../../types/Requisition";
 import { formatPrice, getTotalCost, StatusToColor, StatusToString } from "../../util/util";
+import { Requisition } from "../../generated/types";
 
 const { Text } = Typography;
 

@@ -6,10 +6,12 @@ import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import { Helmet } from "react-helmet";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus, RequisitionItem } from "../../types/Requisition";
+import { CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY } from "../../queries/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import QuestionIconLabel from "../../util/QuestionIconLabel";
+import { RequisitionItem, RequisitionStatus } from "../../generated/types";
+import { RequisitionFormData } from "../../types/types";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
@@ -169,6 +171,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
   const defaultItem: RequisitionItem = {
+    id: 0,
     name: null,
     unitPrice: null,
     quantity: null,

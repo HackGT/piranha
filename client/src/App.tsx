@@ -12,15 +12,16 @@ import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail"
 import ProjectList from "./components/projectList/ProjectList";
 import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
-import { User, USER_INFO_QUERY } from "./types/User";
+import { USER_INFO_QUERY } from "./queries/User";
 import PrivateRoute from "./util/PrivateRoute";
 import NotFound from "./components/NotFound";
 import ErrorDisplay from "./util/ErrorDisplay";
 import ScrollToTop from "./util/ScrollToTop";
+import { User } from "./generated/types";
 
 const { Header, Content, Footer } = Layout;
 
-const App:React.FC = () => {
+const App: React.FC = () => {
   const { loading, data, error } = useQuery(USER_INFO_QUERY);
 
   if (error || (data && !data.user)) {

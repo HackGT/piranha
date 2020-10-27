@@ -2,8 +2,8 @@ import React from "react";
 import { Table, Typography } from "antd";
 import moment from "moment";
 import { formatPrice, getTotalCost } from "../../../util/util";
-import { Payment } from "../../../types/Payment";
 import { RequisitionSectionProps } from "../RequisitionDetail";
+import { Payment } from "../../../generated/types";
 
 const { Text, Title } = Typography;
 const { Summary } = Table;

@@ -5,9 +5,10 @@ import { uploadFile } from "../util/googleUpload";
 import { sendSlackNotification } from "../util/slack";
 import { APPROVAL_INCLUDE, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../common';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationResolvers, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../generated/types';
 
 
-const updateUser = async function (parent: any, args: any) {
+const updateUser = async function (parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
         where: {
             id: args.id
@@ -22,13 +23,13 @@ const createRequisition = async function (parent: any, args: any, context: { use
             projectRequisitionId: true
         },
         where: {
-            projectId: args.project
+            projectId: args.data.project!
         }
     });
 
     const data = args.data;
 
-    const createItems = data.items.map((item: any) => ({
+    const createItems = data.items?.map((item: any) => ({
         name: item.name,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
@@ -82,7 +83,7 @@ const updateRequisition = async function (parent: any, args: any) {
     const data = args.data;
 
     let itemIds = [];
-    if ("items" in data) {
+    if (data.items) {
         let index = 0;
         let oldItems = oldRequisition.items;
         let newItems = data.items;
@@ -145,7 +146,7 @@ const updateRequisition = async function (parent: any, args: any) {
         sendSlackNotification(requisition);
     }
 
-    if ("files" in data) {
+    if (data.files) {
         for (const file of data.files.filter((file: any) => !oldRequisition!.files.includes(file))) {
             console.log(file);
             uploadFile(file, requisition);
@@ -155,12 +156,13 @@ const updateRequisition = async function (parent: any, args: any) {
     return requisition;
 }
 
-const createProject = async function (parent: any, args: any) {
+const createProject = async function (parent: any, args: MutationCreateProjectArgs) {
     return await prisma.project.create({
         data: {
             ...args.data,
+            archived: args.data.archived || false,
             leads: {
-                connect: args.data.leads.map((lead: any) => ({ id: lead }))
+                connect: args.data.leads.map(lead => ({ id: lead }))
             }
         },
         include: {
@@ -168,15 +170,17 @@ const createProject = async function (parent: any, args: any) {
         }
     });
 }
-const updateProject = async function (parent: any, args: any) {
+
+const updateProject = async function (parent: any, args: MutationUpdateProjectArgs) {
     return await prisma.project.update({
         where: {
             id: args.id
         },
         data: {
             ...args.data,
+            archived: args.data.archived || false,
             leads: {
-                connect: args.data.leads.map((lead: any) => ({ id: lead }))
+                connect: args.data.leads.map(lead => ({ id: lead }))
             }
         },
         include: {
@@ -185,41 +189,54 @@ const updateProject = async function (parent: any, args: any) {
     });
 }
 
-const createVendor = async function (parent: any, args: any) {
+const createVendor = async function (parent: any, args: MutationCreateVendorArgs) {
     return await prisma.vendor.create({
-        data: args.data
+        data: {
+            ...args.data,
+            isActive: args.data.isActive || true,
+        }
     });
 }
 
-const updateVendor = async function (parent: any, args: any) {
+const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs) {
     return await prisma.vendor.update({
         where: {
             id: args.id
         },
-        data: args.data
+        data: {
+            ...args.data,
+            isActive: args.data.isActive || true
+        }
     });
 }
 
-const createPaymentMethod = async function (parent: any, args: any) {
+const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs) {
     return await prisma.paymentMethod.create({
-        data: args.data
+        data: {
+            ...args.data,
+            isActive: args.data.isActive || true,
+            isDirectPayment: args.data.isActive || false
+        }
     });
 }
 
-const updatePaymentMethod = async function (parent: any, args: any) {
+const updatePaymentMethod = async function (parent: any, args: MutationUpdatePaymentMethodArgs) {
     return await prisma.paymentMethod.update({
         where: {
             id: args.id
         },
-        data: args.data
+        data: {
+            ...args.data,
+            isActive: args.data.isActive || true,
+            isDirectPayment: args.data.isActive || false
+        }
     });
 }
 
-const createPayment = async function (parent: any, args: any) {
+const createPayment = async function (parent: any, args: MutationCreatePaymentArgs) {
     return await prisma.payment.create({
         data: {
-            amount: args.data.amount,
-            date: args.data.date,
+            ...args.data,
             requisition: {
                 connect: {
                     id: args.data.requisition
@@ -237,11 +254,10 @@ const createPayment = async function (parent: any, args: any) {
     })
 }
 
-const createApproval = async function (parent: any, args: any, context: { user: User }) {
+const createApproval = async function (parent: any, args: MutationCreateApprovalArgs, context: { user: User }) {
     return await prisma.approval.create({
         data: {
-            isApproving: args.data.isApproving,
-            notes: args.data.notes,
+            ...args.data,
             requisition: {
                 connect: {
                     id: args.data.requisition

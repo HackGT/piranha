@@ -1,7 +1,7 @@
 import React, { CSSProperties } from "react";
 import { Tag } from "antd";
-import { RequisitionStatus } from "../types/Requisition";
 import { StatusToColor, StatusToString } from "./util";
+import { RequisitionStatus } from "../generated/types";
 
 interface RequisitionTagProps {
   status: RequisitionStatus;

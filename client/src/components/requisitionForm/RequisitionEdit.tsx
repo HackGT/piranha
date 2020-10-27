@@ -4,9 +4,10 @@ import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
 import moment from "moment";
 import { parseRequisitionParams } from "../../util/util";
-import { REQUISITION_DETAIL_QUERY, RequisitionFormData } from "../../types/Requisition";
+import { REQUISITION_DETAIL_QUERY } from "../../queries/Requisition";
 import RequisitionForm from "./RequisitionForm";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import { RequisitionFormData } from "../../types/types";
 
 const RequisitionEdit: React.FC = () => {
   const { projectReference, requisitionReference } = useParams<any>();

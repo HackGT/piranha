@@ -1,7 +1,7 @@
 import React from "react";
 import { List, Typography } from "antd";
 import { RequisitionSectionProps } from "../RequisitionDetail";
-import { File } from "../../../types/File";
+import { File } from "../../../generated/types";
 
 const { Title, Link } = Typography;
 

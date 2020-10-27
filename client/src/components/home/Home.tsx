@@ -3,9 +3,10 @@ import { ConfigProvider, Empty, List, Typography, Button } from "antd";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { OPEN_REQUISITIONS_QUERY, Requisition } from "../../types/Requisition";
+import { OPEN_REQUISITIONS_QUERY } from "../../queries/Requisition";
 import HomeRequisitionCard from "./HomeRequisitionCard";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import { Requisition } from "../../generated/types";
 
 const { Title, Text } = Typography;
 

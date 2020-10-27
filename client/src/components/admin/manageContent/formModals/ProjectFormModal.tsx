@@ -2,10 +2,10 @@ import React from "react";
 import { Form, Input, InputNumber, Select, Switch } from "antd";
 import { ApolloCache, useQuery } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
-import { CREATE_PROJECT_MUTATION, PROJECT_LIST_QUERY, UPDATE_PROJECT_MUTATION } from "../../../../types/Project";
+import { CREATE_PROJECT_MUTATION, PROJECT_LIST_QUERY, UPDATE_PROJECT_MUTATION } from "../../../../queries/Project";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
-import { ALL_USERS_QUERY } from "../../../../types/User";
+import { ALL_USERS_QUERY } from "../../../../queries/User";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
 import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 

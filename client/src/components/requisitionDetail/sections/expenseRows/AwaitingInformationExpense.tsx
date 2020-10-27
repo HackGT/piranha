@@ -1,9 +1,9 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input, Select } from "antd";
+import { Collapse, DatePicker, Form, Input, message, Select } from "antd";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../types/Payment";
+import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../queries/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
 
@@ -18,6 +18,11 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
   const { isDirectPayment } = props.requisition.fundingSource;
 
   const onFinish = async (values: any) => {
+    if (!props.requisition.fundingSource?.id) {
+      message.error("Funding source is not defined.", 2);
+      return;
+    }
+
     const requisitionData = {
       status: isDirectPayment ? "CLOSED" : "REIMBURSEMENT_IN_PROGRESS"
     };

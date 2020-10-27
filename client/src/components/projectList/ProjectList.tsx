@@ -2,9 +2,10 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { List, Typography } from "antd";
 import { Helmet } from "react-helmet";
-import { Project, PROJECT_LIST_QUERY } from "../../types/Project";
+import { PROJECT_LIST_QUERY } from "../../queries/Project";
 import ProjectListCard from "./ProjectListCard";
 import ErrorDisplay from "../../util/ErrorDisplay";
+import { Project } from "../../generated/types";
 
 const { Title } = Typography;
 

@@ -2,8 +2,7 @@ import React from "react";
 import { Card, List, Skeleton, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons/lib";
 import { Link } from "react-router-dom";
-import { User } from "../../types/User";
-import { Project } from "../../types/Project";
+import { Project, User } from "../../generated/types";
 
 const { Title, Text } = Typography;
 

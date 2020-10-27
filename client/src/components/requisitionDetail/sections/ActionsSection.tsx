@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Popconfirm, Tooltip, Typography } from "antd";
 import { useMutation } from "@apollo/client";
 import { useHistory, useLocation } from "react-router-dom";
-import { UPDATE_REQUISITION_MUTATION } from "../../../types/Requisition";
+import { UPDATE_REQUISITION_MUTATION } from "../../../queries/Requisition";
 import { saveExpenseData } from "./ManageStatusSection";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 
@@ -10,7 +10,7 @@ const { Title } = Typography;
 
 const ActionsSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
-  
+
   const location = useLocation();
   const history = useHistory();
 

@@ -1,11 +1,5 @@
 import { gql } from "@apollo/client";
 
-export type Vendor = {
-  id: number,
-  name: string,
-  isActive: boolean
-}
-
 export const VENDOR_INFO_FRAGMENT = gql`
   fragment VendorInfoFragment on Vendor {
     id

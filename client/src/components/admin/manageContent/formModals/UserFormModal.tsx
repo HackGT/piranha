@@ -5,8 +5,9 @@ import { useApolloClient } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "./FormModalProps";
-import { UPDATE_USER_MUTATION, USER_INFO_QUERY, UserAccessLevel } from "../../../../types/User";
+import { UPDATE_USER_MUTATION, USER_INFO_QUERY } from "../../../../queries/User";
 import QuestionIconLabel from "../../../../util/QuestionIconLabel";
+import { UserAccessLevel } from "../../../../types/types";
 
 const { Text } = Typography;
 

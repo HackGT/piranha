@@ -1,6 +1,5 @@
 import React from "react";
 import { message, Typography } from "antd";
-import { Requisition } from "../../../types/Requisition";
 import CancelledExpense from "./expenseRows/CancelledExpense";
 import SubmittedExpense from "./expenseRows/SubmittedExpense";
 import OrderedExpense from "./expenseRows/OrderedExpense";
@@ -10,6 +9,7 @@ import { RequisitionSectionProps } from "../RequisitionDetail";
 import ReadyForReimbursementExpense from "./expenseRows/ReadyForReimbursementExpense";
 import AwaitingInformationExpense from "./expenseRows/AwaitingInformationExpense";
 import ReimbursementInProgressExpense from "./expenseRows/ReimbursementInProgressExpense";
+import { Requisition } from "../../../generated/types";
 
 const { Title } = Typography;
 
@@ -33,7 +33,7 @@ export const saveExpenseData = async (mutation: any, variables: any) => {
 
 const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data } = props;
-  
+
   const content = (() => {
     if (!data.canExpense) {
       return null;
@@ -67,7 +67,7 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
         return null;
     }
   })();
-  
+
   if (!content) {
     return null;
   }

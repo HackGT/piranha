@@ -3,7 +3,7 @@ import { Form, Input, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_VENDOR_MUTATION, UPDATE_VENDOR_MUTATION, VENDOR_LIST_QUERY } from "../../../../types/Vendor";
+import { CREATE_VENDOR_MUTATION, UPDATE_VENDOR_MUTATION, VENDOR_LIST_QUERY } from "../../../../queries/Vendor";
 import { FormModalProps } from "./FormModalProps";
 
 const VendorFormModal: React.FC<FormModalProps> = props => (

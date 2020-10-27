@@ -3,7 +3,7 @@ import { Form, Input, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_PAYMENT_METHOD_MUTATION, UPDATE_PAYMENT_METHOD_MUTATION, PAYMENT_METHOD_LIST_QUERY } from "../../../../types/PaymentMethod";
+import { CREATE_PAYMENT_METHOD_MUTATION, UPDATE_PAYMENT_METHOD_MUTATION, PAYMENT_METHOD_LIST_QUERY } from "../../../../queries/PaymentMethod";
 import { FormModalProps } from "./FormModalProps";
 import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 

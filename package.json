@@ -1,0 +1,19 @@
+{
+  "name": "piranha",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/HackGT/piranha.git",
+  "author": "Ayush Goyal <agoyal2001@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "generate": "graphql-codegen --config codegen.yaml"
+  },
+  "dependencies": {
+    "graphql": "^15.4.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.19.0",
+    "@graphql-codegen/typescript": "^1.17.11",
+    "@graphql-codegen/typescript-resolvers": "^1.17.10"
+  }
+}

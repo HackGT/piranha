@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, List, Skeleton } from "antd";
 import moment from "moment";
-import { Approval } from "../../../types/Approval";
 import { RequisitionSectionProps } from "../RequisitionDetail";
+import { Approval } from "../../../generated/types";
 
 const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;

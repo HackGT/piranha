@@ -1,14 +1,5 @@
 import { gql } from "@apollo/client";
-import { PaymentMethod } from "./PaymentMethod";
-import { Vendor } from "./Vendor";
-import { Requisition, REQUISITION_INFO_FRAGMENT } from "./Requisition";
-
-export type Payment = {
-  amount: number;
-  requisition: Requisition;
-  fundingSource: PaymentMethod;
-  date: Date;
-}
+import { REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export const PAYMENT_INFO_FRAGMENT = gql`
   fragment PaymentInfoFragment on Payment {

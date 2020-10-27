@@ -2,7 +2,7 @@ import React from "react";
 import { Collapse } from "antd";
 import { useMutation } from "@apollo/client";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_MUTATION } from "../../../../types/Requisition";
+import { UPDATE_REQUISITION_MUTATION } from "../../../../queries/Requisition";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 
 const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
@@ -20,7 +20,7 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     <Collapse>
       <RequisitionExpenseRow
         onFinish={onFinish}
-        newStatus="DRAFT"
+        newStatus={"DRAFT"}
         title="Reactivate Requisition"
         description="This will make the requisition open to edit again."
         key="reactivate"

@@ -79,28 +79,28 @@ enum Month {
 }
 
 type User {
-    id: ID
-    uuid: String
-    email: String
-    name: String
-    accessLevel: AccessLevel
+    id: ID!
+    uuid: String!
+    email: String!
+    name: String!
+    accessLevel: AccessLevel!
     slackId: String
-    hasAdminAccess: Boolean
+    hasAdminAccess: Boolean!
 }
 
 input UserInput {
-    name: String
+    name: String!
     slackId: String
-    accessLevel: AccessLevel
+    accessLevel: AccessLevel!
 }
 
 type Approval {
-    id: ID
-    requisition: Requisition
-    isApproving: Boolean
+    id: ID!
+    requisition: Requisition!
+    isApproving: Boolean!
     notes: String
-    approver: User
-    date: Date
+    approver: User!
+    date: Date!
 }
 
 input ApprovalInput {
@@ -110,28 +110,29 @@ input ApprovalInput {
 }
 
 type Payment {
-    id: ID
-    amount: Float
-    fundingSource: PaymentMethod
-    date: String
-    requisition: Requisition
+    id: ID!
+    amount: Float!
+    fundingSource: PaymentMethod!
+    date: String!
+    requisition: Requisition!
 }
 
 input PaymentInput {
-    amount: Float
-    fundingSource: ID
-    date: String
-    requisition: ID
+    amount: Float!
+    fundingSource: ID!
+    date: String!
+    requisition: ID!
 }
 
 type File {
-    name: String
-    googleName: String
-    type: String
-    isActive: Boolean
+    name: String!
+    googleName: String!
+    type: String!
+    isActive: Boolean!
 }
 
 type RequisitionItem {
+    id: ID!
     name: String
     quantity: Int
     unitPrice: Float
@@ -152,44 +153,44 @@ input RequisitionItemInput {
 }
 
 type Requisition {
-    id: ID
-    headline: String
+    id: ID!
+    headline: String!
     description: String
-    items: [RequisitionItem]
-    status: RequisitionStatus
-    createdBy: User
-    project: Project
+    items: [RequisitionItem!]!
+    status: RequisitionStatus!
+    createdBy: User!
+    project: Project!
     vendor: Vendor
-    projectRequisitionId: Int
+    projectRequisitionId: Int!
     paymentRequiredBy: String
     otherFees: Float
-    isReimbursement: Boolean
+    isReimbursement: Boolean!
     budget: Budget
-    approvals: [Approval]
-    payments: [Payment]
-    files: [File]
+    approvals: [Approval!]!
+    payments: [Payment!]!
+    files: [File!]!
     shippingLocation: String
     orderDate: String
     fundingSource: PaymentMethod
     purchaseDate: String
-    referenceString: String
-    canEdit: Boolean
-    canCancel: Boolean
-    canExpense: Boolean
+    referenceString: String!
+    canEdit: Boolean!
+    canCancel: Boolean!
+    canExpense: Boolean!
 }
 
 input RequisitionInput {
     headline: String
     description: String
-    items: [RequisitionItemInput]
-    status: RequisitionStatus
+    items: [RequisitionItemInput!]
+    status: RequisitionStatus!
     project: ID
     vendor: ID
     paymentRequiredBy: String
     otherFees: Float
     isReimbursement: Boolean
     budget: ID
-    files: [Upload]
+    files: [Upload!]
     shippingLocation: String
     orderDate: String
     fundingSource: ID
@@ -197,79 +198,80 @@ input RequisitionInput {
 }
 
 type Project {
-    id: ID
-    name: String
-    archived: Boolean
-    leads: [User]
-    shortCode: String
-    year: Int
-    referenceString: String
-    requisitions: [Requisition]
+    id: ID!
+    name: String!
+    archived: Boolean!
+    leads: [User!]!
+    shortCode: String!
+    year: Int!
+    referenceString: String!
+    requisitions: [Requisition!]!
 }
 
 input ProjectInput {
-    name: String
-    leads: [ID]
-    shortCode: String
-    year: Int
+    name: String!
+    leads: [ID!]!
+    shortCode: String!
+    year: Int!
     archived: Boolean
 }
 
 type Vendor {
-    id: ID
-    name: String
-    isActive: Boolean
+    id: ID!
+    name: String!
+    isActive: Boolean!
 }
 
 input VendorInput {
-    name: String
+    name: String!
     isActive: Boolean
 }
 
 type PaymentMethod {
-    id: ID
-    name: String
+    id: ID!
+    name: String!
     reimbursementInstructions: String
-    isDirectPayment: Boolean
-    isActive: Boolean
+    isDirectPayment: Boolean!
+    isActive: Boolean!
 }
 
 input PaymentMethodInput {
-    name: String
+    name: String!
     isActive: Boolean
     isDirectPayment: Boolean
     reimbursementInstructions: String
 }
 
 type LineItem {
-    id: ID
-    name: String
+    id: ID!
+    name: String!
     quantity: Int
     unitCost: Float
-    category: Category
+    category: Category!
 }
 
 type Category {
-    id: ID
-    name: String
-    lineItems: [LineItem]
+    id: ID!
+    name: String!
+    lineItems: [LineItem!]!
 }
 
 type Budget {
-    id: ID
-    name: String
-    categories: [Category]
-    isActive: Boolean
+    id: ID!
+    name: String!
+    categories: [Category!]!
+    isActive: Boolean!
 }
 
 type OperatingLineItem {
-    name: String
+    id: ID!
+    name: String!
     cost: Float
 }
 
 type OperatingBudget {
-    id: ID
+    id: ID!
     month: Month
     year: Int
-    lineItems: [OperatingLineItem]
+    lineItems: [OperatingLineItem!]!
 }

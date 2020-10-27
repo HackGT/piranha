@@ -1,13 +1,5 @@
 import { gql } from "@apollo/client";
 
-export type PaymentMethod = {
-  id: number,
-  name: string,
-  reimbursementInstructions: string;
-  isDirectPayment: boolean;
-  isActive: boolean
-}
-
 export const PAYMENT_METHOD_EXPENSE_QUERY = gql`
   query paymentMethodExpense {
     paymentMethods(isActive: true) {

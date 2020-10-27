@@ -3,6 +3,7 @@ import { User } from "@prisma/client";
 
 import { BUDGET_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from "./common";
 import { prisma } from '../common';
+import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryProjectsArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../generated/types';
 
 const user = async function (parent: any, args: any, context: { user: User }) {
     let user = await prisma.user.findOne({
@@ -22,7 +23,7 @@ const users = async function (parent: any, args: any) {
     return await prisma.user.findMany();
 };
 
-const project = async function (parent: any, args: any) {
+const project = async function (parent: any, args: QueryProjectArgs) {
     const project = await prisma.project.findFirst({
         where: args,
         include: {
@@ -33,7 +34,7 @@ const project = async function (parent: any, args: any) {
     return project;
 };
 
-const projects = async function (parent: any, args: any) {
+const projects = async function (parent: any, args: QueryProjectsArgs) {
     return await prisma.project.findMany({
         include: {
             ...PROJECT_INCLUDE
@@ -41,19 +42,21 @@ const projects = async function (parent: any, args: any) {
     });
 };
 
-const vendor = async function (parent: any, args: any) {
+const vendor = async function (parent: any, args: QueryVendorArgs) {
     return await prisma.vendor.findOne({
         where: args
     });
 };
 
-const vendors = async function (parent: any, args: any) {
+const vendors = async function (parent: any, args: QueryVendorsArgs) {
     return await prisma.vendor.findMany({
-        where: args
+        where: {
+            isActive: args.isActive || undefined
+        }
     });
 };
 
-const requisition = async function (parent: any, args: { year: number, shortCode: string, projectRequisitionId: number }, context: { user: User }) {
+const requisition = async function (parent: any, args: QueryRequisitionArgs, context: { user: User }) {
     return await prisma.requisition.findFirst({
         where: {
             project: {
@@ -81,15 +84,16 @@ const requisitions = async function (parent: any, args: any, context: { user: Us
     })
 };
 
-const paymentMethods = async function (parent: any, args: any) {
+const paymentMethods = async function (parent: any, args: QueryPaymentMethodsArgs) {
     return await prisma.paymentMethod.findMany({
-        where: args
+        where: {
+            isActive: args.isActive || undefined
+        }
     });
 };
 
 const budgets = async function (parent: any, args: any) {
     return await prisma.budget.findMany({
-        where: args,
         include: {
             ...BUDGET_INCLUDE
         }

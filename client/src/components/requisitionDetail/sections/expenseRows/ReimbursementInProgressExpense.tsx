@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { Collapse } from "antd";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import { UPDATE_REQUISITION_MUTATION } from "../../../../types/Requisition";
+import { UPDATE_REQUISITION_MUTATION } from "../../../../queries/Requisition";
 
 const ReimbursementInProgressExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);

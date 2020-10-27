@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Col, Pagination, Row, Tag, Typography } from "antd";
 import { Helmet } from "react-helmet";
-import { Requisition, REQUISITION_DETAIL_QUERY } from "../../types/Requisition";
+import { REQUISITION_DETAIL_QUERY } from "../../queries/Requisition";
 import { parseRequisitionParams } from "../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
 import ErrorDisplay from "../../util/ErrorDisplay";
@@ -18,6 +18,7 @@ import ReimbursementInstructionsSection from "./sections/ReimbursementInstructio
 import ProjectBreadcrumb from "../projectDetail/ProjectBreadcrumb";
 import "./index.css";
 import NotFound from "../NotFound";
+import { Requisition } from "../../generated/types";
 
 const { Text, Title } = Typography;
 

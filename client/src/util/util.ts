@@ -2,7 +2,8 @@ import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
 import { Rule, RuleObject } from "antd/es/form";
 import { StoreValue } from "@apollo/client";
-import { Requisition, RequisitionFormData, RequisitionStatus } from "../types/Requisition";
+import { Requisition, RequisitionStatus } from "../generated/types";
+import { RequisitionFormData } from "../types/types";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {
   switch (status) {
@@ -58,7 +59,7 @@ export const StatusToStep = (status: RequisitionStatus) => {
   }
 };
 
-export const formatPrice = (num: number, noDollarSign: boolean = false) => {
+export const formatPrice = (num: (number | undefined | null), noDollarSign: boolean = false) => {
   const options = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

@@ -2,11 +2,11 @@ import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { DatePicker, Form, Input, Select } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
-import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../types/PaymentMethod";
+import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../queries/PaymentMethod";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { CREATE_PAYMENT_MUTATION } from "../../../../types/Payment";
+import { CREATE_PAYMENT_MUTATION } from "../../../../queries/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 
 const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {

@@ -4,8 +4,7 @@ import { useQuery } from "@apollo/client";
 import { Typography, Table, Tag, Button } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
 import { Helmet } from "react-helmet";
-import { PROJECT_DETAIL_QUERY } from "../../types/Project";
-import { Requisition } from "../../types/Requisition";
+import { PROJECT_DETAIL_QUERY } from "../../queries/Project";
 import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook } from "../../util/util";
 
 import "./index.css";
@@ -13,6 +12,7 @@ import ErrorDisplay from "../../util/ErrorDisplay";
 import { ReimbursementTag } from "../../util/CustomTags";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
 import NotFound from "../NotFound";
+import { Requisition } from "../../generated/types";
 
 const { Text, Title } = Typography;
 

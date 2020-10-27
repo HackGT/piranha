@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography, Table } from "antd";
-import { RequisitionItem } from "../../../types/Requisition";
 import { formatPrice, getTotalCost } from "../../../util/util";
 import { RequisitionSectionProps } from "../RequisitionDetail";
+import { RequisitionItem } from "../../../generated/types";
 
 const { Text, Link } = Typography;
 
