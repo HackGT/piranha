@@ -49,7 +49,10 @@ const ProjectDetail: React.FC = () => {
   const columns = [
     {
       title: "Reference Code",
-      render: (record: any) => ("isChild" in record ? null : record.referenceString)
+      render: (record: any) => ("isChild" in record ? null : record.referenceString),
+      sorter: (a: any, b: any) => a.projectRequisitionId - b.projectRequisitionId,
+      defaultSortOrder: "ascend" as "ascend" | "descend" | null,
+      sortDirections: ["ascend", "descend", "ascend"] as ("ascend" | "descend" | null)[]
     },
     {
       title: "Status",
