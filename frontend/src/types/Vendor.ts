@@ -26,9 +26,7 @@ export const VENDOR_LIST_QUERY = gql`
 export const CREATE_VENDOR_MUTATION = gql`
   mutation createVendor($data: VendorInput!) {
     createVendor(data: $data) {
-      vendor {
-        ...VendorInfoFragment
-      }
+      ...VendorInfoFragment
     }
   }
   ${VENDOR_INFO_FRAGMENT}
@@ -37,9 +35,7 @@ export const CREATE_VENDOR_MUTATION = gql`
 export const UPDATE_VENDOR_MUTATION = gql`
   mutation updateVendor($data: VendorInput!, $id: ID!) {
     updateVendor(data: $data, id: $id) {
-      vendor {
-        ...VendorInfoFragment
-      }
+      ...VendorInfoFragment
     }
   }
   ${VENDOR_INFO_FRAGMENT}

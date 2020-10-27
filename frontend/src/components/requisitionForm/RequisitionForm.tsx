@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import { Helmet } from "react-helmet";
 import RequisitionItemCard from "./RequisitionItemCard";
-import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus } from "../../types/Requisition";
+import { RequisitionFormData, CREATE_REQUISITION_MUTATION, UPDATE_REQUISITION_MUTATION, REQUISITION_FORM_QUERY, OPEN_REQUISITIONS_QUERY, RequisitionStatus, RequisitionItem } from "../../types/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../util/util";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import QuestionIconLabel from "../../util/QuestionIconLabel";
@@ -69,7 +69,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
 
   const lineItemOptions = (loading || !selectedBudget) ? [] : data.budgets.find((budget: any) => (
     budget.id === selectedBudget
-  )).categorySet;
+  )).categories;
 
   // Determines if requisition is submitting for review or just editing to save changes by an admin
   const submittalMode = !props.requisitionData || ["DRAFT", "PENDING_CHANGES"].includes(props.requisitionData.status);
@@ -89,20 +89,20 @@ const RequisitionForm: React.FC<Props> = (props) => {
       description: values.description,
       vendor: values.vendor || undefined,
       budget: values.budget || undefined,
-      paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : null,
+      paymentRequiredBy: values.paymentRequiredBy ? values.paymentRequiredBy.format("YYYY-MM-DD") : undefined,
       otherFees: values.otherFees,
       isReimbursement: values.isReimbursement,
-      requisitionitemSet: values.requisitionitemSet.map((item: any) => ({
+      items: values.items.filter((item: any) => Object.keys(item).length !== 0).map((item: any) => ({
         name: item.name,
         link: item.link,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
-        lineItem: item.lineItem ? item.lineItem[1] : null // Get id of line item, index 0 is category
+        lineItem: item.lineItem ? item.lineItem[1] : undefined // Get id of line item, index 0 is category
       })),
       status: requisitionStatus,
-      fileSet: values.fileSet,
-      purchaseDate: values.purchaseDate ? values.purchaseDate.format("YYYY-MM-DD") : null
+      files: values.files,
+      purchaseDate: values.purchaseDate ? values.purchaseDate.format("YYYY-MM-DD") : undefined
     };
 
     const hide = message.loading("Saving requisition...", 0);
@@ -112,11 +112,11 @@ const RequisitionForm: React.FC<Props> = (props) => {
       if (props.editMode) {
         const result = await updateRequisition({ variables: { data: mutationData, id: props.requisitionId } });
         text = "Successfully updated";
-        rekData = result.data.updateRequisition.requisition;
+        rekData = result.data.updateRequisition;
       } else {
         const result = await createRequisition({ variables: { data: mutationData } });
         text = "Successfully created";
-        rekData = result.data.createRequisition.requisition;
+        rekData = result.data.createRequisition;
       }
 
       hide();
@@ -125,6 +125,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
     } catch (err) {
       hide();
       message.error("Error saving", 2);
+      console.error(err);
       console.error(JSON.parse(JSON.stringify(err)));
     }
   };
@@ -157,8 +158,8 @@ const RequisitionForm: React.FC<Props> = (props) => {
     setSelectedBudget(newValue);
 
     // Resets existing line item selections
-    const newItemValues = form.getFieldsValue().requisitionitemSet.map((item: any) => ({ ...item, lineItem: null }));
-    form.setFieldsValue({ requisitionitemSet: newItemValues });
+    const newItemValues = form.getFieldsValue().items.map((item: any) => ({ ...item, lineItem: null }));
+    form.setFieldsValue({ items: newItemValues });
   };
 
   const halfLayout = {
@@ -167,6 +168,15 @@ const RequisitionForm: React.FC<Props> = (props) => {
   const fullLayout = {
     xs: 24, sm: 24, md: 16, lg: 12, xl: 12
   };
+  const defaultItem: RequisitionItem = {
+    name: null,
+    unitPrice: null,
+    quantity: null,
+    link: null,
+    notes: null,
+    received: null,
+    lineItem: null
+  }
 
   const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"]; // Has backend validation as well
   const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3 MB
@@ -188,7 +198,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
       <Title>{props.editMode ? "Edit Requisition" : "Create Requisition"}</Title>
       <Form
         name="create"
-        initialValues={props.editMode ? props.requisitionData : { requisitionitemSet: [{}] }}
+        initialValues={props.editMode ? props.requisitionData : { items: [defaultItem] }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={onValuesChange}
@@ -306,7 +316,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
           )}
         </Row>
 
-        <Form.List name="requisitionitemSet">
+        <Form.List name="items">
           {(fields, { add, remove }) => (
             <div>
               {fields.map(field => (
@@ -325,7 +335,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
               <Row justify="center">
                 <Col {...fullLayout}>
                   <Form.Item>
-                    <Button type="dashed" onClick={add} block>
+                    <Button type="dashed" onClick={() => add(defaultItem)} block>
                       <PlusOutlined />
                       {" Add Item"}
                     </Button>
@@ -339,7 +349,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         <Row justify="center">
           <Col {...fullLayout}>
             <Form.Item
-              name="fileSet"
+              name="files"
               label={<QuestionIconLabel label="Upload Files" helpText="Add any invoices, receipts, or other documents associated with the requisition." />}
               valuePropName="fileList"
               getValueFromEvent={(event: any) => (Array.isArray(event) ? event : event && event.fileList)}

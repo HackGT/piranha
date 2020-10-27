@@ -27,38 +27,38 @@ export type Requisition = {
   id: number,
   headline: string,
   description: string,
+  items: RequisitionItem[],
   status: RequisitionStatus,
-  pointOfContact: User,
   createdBy: User,
   project: Project,
   vendor: Vendor,
   projectRequisitionId: number,
   paymentRequiredBy: Date,
-  requisitionitemSet: RequisitionItem[],
-  approvalSet: Approval[],
-  paymentSet: Payment[],
-  fileSet: File[],
+  otherFees: number,
+  isReimbursement: boolean
+  budget: Budget
+  approvals: Approval[],
+  payments: Payment[],
+  files: File[],
+  shippingLocation: string, // Used for non-reimbursements
+  orderDate: string, // Used for non-reimbursements
+  fundingSource: PaymentMethod, // Used for reimbursements
+  purchaseDate: string, // Used for reimbursements
+
   referenceString: string,
   canEdit: boolean,
   canCancel: boolean,
-  canExpense: boolean,
-  otherFees: number,
-  shippingLocation: string,
-  orderDate: string, // Used for non-reimbursements
-  purchaseDate: string, // Used for reimbursements
-  isReimbursement: boolean
-  fundingSource: PaymentMethod,
-  budget: Budget
+  canExpense: boolean
 }
 
 export type RequisitionItem = {
-  name: string,
-  unitPrice: number,
-  quantity: number,
-  link: string,
-  notes: string,
-  received: boolean,
-  lineItem: LineItem
+  name: string | null,
+  unitPrice: number | null,
+  quantity: number | null,
+  link: string | null,
+  notes: string | null,
+  received: boolean | null,
+  lineItem: LineItem | null
 }
 
 export type RequisitionFormData = {
@@ -70,21 +70,21 @@ export type RequisitionFormData = {
   paymentRequiredBy: moment.Moment | null;
   otherFees: string;
   isReimbursement: boolean;
-  requisitionitemSet: RequisitionItem[];
+  items: RequisitionItem[];
   status: RequisitionStatus;
-  fileSet: any[];
+  files: any[];
   purchaseDate: moment.Moment | null;
 }
 
 export const REQUISITION_FORM_QUERY = gql`
   query requisitionForm {
-    projects(where: {archived: false}) {
+    projects(archived: false) {
       id
       name
       referenceString
     }
   
-    vendors(where: {isActive: true}) {
+    vendors(isActive: true) {
       id
       name
     }
@@ -92,14 +92,10 @@ export const REQUISITION_FORM_QUERY = gql`
     budgets {
       id
       name
-      group {
+      categories {
         id
         name
-      }
-      categorySet {
-        id
-        name
-        lineitemSet {
+        lineItems {
           id
           name
         }
@@ -121,8 +117,7 @@ export const OPEN_REQUISITIONS_QUERY = gql`
         id
         referenceString
       }
-      requisitionitemSet {
-        id
+      items {
         quantity
         unitPrice
       }
@@ -140,14 +135,14 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     status
     createdBy {
       id
-      fullName
+      name
     }
     project {
       id
       name
       referenceString
-      requisitionSet {
-        projectRequisitionId
+      requisitions {
+        id
       }
     }
     vendor {
@@ -157,8 +152,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     }
     projectRequisitionId
     paymentRequiredBy
-    requisitionitemSet {
-      id
+    items {
       name
       quantity
       unitPrice
@@ -174,18 +168,16 @@ export const REQUISITION_INFO_FRAGMENT = gql`
         }
       }
     }
-    approvalSet {
-      id
+    approvals {
       isApproving
       approver {
         id
-        fullName
+        name
       }
       notes
-      createdAt
+      date
     }
-    paymentSet {
-      id
+    payments {
       amount
       fundingSource {
         id
@@ -193,8 +185,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       }
       date
     }
-    fileSet {
-      id
+    files {
       name
       googleName
       type
@@ -217,10 +208,6 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     budget {
       id
       name
-      group {
-        id
-        name
-      }
     }
   }
 `;
@@ -237,9 +224,7 @@ export const REQUISITION_DETAIL_QUERY = gql`
 export const CREATE_REQUISITION_MUTATION = gql`
   mutation createRequisition($data: RequisitionInput!) {
     createRequisition(data: $data) {
-      requisition {
-        ...RequisitionInfoFragment
-      }
+      ...RequisitionInfoFragment
     }
   }
   ${REQUISITION_INFO_FRAGMENT}
@@ -248,9 +233,7 @@ export const CREATE_REQUISITION_MUTATION = gql`
 export const UPDATE_REQUISITION_MUTATION = gql`
   mutation updateRequisition($data: RequisitionInput!, $id: ID!) {
     updateRequisition(data: $data, id: $id) {
-      requisition {
-        ...RequisitionInfoFragment
-      }
+      ...RequisitionInfoFragment
     }
   }
   ${REQUISITION_INFO_FRAGMENT}

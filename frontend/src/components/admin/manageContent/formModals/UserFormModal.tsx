@@ -51,28 +51,12 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
       {(initialValues: any) => (
         <>
           <Form.Item
-            name="firstName"
+            name="name"
             rules={[FORM_RULES.requiredRule]}
-            label="First Name"
-            initialValue={initialValues && initialValues.firstName}
+            label="Name"
+            initialValue={initialValues && initialValues.name}
           >
             <Input placeholder="Johnny" />
-          </Form.Item>
-          <Form.Item
-            name="preferredName"
-            rules={[FORM_RULES.requiredRule]}
-            label={<QuestionIconLabel label="Preferred Name" helpText="This is the name that is used in Piranha." />}
-            initialValue={initialValues && initialValues.preferredName}
-          >
-            <Input placeholder="Alvin" />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            rules={[FORM_RULES.requiredRule]}
-            label="Last Name"
-            initialValue={initialValues && initialValues.lastName}
-          >
-            <Input placeholder="Depp" />
           </Form.Item>
           <Form.Item
             name="slackId"
@@ -107,14 +91,9 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
           <Text>{initialValues?.email || "Not Set"}</Text>
           <br />
           <br />
-          <Text strong>Django Id</Text>
-          <br />
-          <Text>{initialValues?.id || "Not Set"}</Text>
-          <br />
-          <br />
           <Text strong>Ground Truth Id</Text>
           <br />
-          <Text>{initialValues?.groundTruthId || "Not Set"}</Text>
+          <Text>{initialValues?.uuid || "Not Set"}</Text>
           <br />
           <br />
         </>

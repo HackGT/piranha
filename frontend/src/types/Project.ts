@@ -4,14 +4,13 @@ import { Requisition } from "./Requisition";
 
 export type Project = {
   id: number,
-  createdAt: string,
   updatedAt: string,
   name: string,
   year: number,
   archived: boolean,
   shortCode: string,
   leads: [User],
-  requisitionSet: Requisition[],
+  requisitions: Requisition[],
   referenceString: string
 }
 
@@ -25,7 +24,7 @@ export const PROJECT_INFO_FRAGMENT = gql`
     shortCode
     leads {
       id
-      fullName
+      name
     }
   }
 `;
@@ -33,7 +32,7 @@ export const PROJECT_INFO_FRAGMENT = gql`
 export const PROJECT_DETAIL_QUERY = gql`
   query project($year: Int!, $shortCode: String!) {
     project(year: $year, shortCode: $shortCode) {
-      requisitionSet {
+      requisitions {
         id
         referenceString
         projectRequisitionId
@@ -45,8 +44,7 @@ export const PROJECT_DETAIL_QUERY = gql`
         project {
           referenceString
         }
-        requisitionitemSet {
-          id
+        items {
           name
           quantity
           unitPrice
@@ -62,7 +60,7 @@ export const PROJECT_DETAIL_QUERY = gql`
 export const PROJECT_LIST_QUERY = gql`
   query projectList {
     projects {
-      requisitionSet {
+      requisitions {
         id
       }
       ...ProjectInfoFragment
@@ -74,9 +72,7 @@ export const PROJECT_LIST_QUERY = gql`
 export const CREATE_PROJECT_MUTATION = gql`
   mutation createProject($data: ProjectInput!) {
     createProject(data: $data) {
-      project {
-        ...ProjectInfoFragment
-      }
+      ...ProjectInfoFragment
     }
   }
   ${PROJECT_INFO_FRAGMENT}
@@ -85,9 +81,7 @@ export const CREATE_PROJECT_MUTATION = gql`
 export const UPDATE_PROJECT_MUTATION = gql`
   mutation updateProject($data: ProjectInput!, $id: ID!) {
     updateProject(data: $data, id: $id) {
-      project {
-        ...ProjectInfoFragment
-      }
+      ...ProjectInfoFragment
     }
   }
   ${PROJECT_INFO_FRAGMENT}

@@ -33,7 +33,7 @@ const ProjectListCard: React.FC<Props> = props => (
           <List.Item>
             <Text>
               <UserOutlined style={{ marginRight: "5px" }} />
-              {lead.fullName}
+              {lead.name}
             </Text>
           </List.Item>
         )}

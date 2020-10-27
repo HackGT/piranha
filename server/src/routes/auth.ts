@@ -1,9 +1,9 @@
+import { User } from "@prisma/client";
 import express from "express";
 import fetch from "node-fetch";
 import passport from "passport";
 
 import { createLink, AuthenticateOptions } from "../auth/strategies"
-import { IUser } from "../schema";
 
 export let authRoutes = express.Router();
 
@@ -36,7 +36,7 @@ authRoutes.route("/check").get((req, res) => {
 });
 
 authRoutes.route("/logout").all(async (req, res) => {
-    const user = req.user as IUser | undefined;
+    const user = req.user as User | undefined;
 
     if (user) {
         try {

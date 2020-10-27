@@ -20,7 +20,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   // @ts-ignore
   link: createUploadLink({
-    uri: "/api/graphql",
+    uri: "/graphql",
     credentials: "include",
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken")

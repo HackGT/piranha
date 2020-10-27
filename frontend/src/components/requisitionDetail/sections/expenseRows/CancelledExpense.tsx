@@ -10,9 +10,6 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
 
   const onFinish = async () => {
     const mutationData = {
-      headline: props.requisition.headline,
-      project: props.requisition.project.id,
-      vendor: props.requisition.vendor?.id,
       status: "DRAFT"
     };
 

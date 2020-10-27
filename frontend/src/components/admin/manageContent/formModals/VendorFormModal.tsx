@@ -22,7 +22,7 @@ const VendorFormModal: React.FC<FormModalProps> = props => (
       const { vendors } = cache.readQuery({ query: VENDOR_LIST_QUERY });
       cache.writeQuery({
         query: VENDOR_LIST_QUERY,
-        data: { vendors: vendors.concat([createMutationData.createVendor.vendor]) }
+        data: { vendors: vendors.concat([createMutationData.createVendor]) }
       });
     }}
   >

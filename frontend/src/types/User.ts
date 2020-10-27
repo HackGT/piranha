@@ -9,23 +9,19 @@ export enum UserAccessLevel {
 
 export type User = {
   id: string,
-  groundTruthId: string,
-  firstName: string,
-  preferredName: string,
-  lastName: string,
-  fullName: string,
+  uuid: string,
+  name: string,
   email: string,
   hasAdminAccess: boolean,
-  isActive: boolean,
   accessLevel: UserAccessLevel,
   slackId: string
 }
 
 export const ALL_USERS_QUERY = gql`
   query allUsers {
-    users(where: {isActive: true}) {
+    users {
       id
-      fullName
+      name
       email
     }
   }
@@ -35,8 +31,8 @@ export const USER_INFO_QUERY = gql`
   query user {
     user {
       id
-      groundTruthId
-      fullName
+      uuid
+      name
       email
       hasAdminAccess
     }
@@ -46,11 +42,8 @@ export const USER_INFO_QUERY = gql`
 export const USER_INFO_FRAGMENT = gql`
   fragment UserInfoFragment on User {
     id
-    groundTruthId
-    fullName
-    firstName
-    preferredName
-    lastName
+    uuid
+    name
     email
     hasAdminAccess
     accessLevel
@@ -68,11 +61,9 @@ export const USER_LIST_QUERY = gql`
 `;
 
 export const UPDATE_USER_MUTATION = gql`
-  mutation updateUser($data: UserInput!, $id: UUID!) {
+  mutation updateUser($data: UserInput!, $id: ID!) {
     updateUser(data: $data, id: $id) {
-      user {
-        ...UserInfoFragment
-      }
+      ...UserInfoFragment
     }
   }
   ${USER_INFO_FRAGMENT}

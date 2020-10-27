@@ -23,17 +23,14 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     }
 
     const mutationData = {
-      headline: props.requisition.headline,
-      project: props.requisition.project.id,
-      vendor: props.requisition.vendor?.id,
-      requisitionitemSet: props.requisition.requisitionitemSet.map((item: RequisitionItem) => ({
+      items: props.requisition.items.map((item: RequisitionItem) => ({
         name: item.name,
         link: item.link,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         notes: item.notes,
         lineItem: item.lineItem?.id,
-        received: !!values[item.name]
+        received: !!values[item.name || ""]
       })),
       status
     };
@@ -51,8 +48,8 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         key="received"
         buttonText="Submit"
       >
-        {props.requisition.requisitionitemSet.map((item: RequisitionItem) => (
-          <Form.Item name={item.name} valuePropName="checked" style={{ marginBottom: "10px" }} initialValue={item.received}>
+        {props.requisition.items.map((item: RequisitionItem) => (
+          <Form.Item name={item.name || ""} valuePropName="checked" style={{ marginBottom: "10px" }} initialValue={item.received}>
             <Checkbox>{item.name}</Checkbox>
           </Form.Item>
         ))}

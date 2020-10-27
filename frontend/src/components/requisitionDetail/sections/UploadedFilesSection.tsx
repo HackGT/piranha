@@ -9,7 +9,7 @@ const UploadedFilesSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
   const BASE_URL = "/content/";
 
-  if (loading || !data.fileSet || data.fileSet.length === 0) {
+  if (loading || !data.files || data.files.length === 0) {
     return null;
   }
 
@@ -17,7 +17,7 @@ const UploadedFilesSection: React.FC<RequisitionSectionProps> = (props) => {
     <>
       <Title level={3} style={{ margin: "15px 0 0 0" }}>Files</Title>
       <List
-        dataSource={data.fileSet}
+        dataSource={data.files}
         style={{ marginBottom: "10px" }}
         renderItem={(item: File) => (
           <List.Item>

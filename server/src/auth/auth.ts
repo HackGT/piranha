@@ -1,16 +1,15 @@
-import mongoose from "mongoose";
 import express from "express";
 import passport from "passport";
 import session from "express-session";
-import connectMongo from 'connect-mongo';
 import dotenv from "dotenv";
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+import { User } from "@prisma/client";
 
 import { app } from "../app";
-import { IUser, User } from "../schema";
 import { GroundTruthStrategy } from "./strategies";
+import { prisma } from "../common";
 
 dotenv.config();
-const MongoStore = connectMongo(session);
 
 if (process.env.PRODUCTION === 'true') {
     app.enable("trust proxy");
@@ -24,13 +23,17 @@ if (!process.env.SESSION_SECRET) {
 }
 
 app.use(session({
+    cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+    },
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: true,
-    store: new MongoStore({
-        mongooseConnection: mongoose.connection
+    store: new PrismaSessionStore(prisma, {
+        checkPeriod: 2 * 60 * 1000, // ms
+        dbRecordIdIsSessionId: true,
     })
-}));
+}))
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,11 +53,19 @@ export function isAuthenticated(request: express.Request, response: express.Resp
 const groundTruthStrategy = new GroundTruthStrategy(String(process.env.GROUND_TRUTH_URL));
 
 passport.use(groundTruthStrategy);
-passport.serializeUser<IUser, string>((user, done) => {
+passport.serializeUser<User, string>((user, done) => {
     done(null, user.uuid);
 });
-passport.deserializeUser<IUser, string>((id, done) => {
-    User.findOne({ uuid: id }, (err, user) => {
-        done(err, user!);
+passport.deserializeUser<User, string>(async (id, done) => {
+    let user = await prisma.user.findOne({
+        where: {
+            uuid: id
+        }
     });
+
+    if (user) {
+        done(null, user);
+    } else {
+        done("No user found", undefined)
+    }
 });

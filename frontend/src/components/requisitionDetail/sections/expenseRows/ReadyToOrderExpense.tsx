@@ -13,9 +13,6 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = (props) =>
 
   const onFinish = async (values: any) => {
     const mutationData = {
-      headline: props.requisition.headline,
-      project: props.requisition.project.id,
-      vendor: props.requisition.vendor?.id,
       status: "ORDERED",
       shippingLocation: values.shippingLocation,
       orderDate: values.orderDate.format("YYYY-MM-DD")

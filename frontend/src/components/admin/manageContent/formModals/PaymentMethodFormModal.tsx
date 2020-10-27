@@ -25,7 +25,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
       const { paymentMethods } = cache.readQuery({ query: PAYMENT_METHOD_LIST_QUERY });
       cache.writeQuery({
         query: PAYMENT_METHOD_LIST_QUERY,
-        data: { paymentMethods: paymentMethods.concat([createMutationData.createPaymentMethod.paymentMethod]) }
+        data: { paymentMethods: paymentMethods.concat([createMutationData.createPaymentMethod]) }
       });
     }}
   >

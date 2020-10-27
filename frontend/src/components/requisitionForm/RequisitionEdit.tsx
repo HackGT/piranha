@@ -9,7 +9,7 @@ import RequisitionForm from "./RequisitionForm";
 import ErrorDisplay from "../../util/ErrorDisplay";
 
 const RequisitionEdit: React.FC = () => {
-  const { projectReference, requisitionReference } = useParams();
+  const { projectReference, requisitionReference } = useParams<any>();
 
   const { year, shortCode, projectRequisitionId } = parseRequisitionParams(projectReference, requisitionReference);
 
@@ -20,7 +20,7 @@ const RequisitionEdit: React.FC = () => {
   if (error || (data && !data.requisition)) {
     return <ErrorDisplay error={error} />;
   }
-  
+
   if (loading) {
     return <Spin style={{ position: "absolute", top: "48%", left: "48%" }} />;
   }
@@ -40,14 +40,14 @@ const RequisitionEdit: React.FC = () => {
     paymentRequiredBy: rekData.paymentRequiredBy ? moment(rekData.paymentRequiredBy) : null,
     otherFees: rekData.otherFees,
     isReimbursement: rekData.isReimbursement,
-    requisitionitemSet: rekData.requisitionitemSet.length === 0
+    items: rekData.items.length === 0
       ? [{}]
-      : rekData.requisitionitemSet.map((item: any) => ({
+      : rekData.items.map((item: any) => ({
         ...item,
         lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id]
       })),
     status: rekData.status,
-    fileSet: rekData.fileSet.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })), // https://github.com/ant-design/ant-design/issues/4120
+    files: rekData.files.map((file: any) => ({ ...file, status: "done", key: file.id, uid: file.id })), // https://github.com/ant-design/ant-design/issues/4120
     purchaseDate: rekData.purchaseDate ? moment(rekData.purchaseDate) : null
   };
 

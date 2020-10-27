@@ -101,7 +101,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
         >
           <Cascader
             options={props.lineItemOptions}
-            fieldNames={{ label: "name", value: "id", children: "lineitemSet" }}
+            fieldNames={{ label: "name", value: "id", children: "lineItems" }}
             disabled={props.lineItemOptions.length === 0}
             placeholder=""
           />

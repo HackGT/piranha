@@ -27,7 +27,7 @@ export interface RequisitionSectionProps {
 }
 
 const RequisitionDetail: React.FC = () => {
-  const { projectReference, requisitionReference } = useParams();
+  const { projectReference, requisitionReference } = useParams<any>();
   const history = useHistory();
 
   const { year, shortCode, projectRequisitionId } = parseRequisitionParams(projectReference, requisitionReference);
@@ -85,7 +85,7 @@ const RequisitionDetail: React.FC = () => {
       <Pagination
         pageSize={1}
         defaultCurrent={projectRequisitionId}
-        total={loading ? projectRequisitionId : rekData.project.requisitionSet.length}
+        total={loading ? projectRequisitionId : rekData.project.requisitions.length}
         onChange={(page: number) => history.push(`/project/${projectReference}/requisition/${page}`)}
         style={{ textAlign: "center", marginTop: "25px" }}
         simple

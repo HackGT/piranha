@@ -1,24 +1,17 @@
 import { Requisition, RequisitionItem } from "./Requisition";
 
-export type BudgetGroup = {
-  id: string;
-  name: string;
-  budgetSet: Budget[];
-}
-
 export type Budget = {
   id: string;
   name: string;
-  group: BudgetGroup;
-  requisitionSet: Requisition[];
-  categorySet: Category[];
+  requisitions: Requisition[];
+  categories: Category[];
 }
 
 export type Category = {
   id: string;
   name: string;
   budget: Budget;
-  lineitemSet: LineItem[];
+  lineItems: LineItem[];
 }
 
 export type LineItem = {
@@ -26,6 +19,6 @@ export type LineItem = {
   name: string;
   quantity: number;
   unitCost: number;
+  items: RequisitionItem[];
   category: Category;
-  requisitionitemSet: RequisitionItem[];
 }

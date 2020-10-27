@@ -17,7 +17,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
     return <ErrorDisplay error={error} />;
   }
 
-  const totalAlreadyPaid = props.requisition.paymentSet?.reduce((prev, curr) => prev + curr.amount, 0) || 0;
+  const totalAlreadyPaid = props.requisition.payments?.reduce((prev, curr) => prev + curr.amount, 0) || 0;
   const remainingBalance = getTotalCost(props.requisition, true) - totalAlreadyPaid;
   const maxAmountRule: Rule = { max: remainingBalance, type: "number", message: "Payment amount cannot be more than the remaining balance" };
 
@@ -30,7 +30,6 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = (props) => {
       amount: values.amount,
       fundingSource: values.fundingSource,
       date: values.date.format("YYYY-MM-DD"),
-      recipient: props.requisition.vendor.id,
       requisition: props.requisition.id
     };
 

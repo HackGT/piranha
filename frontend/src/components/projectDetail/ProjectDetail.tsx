@@ -32,8 +32,10 @@ const ProjectDetail: React.FC = () => {
 
   useEffect(screenWidthHook(setScreenWidth));
 
-  const { projectReference } = useParams();
-  const [year, shortCode] = (projectReference || "").split("-");
+  const { projectReference } = useParams<any>();
+  let [year, shortCode] = (projectReference || "").split("-");
+
+  year = parseInt(year) || 0;
 
   const { loading, data, error } = useQuery(PROJECT_DETAIL_QUERY, {
     variables: { year, shortCode },
@@ -93,13 +95,13 @@ const ProjectDetail: React.FC = () => {
   ];
 
   const sortedData: Requisition[] = data
-    ? data.project.requisitionSet.concat().sort((first: Requisition, second: Requisition) => first.projectRequisitionId - second.projectRequisitionId)
+    ? data.project.requisitions.concat().sort((first: Requisition, second: Requisition) => first.projectRequisitionId - second.projectRequisitionId)
     : [];
 
   const rows: RequisitionTableData[] = sortedData.map((requisition) => {
     const row: RequisitionTableData = {
       key: requisition.projectRequisitionId,
-      children: requisition.requisitionitemSet.map((item, index) => ({
+      children: requisition.items.map((item, index) => ({
         key: `${requisition.projectRequisitionId.toString()}-${index}`,
         nameElement: (
           <>
@@ -113,7 +115,7 @@ const ProjectDetail: React.FC = () => {
             </Text>
           </>
         ),
-        cost: formatPrice(item.quantity * item.unitPrice),
+        cost: formatPrice((item.quantity || 0) * (item.unitPrice || 0)),
         isChild: true
       })),
       ...requisition

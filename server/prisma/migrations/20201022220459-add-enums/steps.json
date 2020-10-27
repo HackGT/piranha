@@ -1,0 +1,69 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "AccessLevel",
+      "values": [
+        "NONE",
+        "MEMBER",
+        "EXEC",
+        "ADMIN"
+      ]
+    },
+    {
+      "tag": "CreateEnum",
+      "enum": "RequisitionStatus",
+      "values": [
+        "DRAFT",
+        "SUBMITTED",
+        "PENDING_CHANGES",
+        "READY_TO_ORDER",
+        "ORDERED",
+        "PARTIALLY_RECEIVED",
+        "RECEIVED",
+        "CLOSED",
+        "CANCELLED",
+        "READY_FOR_REIMBURSEMENT",
+        "AWAITING_INFORMATION",
+        "REIMBURSEMENT_IN_PROGRESS"
+      ]
+    },
+    {
+      "tag": "CreateEnum",
+      "enum": "Month",
+      "values": [
+        "JANUARY",
+        "FEBRUARY",
+        "MARCH",
+        "APRIL",
+        "MAY",
+        "JUNE",
+        "JULY",
+        "AUGUST",
+        "SEPTEMBER",
+        "OCTOBER",
+        "NOVEMBER",
+        "DECEMBER"
+      ]
+    },
+    {
+      "tag": "UpdateField",
+      "model": "OperatingBudget",
+      "field": "month",
+      "type": "Month"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "Requisition",
+      "field": "status",
+      "type": "RequisitionStatus"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "User",
+      "field": "accessLevel",
+      "type": "AccessLevel"
+    }
+  ]
+}

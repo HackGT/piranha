@@ -73,8 +73,8 @@ export const getTotalCost = (requisition: Requisition | RequisitionFormData | un
   if (requisition) {
     let itemTotal = 0;
 
-    if (requisition.requisitionitemSet) {
-      itemTotal = requisition.requisitionitemSet.reduce((prev, curr) => {
+    if (requisition.items) {
+      itemTotal = requisition.items.reduce((prev, curr) => {
         if (curr.quantity && curr.unitPrice) {
           return prev + (curr.quantity * curr.unitPrice);
         }
@@ -98,8 +98,9 @@ export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAct
 };
 
 export const parseRequisitionParams = (projectReference: (string | null), requisitionReference: (string | null)) => {
-  const [year, shortCode] = (projectReference || "").split("-");
-  const projectRequisitionId: number = parseInt(requisitionReference || "");
+  const [yearString, shortCode] = (projectReference || "").split("-");
+  const year = parseInt(yearString || "");
+  const projectRequisitionId = parseInt(requisitionReference || "");
 
   return { year, shortCode, projectRequisitionId };
 };

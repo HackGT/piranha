@@ -37,7 +37,7 @@ const HomeRequisitionCard: React.FC<Props> = (props) => (
     <br />
     <Text>
       <strong># of Items: </strong>
-      {props.rek.requisitionitemSet.length}
+      {props.rek.items.length}
     </Text>
   </Card>
 );

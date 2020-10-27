@@ -3,12 +3,12 @@ import passport from "passport";
 import { Strategy as OAuthStrategy } from "passport-oauth2";
 import dotenv from "dotenv"
 import { Request } from "express";
-
-import { createNew, IUser, User } from "../schema";
+import { AccessLevel, User } from "@prisma/client";
+import { prisma } from "../common";
 
 dotenv.config()
 
-type PassportDone = (err: Error | null, user?: IUser | false, errMessage?: { message: string }) => void;
+type PassportDone = (err: Error | null, user?: User | false, errMessage?: { message: string }) => void;
 type PassportProfileDone = (err: Error | null, profile?: IProfile) => void;
 
 interface IStrategyOptions {
@@ -73,18 +73,33 @@ export class GroundTruthStrategy extends OAuthStrategy {
     }
 
     protected static async passportCallback(req: Request, accessToken: string, refreshToken: string, profile: IProfile, done: PassportDone) {
-        let user = await User.findOne({ uuid: profile.uuid });
+        let user = await prisma.user.findOne({
+            where: {
+                uuid: profile.uuid
+            }
+        });
 
         if (!user) {
-            user = createNew<IUser>(User, {
-                ...profile,
-                accessLevel: "MEMBER"
+            user = await prisma.user.create({
+                data: {
+                    name: profile.name,
+                    uuid: profile.uuid,
+                    email: profile.email,
+                    token: profile.token,
+                    accessLevel: AccessLevel.MEMBER
+                }
             });
         } else {
-            user.token = accessToken;
+            user = await prisma.user.update({
+                where: {
+                    uuid: profile.uuid
+                },
+                data: {
+                    token: accessToken
+                }
+            });
         }
 
-        await user.save();
         done(null, user);
     }
 }

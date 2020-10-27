@@ -10,8 +10,6 @@ const ReimbursementInProgressExpense: React.FC<RequisitionExpenseSectionProps> =
 
   const onFinish = async () => {
     const mutationData = {
-      headline: props.requisition.headline,
-      project: props.requisition.project.id,
       status: "CLOSED"
     };
 

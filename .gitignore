@@ -10,6 +10,11 @@ db.sqlite3
 expenses/config/**
 !expenses/config/google-application-key-example.json
 
+server/config/**
+!server/config/google-application-key-example.json
+
 /demos
 
 node_modules
+
+frontend/src/generated

@@ -1,0 +1,22 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "UpdateField",
+      "model": "RequisitionItem",
+      "field": "received",
+      "arity": "Optional"
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "RequisitionItem",
+          "field": "received"
+        },
+        "directive": "default"
+      }
+    }
+  ]
+}

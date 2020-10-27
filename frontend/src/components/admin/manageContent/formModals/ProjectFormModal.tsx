@@ -17,7 +17,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
   }
 
   const leadOptions = loading ? [] : data.users.map((user: any) => ({
-    label: `${user.fullName} [${user.email}]`,
+    label: `${user.name} [${user.email}]`,
     value: user.id
   }));
 
@@ -37,7 +37,7 @@ const ProjectFormModal: React.FC<FormModalProps> = (props) => {
         const { projects } = cache.readQuery({ query: PROJECT_LIST_QUERY });
         cache.writeQuery({
           query: PROJECT_LIST_QUERY,
-          data: { projects: projects.concat([createMutationData.createProject.project]) }
+          data: { projects: projects.concat([createMutationData.createProject]) }
         });
       }}
     >

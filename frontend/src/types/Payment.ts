@@ -5,7 +5,6 @@ import { Requisition, REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export type Payment = {
   amount: number;
-  recipient: Vendor;
   requisition: Requisition;
   fundingSource: PaymentMethod;
   date: Date;
@@ -17,7 +16,7 @@ export const PAYMENT_INFO_FRAGMENT = gql`
     requisition {
       id
       status
-      paymentSet {
+      payments {
         id
         amount
         fundingSource {
@@ -33,9 +32,7 @@ export const PAYMENT_INFO_FRAGMENT = gql`
 export const CREATE_PAYMENT_MUTATION = gql`
   mutation createPayment($data: PaymentInput!) {
     createPayment(data: $data) {
-      payment {
-        ...PaymentInfoFragment
-      }
+      ...PaymentInfoFragment
     }
   }
   ${PAYMENT_INFO_FRAGMENT}
@@ -44,15 +41,11 @@ export const CREATE_PAYMENT_MUTATION = gql`
 export const UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION = gql`
   mutation updateRequisitionAndCreatePayment($requisitionData: RequisitionInput!, $id: ID!, $paymentData: PaymentInput!) {
     updateRequisition(data: $requisitionData, id: $id) {
-      requisition {
-        ...RequisitionInfoFragment
-      }
+      ...RequisitionInfoFragment
     }
     
     createPayment(data: $paymentData) {
-      payment {
-        ...PaymentInfoFragment
-      }
+      ...PaymentInfoFragment
     }
   }
   ${REQUISITION_INFO_FRAGMENT}

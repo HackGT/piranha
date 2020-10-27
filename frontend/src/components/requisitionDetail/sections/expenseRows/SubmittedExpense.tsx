@@ -3,25 +3,43 @@ import { Collapse, Form, Input, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { FORM_RULES } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { CREATE_APPROVAL_MUTATION } from "../../../../types/Approval";
+import { UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION } from "../../../../types/Approval";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
+import { RequisitionStatus } from "../../../../types/Requisition";
 
 const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
-  const [createApproval] = useMutation(CREATE_APPROVAL_MUTATION);
+  const [updateRequisitionAndCreateApproval] = useMutation(UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION);
 
   const onFinish = async (values: any, isApproving: boolean) => {
     if (isApproving && !props.requisition.vendor?.isActive) {
       message.error("Vendor must be active before approval.", 2);
       return;
     }
+    let newRequisitionStatus: RequisitionStatus;
 
-    const mutationData = {
+    if (isApproving && props.requisition.isReimbursement) {
+      newRequisitionStatus = "READY_FOR_REIMBURSEMENT";
+    } else if (isApproving && !props.requisition.isReimbursement) {
+      newRequisitionStatus = "READY_TO_ORDER";
+    } else {
+      newRequisitionStatus = "PENDING_CHANGES";
+    }
+
+    const requisitionData = {
+      status: newRequisitionStatus
+    };
+
+    const approvalData = {
       isApproving,
       requisition: props.requisition.id,
       ...values
     };
 
-    await saveExpenseData(createApproval, { data: mutationData });
+    await saveExpenseData(updateRequisitionAndCreateApproval, {
+      id: props.requisition.id,
+      requisitionData,
+      approvalData
+    });
   };
 
   return (

@@ -16,7 +16,7 @@ const { Title } = Typography;
 const { TabPane } = Tabs;
 
 const AdminHome: React.FC = () => {
-  const { activeTab } = useParams();
+  const { activeTab } = useParams<any>();
   const history = useHistory();
 
   const tabKeys = ["projects", "vendors", "payment-methods", "users"];
@@ -24,7 +24,7 @@ const AdminHome: React.FC = () => {
   if (!tabKeys.includes(activeTab)) {
     history.replace(`/admin/${tabKeys[0]}`);
   }
-  
+
   const getUserTag = (item: any) => {
     switch (item.accessLevel as UserAccessLevel) {
       case UserAccessLevel.ADMIN:
@@ -81,10 +81,10 @@ const AdminHome: React.FC = () => {
             query={USER_LIST_QUERY}
             title="Users"
             tag={getUserTag}
-            sortData={data => data.users.concat().sort((a: any, b: any) => a.fullName.localeCompare(b.fullName))}
-            name={item => item.fullName}
+            sortData={data => data.users.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+            name={item => item.name}
             modal={UserFormModal}
-            searchFilterField="fullName"
+            searchFilterField="name"
             hideAddButton
           />
         </TabPane>

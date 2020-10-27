@@ -6,11 +6,11 @@ import { RequisitionSectionProps } from "../RequisitionDetail";
 
 const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
-  
+
   const listData = [
     {
       title: "Created By",
-      body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.fullName
+      body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.name
     },
     {
       title: "Vendor",
@@ -36,18 +36,19 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     });
   }
 
-  if (data.approvalSet && data.approvalSet.length > 0) {
-    const approval: Approval = data.approvalSet[data.approvalSet.length - 1]; // Gets last approval
+  if (data.approvals && data.approvals.length > 0) {
+    const approval: Approval = data.approvals[data.approvals.length - 1]; // Gets last approval
     let text = "";
 
-    const time = moment(approval.createdAt);
+    console.log(approval.date);
+    const time = moment(approval.date);
     // @ts-ignore
     const timeDisplay = time.diff() < 86400000 ? time.fromNow() : `on ${time.format("M/D/YY")}`; // Checks if requisition was approved less than a day ago
 
     if (approval.isApproving) {
-      text = `Approved by ${approval.approver.fullName} ${timeDisplay}`;
+      text = `Approved by ${approval.approver.name} ${timeDisplay}`;
     } else {
-      text = `${approval.approver.fullName} requested changes ${timeDisplay}. Notes: ${approval.notes}`;
+      text = `${approval.approver.name} requested changes ${timeDisplay}. Notes: ${approval.notes}`;
     }
 
     listData.push({

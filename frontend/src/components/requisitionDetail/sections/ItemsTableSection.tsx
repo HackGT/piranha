@@ -50,7 +50,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         if (!record.name) {
           return `Item ${index / 2 + 1}`;
         }
-        
+
         return {
           children: record.link ? <Link href={record.link} target="_blank">{record.name}</Link> : <Text>{record.name}</Text>,
           props: {
@@ -91,7 +91,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
           };
         }
         return {
-          children: formatPrice(record.quantity * record.unitPrice),
+          children: formatPrice((record.quantity || 0) * (record.unitPrice || 0)),
           props: {
             style: { background: record.received && showReceived ? greenColor : "" }
           }
@@ -101,7 +101,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
   ];
 
   // Duplicates the rows so that items with notes have an extra row
-  const rows = loading ? [] : data.requisitionitemSet.flatMap((item) => {
+  const rows = loading ? [] : data.items.flatMap((item) => {
     if (item.notes || item.lineItem) {
       return [{ ...item, isDetailsRow: false }, { ...item, isDetailsRow: true }];
     }

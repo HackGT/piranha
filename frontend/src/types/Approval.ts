@@ -1,35 +1,38 @@
 import { gql } from "@apollo/client";
 import { User } from "./User";
-import { Requisition } from "./Requisition";
+import { Requisition, REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export type Approval = {
   approver: User;
   requisition: Requisition;
   notes: string;
   isApproving: boolean;
-  createdAt: string;
+  date: string;
 }
 
-export const CREATE_APPROVAL_MUTATION = gql`
-  mutation createApproval($data: ApprovalInput!) {
-    createApproval(data: $data) {
-      approval {
+export const UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION = gql`
+  mutation updateRequisitionAndCreateApproval($requisitionData: RequisitionInput!, $id: ID!, $approvalData: ApprovalInput!) {
+    updateRequisition(data: $requisitionData, id: $id) {
+      ...RequisitionInfoFragment
+    }
+    
+    createApproval(data: $approvalData) {
+      id
+      requisition {
         id
-        requisition {
+        status
+        approvals {
           id
-          status
-          approvalSet {
+          isApproving
+          approver {
             id
-            isApproving
-            approver {
-              id
-              fullName
-            }
-            notes
-            createdAt
+            name
           }
+          notes
+          date
         }
       }
     }
   }
+  ${REQUISITION_INFO_FRAGMENT}
 `;

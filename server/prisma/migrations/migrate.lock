@@ -1,0 +1,13 @@
+# Prisma Migrate lockfile v1
+
+20201022203707-initial
+20201022220459-add-enums
+20201022221216-add-optional-types
+20201022230904-slack-optional
+20201022232810-change-to-leads
+20201023015928
+20201023023621-make-received-optional
+20201023230839-remove-vendor-from-payment
+20201023235034-add-session-store
+20201024005705-change-to-funding-source
+20201024221308-change-date-to-default-on-approval

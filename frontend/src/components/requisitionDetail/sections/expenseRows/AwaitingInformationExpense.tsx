@@ -19,16 +19,13 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
 
   const onFinish = async (values: any) => {
     const requisitionData = {
-      headline: props.requisition.headline,
-      project: props.requisition.project.id,
       status: isDirectPayment ? "CLOSED" : "REIMBURSEMENT_IN_PROGRESS"
     };
 
     const paymentData = {
-      amount: values.amount,
+      amount: parseFloat(values.amount.replace(/,/g, '')),
       fundingSource: props.requisition.fundingSource.id,
       date: values.date.format("YYYY-MM-DD"),
-      recipient: props.requisition.vendor.id,
       requisition: props.requisition.id
     };
 
@@ -59,11 +56,10 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
         <Form.Item
           name="amount"
           rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
-          normalize={(value: any) => (value ? parseFloat(value) : null)}
           label="Amount Paid"
           initialValue={formatPrice(getTotalCost(props.requisition, true), true)}
         >
-          <Input prefix="$" type="number" placeholder="23.90" step={0.01} disabled />
+          <Input prefix="$" placeholder="23.90" disabled />
         </Form.Item>
         <Form.Item
           name="fundingSource"

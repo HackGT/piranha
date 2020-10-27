@@ -44,7 +44,11 @@ const server = new ApolloServer({
             "request.credentials": "include",
         },
     },
-    introspection: process.env.PRODUCTION !== "true"
+    introspection: process.env.PRODUCTION !== "true",
+    formatError: (err) => {
+        console.error(err);
+        return err;
+    },
 });
 
 app.use(isAuthenticated);

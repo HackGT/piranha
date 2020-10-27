@@ -10,7 +10,7 @@ export type PaymentMethod = {
 
 export const PAYMENT_METHOD_EXPENSE_QUERY = gql`
   query paymentMethodExpense {
-    paymentMethods(where: {isActive: true}) {
+    paymentMethods(isActive: true) {
       id
       name
     }
@@ -39,9 +39,7 @@ export const PAYMENT_METHOD_LIST_QUERY = gql`
 export const CREATE_PAYMENT_METHOD_MUTATION = gql`
   mutation createPaymentMethod($data: PaymentMethodInput!) {
     createPaymentMethod(data: $data) {
-      paymentMethod {
-        ...PaymentMethodInfoFragment
-      }
+      ...PaymentMethodInfoFragment
     }
   }
   ${PAYMENT_METHOD_INFO_FRAGMENT}
@@ -50,9 +48,7 @@ export const CREATE_PAYMENT_METHOD_MUTATION = gql`
 export const UPDATE_PAYMENT_METHOD_MUTATION = gql`
   mutation updatePaymentMethod($data: PaymentMethodInput!, $id: ID!) {
     updatePaymentMethod(data: $data, id: $id) {
-      paymentMethod {
-        ...PaymentMethodInfoFragment
-      }
+      ...PaymentMethodInfoFragment
     }
   }
   ${PAYMENT_METHOD_INFO_FRAGMENT}

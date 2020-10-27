@@ -38,7 +38,7 @@ const Home: React.FC = () => {
   }
 
   const emptyRek = {
-    requisitionitemSet: []
+    items: []
   };
 
   const rekData = loading ? [emptyRek, emptyRek] : data.requisitions;
