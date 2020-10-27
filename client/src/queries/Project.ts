@@ -27,6 +27,10 @@ export const PROJECT_DETAIL_QUERY = gql`
         canEdit
         otherFees
         isReimbursement
+        createdBy {
+          id
+          name
+        }
         project {
           referenceString
         }

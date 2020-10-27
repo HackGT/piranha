@@ -9,7 +9,8 @@ export const PROJECT_INCLUDE: ProjectInclude = {
                     leads: true
                 }
             },
-            items: true
+            items: true,
+            createdBy: true
         }
     }
 }

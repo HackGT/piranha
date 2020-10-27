@@ -51,8 +51,20 @@ const ProjectDetail: React.FC = () => {
   const columns = [
     {
       title: "Reference Code",
-      responsive: ["md"] as Breakpoint[],
       render: (record: any) => ("isChild" in record ? null : record.referenceString)
+    },
+    {
+      title: "Status",
+      render: (record: any) => {
+        if ("isChild" in record) {
+          return {
+            props: {
+              colSpan: 0
+            }
+          };
+        }
+        return <Tag color={StatusToColor(record.status)} style={{ margin: 0 }}>{StatusToString(record.status)}</Tag>;
+      }
     },
     {
       title: "Name",
@@ -76,20 +88,12 @@ const ProjectDetail: React.FC = () => {
       }
     },
     {
-      title: "Status",
-      render: (record: any) => {
-        if ("isChild" in record) {
-          return {
-            props: {
-              colSpan: 0
-            }
-          };
-        }
-        return <Tag color={StatusToColor(record.status)} style={{ margin: 0 }}>{StatusToString(record.status)}</Tag>;
-      }
+      title: "Created By",
+      render: (record: any) => ("isChild" in record ? null : record.createdBy.name)
     },
     {
       title: "Total Cost",
+      responsive: ["md"] as Breakpoint[],
       render: (record: any) => ("isChild" in record ? record.cost : formatPrice(getTotalCost(record, true)))
     }
   ];
