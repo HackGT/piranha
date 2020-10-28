@@ -5,8 +5,13 @@ from rules.contrib.admin import ObjectPermissionsModelAdmin
 from expenses.models import Project, Requisition, Vendor, RequisitionItem, Approval, Payment, PaymentMethod, File
 
 
+class RequisitionItemInline(admin.StackedInline):
+    model = RequisitionItem
+    extra = 1
+
+
 class RequisitionAdmin(ObjectPermissionsModelAdmin):
-    pass
+    inlines = [RequisitionItemInline]
 
 
 admin.site.register(Project)

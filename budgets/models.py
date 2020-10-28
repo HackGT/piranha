@@ -1,6 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import CharField, PositiveIntegerField, DecimalField, ForeignKey, TextChoices
-from django.contrib.contenttypes.models import ContentType
 
 
 class BudgetGroup(models.Model):
@@ -23,7 +23,7 @@ class Category(models.Model):
     budget = ForeignKey('Budget', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.budget.name})"
 
 
 class LineItem(models.Model):
