@@ -43,7 +43,6 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     const approval: Approval = data.approvals[data.approvals.length - 1]; // Gets last approval
     let text = "";
 
-    console.log(approval.date);
     const time = moment(approval.date);
     // @ts-ignore
     const timeDisplay = time.diff() < 86400000 ? time.fromNow() : `on ${time.format("M/D/YY")}`; // Checks if requisition was approved less than a day ago

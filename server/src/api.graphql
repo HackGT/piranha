@@ -125,9 +125,10 @@ input PaymentInput {
 }
 
 type File {
+    id: ID!
     name: String!
     googleName: String!
-    type: String!
+    mimetype: String!
     isActive: Boolean!
 }
 

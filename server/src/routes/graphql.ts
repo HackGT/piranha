@@ -48,7 +48,8 @@ export const resolvers: IResolvers = {
         canEdit: (parent: any, args: any, context: { user: User }) => canEdit(context.user, parent),
         canCancel: (parent: any, args: any, context: { user: User }) => canCancel(context.user),
         canExpense: (parent: any, args: any, context: { user: User }) => canExpense(context.user, parent),
-        referenceString: (parent: any) => `${parent.project.year}-${parent.project.shortCode}-${parent.projectRequisitionId}`
+        referenceString: (parent: any) => `${parent.project.year}-${parent.project.shortCode}-${parent.projectRequisitionId}`,
+        files: (parent: any) => parent.files.filter((file: any) => file.isActive) // Filter so only active files are sent to client
     },
     Project: {
         referenceString: (parent: any) => `${parent.year}-${parent.shortCode}`

@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql';
 import { User, RequisitionStatus } from "@prisma/client";
 
-import { uploadFile } from "../util/googleUpload";
+import { uploadFiles } from "../util/googleUpload";
 import { sendSlackNotification } from "../util/slack";
 import { APPROVAL_INCLUDE, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../common';
@@ -50,7 +50,8 @@ const createRequisition = async function (parent: any, args: any, context: { use
             ...data.budget && { budget: { connect: { id: data.budget } } },
             ...data.project && { project: { connect: { id: data.project } } },
             createdBy: { connect: { id: context.user.id } },
-            items: { create: createItems }
+            items: { create: createItems },
+            files: undefined
         },
         include: {
             ...REQUISITION_INCLUDE
@@ -61,9 +62,7 @@ const createRequisition = async function (parent: any, args: any, context: { use
         sendSlackNotification(requisition);
     }
 
-    for (const file of data.files || []) {
-        uploadFile(file, requisition);
-    }
+    await uploadFiles(args.data.files.map((file: any) => file.originFileObj), requisition);
 
     return requisition;
 }
@@ -131,6 +130,33 @@ const updateRequisition = async function (parent: any, args: any) {
         }
     }
 
+    if (data.files) {
+        let filesToUpload = [];
+        let existingFileIds: any[] = [];
+
+        for (let file of data.files) {
+            if (file.originFileObj) {
+                filesToUpload.push(file.originFileObj);
+            } else if (file.id) {
+                existingFileIds.push(file.id);
+            }
+        }
+        await uploadFiles(filesToUpload, oldRequisition);
+
+        const oldFileIds = oldRequisition.files.filter(file => file.isActive).map(file => file.id);
+
+        for (let inactiveFileId of oldFileIds.filter(id => !existingFileIds.includes(id))) {
+            await prisma.file.update({
+                where: {
+                    id: inactiveFileId
+                },
+                data: {
+                    isActive: false
+                }
+            });
+        }
+    }
+
     let requisition = await prisma.requisition.update({
         where: {
             id: args.id
@@ -140,7 +166,8 @@ const updateRequisition = async function (parent: any, args: any) {
             ...data.fundingSource && { fundingSource: { connect: { id: data.fundingSource } } },
             ...data.budget && { budget: { connect: { id: data.budget } } },
             ...data.project && { project: { connect: { id: data.project } } },
-            ...itemIds.length != 0 && { items: { set: itemIds.map(id => ({ id })) } }
+            ...itemIds.length != 0 && { items: { set: itemIds.map(id => ({ id })) } },
+            files: undefined
         },
         include: {
             ...REQUISITION_INCLUDE
@@ -149,13 +176,6 @@ const updateRequisition = async function (parent: any, args: any) {
 
     if (requisition.status != oldRequisition.status) {
         sendSlackNotification(requisition);
-    }
-
-    if (data.files) {
-        for (const file of data.files.filter((file: any) => !oldRequisition!.files.includes(file))) {
-            console.log(file);
-            uploadFile(file, requisition);
-        }
     }
 
     return requisition;

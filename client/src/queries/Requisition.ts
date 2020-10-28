@@ -93,6 +93,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       }
     }
     approvals {
+      id
       isApproving
       approver {
         id
@@ -102,6 +103,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       date
     }
     payments {
+      id
       amount
       fundingSource {
         id
@@ -110,9 +112,11 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       date
     }
     files {
+      id
+      isActive
       name
       googleName
-      type
+      mimetype
     }
     canEdit
     canCancel
