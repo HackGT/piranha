@@ -11,6 +11,7 @@ FROM node:12-alpine
 WORKDIR /usr/src/piranha
 COPY ./server/ /usr/src/piranha/server/
 COPY --from=build /usr/src/piranha/client/ /usr/src/piranha/client
+RUN yarn install && yarn generate
 
 WORKDIR /usr/src/piranha/server
 RUN yarn install
