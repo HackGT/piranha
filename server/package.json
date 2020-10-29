@@ -5,6 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "start": "ts-node src/app.ts",
+    "start-migrate": "yarn migrate:up && yarn start",
     "dev": "nodemon --watch 'src/**/*' -e ts,graphql --exec 'ts-node' src/app.ts",
     "migrate:up": "prisma migrate up --experimental",
     "migrate:save": "prisma migrate save --experimental"
