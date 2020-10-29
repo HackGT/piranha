@@ -32,3 +32,18 @@
     padding: 30px 30px 0 30px;
   }
 }
+
+/* Gets rid of blue background for menu bar */
+.ant-menu-dark .ant-menu-item:hover {
+  background-color: transparent !important;
+}
+
+/* Makes dropdown get smaller on mobile */
+.ui.selection.dropdown {
+    min-width: 0 !important;
+}
+
+/* Allows question mark icon to be on same line as label in form */
+.ui.form .field>label {
+    display: inline !important;
+}

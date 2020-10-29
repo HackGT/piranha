@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import "./index.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Cookies from "js-cookie";
 import { createUploadLink } from "apollo-upload-client";
