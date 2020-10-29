@@ -6,7 +6,10 @@
   "author": "Ayush Goyal <agoyal2001@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "generate": "graphql-codegen --config codegen.yaml"
+    "generate": "graphql-codegen --config codegen.yaml",
+    "setup": "yarn generate && yarn setup:client && yarn setup:server",
+    "setup:client": "cd client && yarn install",
+    "setup:server": "cd server && yarn install"
   },
   "dependencies": {
     "graphql": "^15.4.0"

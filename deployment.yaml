@@ -6,6 +6,9 @@ target_port: 3000
 wants:
   postgres: true
 
+health:
+  path: /status
+
 secrets:
   - SESSION_SECRET
   - GROUND_TRUTH_CLIENT_ID
