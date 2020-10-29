@@ -11,7 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/storage": "^5.3.0",
-    "@prisma/client": "^2.9.0",
+    "@prisma/client": "~2.9.0",
+    "@prisma/cli": "~2.9.0",
     "@quixo3/prisma-session-store": "^1.1.0",
     "apollo-server-express": "^2.18.2",
     "compression": "^1.7.4",
@@ -29,7 +30,6 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.9.0",
     "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.8",
     "@types/dotenv": "^8.2.0",

@@ -18,3 +18,5 @@ server/config/**
 node_modules
 
 generated
+
+package-lock.json
