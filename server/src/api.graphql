@@ -130,6 +130,7 @@ type File {
     googleName: String!
     mimetype: String!
     isActive: Boolean!
+    signedUrl: String!
 }
 
 type RequisitionItem {

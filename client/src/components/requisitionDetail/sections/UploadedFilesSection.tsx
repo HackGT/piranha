@@ -7,7 +7,6 @@ const { Title, Link } = Typography;
 
 const UploadedFilesSection: React.FC<RequisitionSectionProps> = (props) => {
   const { data, loading } = props;
-  const BASE_URL = "/content/";
 
   if (loading || !data.files || data.files.length === 0) {
     return null;
@@ -21,7 +20,7 @@ const UploadedFilesSection: React.FC<RequisitionSectionProps> = (props) => {
         style={{ marginBottom: "10px" }}
         renderItem={(item: File) => (
           <List.Item>
-            <Link href={BASE_URL + item.googleName} target="_blank">{item.name}</Link>
+            <Link href={item.signedUrl} target="_blank">{item.name}</Link>
           </List.Item>
         )}
       />

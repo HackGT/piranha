@@ -1,5 +1,5 @@
-import { Requisition } from "@prisma/client";
-import { Storage } from "@google-cloud/storage";
+import { File, Requisition } from "@prisma/client";
+import { GetSignedUrlConfig, Storage } from "@google-cloud/storage";
 import { GraphQLError } from "graphql";
 import { prisma } from "../common";
 
@@ -61,4 +61,20 @@ export const uploadFiles = async (promiseFiles: any, requisition: Requisition) =
             }
         }
     });
+}
+
+// Gets signed url for file
+export const getFileLink = async (file: File) => {
+    if (!file.isActive) {
+        return ""
+    }
+
+    const options: GetSignedUrlConfig = {
+        version: "v4",
+        action: "read",
+        expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+    };
+
+    const [url] = await bucket.file(file.googleName).getSignedUrl(options);
+    return url;
 }

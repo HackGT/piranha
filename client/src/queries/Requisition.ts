@@ -115,8 +115,8 @@ export const REQUISITION_INFO_FRAGMENT = gql`
       id
       isActive
       name
-      googleName
       mimetype
+      signedUrl
     }
     canEdit
     canCancel

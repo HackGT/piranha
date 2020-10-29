@@ -5,6 +5,7 @@ import { User } from "@prisma/client";
 import { canCancel, canEdit, canExpense, hasAdminAccess } from "../util/util";
 import { Query } from "../resolvers/query";
 import { Mutation } from "../resolvers/mutation";
+import { getFileLink } from "../util/googleUpload";
 
 export const resolvers: IResolvers = {
     Query: Query,
@@ -53,5 +54,8 @@ export const resolvers: IResolvers = {
     },
     Project: {
         referenceString: (parent: any) => `${parent.year}-${parent.shortCode}`
+    },
+    File: {
+        signedUrl: (parent: any) => getFileLink(parent)
     }
 };
