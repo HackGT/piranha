@@ -39,7 +39,7 @@ const Navigation: React.FC<Props> = (props) => {
     };
   });
 
-  const filteredRoutes = routes.filter((page: Page) => !page.privateRoute || (props.user && props.user.hasAdminAccess));
+  const filteredRoutes = routes.filter((page: Page) => !page.privateRoute || (props.user && props.user.canViewAdminPanel));
 
   return (
     <div style={{ direction: "rtl" }}>

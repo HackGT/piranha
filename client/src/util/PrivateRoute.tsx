@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
 function PrivateRoute({ component: Component, user, ...rest }: any): any {
-  if (user && user.hasAdminAccess) {
+  if (user && user.canViewAdminPanel) {
     return (
       <Route
         {...rest}

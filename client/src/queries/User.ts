@@ -17,7 +17,7 @@ export const USER_INFO_QUERY = gql`
       uuid
       name
       email
-      hasAdminAccess
+      canViewAdminPanel
     }
   }
 `;
@@ -28,7 +28,7 @@ export const USER_INFO_FRAGMENT = gql`
     uuid
     name
     email
-    hasAdminAccess
+    canViewAdminPanel
     accessLevel
     slackId
   }

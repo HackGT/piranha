@@ -5,13 +5,11 @@ import compression from "compression";
 import morgan from "morgan";
 import cors from "cors"
 import dotenv from "dotenv"
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express';
+import { applyMiddleware } from "graphql-middleware";
 
 dotenv.config();
 
-const typeDefs = gql`
-    ${fs.readFileSync(path.resolve(__dirname, "./api.graphql"), "utf8")}
-`;
 const VERSION_NUMBER = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8")).version;
 
 export let app = express();
@@ -30,11 +28,19 @@ app.get("/status", (req, res) => {
 
 app.use("/auth", authRoutes);
 
-import { resolvers } from "./routes/graphql";
+const typeDefs = gql`
+    ${fs.readFileSync(path.resolve(__dirname, "./api.graphql"), "utf8")}
+`;
+import { resolvers } from "./api/api";
+import { permissions } from "./api/api";
+
+const schema = applyMiddleware(
+    makeExecutableSchema({ typeDefs, resolvers }),
+    permissions
+);
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     context: ({ req }: { req: Request }) => {
         return { user: req.user };
     },

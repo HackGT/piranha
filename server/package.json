@@ -14,8 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/storage": "^5.3.0",
-    "@prisma/client": "~2.9.0",
     "@prisma/cli": "~2.9.0",
+    "@prisma/client": "~2.9.0",
     "@quixo3/prisma-session-store": "^1.1.0",
     "apollo-server-express": "^2.18.2",
     "compression": "^1.7.4",
@@ -25,6 +25,8 @@
     "express-session": "^1.17.1",
     "fs": "0.0.1-security",
     "graphql": "^15.3.0",
+    "graphql-middleware": "^4.0.2",
+    "graphql-shield": "^7.3.8",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",

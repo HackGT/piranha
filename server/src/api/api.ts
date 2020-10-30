@@ -1,11 +1,33 @@
 import { IResolvers } from "apollo-server-express";
 import { GraphQLScalarType, Kind } from 'graphql';
-import { User } from "@prisma/client";
-
-import { canCancel, canEdit, canExpense, hasAdminAccess } from "../util/util";
-import { Query } from "../resolvers/query";
-import { Mutation } from "../resolvers/mutation";
+import { canCancel, canEdit, canEditRule, canExpense, canExpenseRule, canViewAdminPanel, fallbackRule, isAuthenticatedRule, isExecRule } from "./permissions";
+import { Query } from "./resolvers/query";
+import { Mutation } from "./resolvers/mutation";
 import { getFileLink } from "../util/googleUpload";
+import { and, shield } from "graphql-shield";
+
+export const permissions = shield({
+    Query: {
+        "*": isAuthenticatedRule
+    },
+    Mutation: {
+        updateUser: and(isAuthenticatedRule, isExecRule),
+        createRequisition: isAuthenticatedRule,
+        updateRequisition: and(isAuthenticatedRule, canEditRule),
+        createProject: and(isAuthenticatedRule, isExecRule),
+        updateProject: and(isAuthenticatedRule, isExecRule),
+        createVendor: and(isAuthenticatedRule, isExecRule),
+        updateVendor: and(isAuthenticatedRule, isExecRule),
+        createPaymentMethod: and(isAuthenticatedRule, isExecRule),
+        updatePaymentMethod: and(isAuthenticatedRule, isExecRule),
+        createPayment: and(isAuthenticatedRule, isExecRule),
+        createApproval: and(isAuthenticatedRule, canExpenseRule)
+    }
+}, {
+    allowExternalErrors: true,
+    fallbackRule: fallbackRule,
+    fallbackError: "Sorry, you don't have access. Please contact a tech team member for help."
+});
 
 export const resolvers: IResolvers = {
     Query: Query,
@@ -43,12 +65,12 @@ export const resolvers: IResolvers = {
         },
     }),
     User: {
-        hasAdminAccess: (parent: any, args: any, context: { user: User }) => hasAdminAccess(context.user)
+        canViewAdminPanel: canViewAdminPanel
     },
     Requisition: {
-        canEdit: (parent: any, args: any, context: { user: User }) => canEdit(context.user, parent),
-        canCancel: (parent: any, args: any, context: { user: User }) => canCancel(context.user),
-        canExpense: (parent: any, args: any, context: { user: User }) => canExpense(context.user, parent),
+        canEdit: canEdit,
+        canCancel: canCancel,
+        canExpense: canExpense,
         referenceString: (parent: any) => `${parent.project.year}-${parent.project.shortCode}-${parent.projectRequisitionId}`,
         files: (parent: any) => parent.files.filter((file: any) => file.isActive) // Filter so only active files are sent to client
     },

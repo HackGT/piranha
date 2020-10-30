@@ -40,6 +40,7 @@ type Mutation {
 
 scalar ID
 scalar Date
+scalar Upload
 
 enum AccessLevel {
     NONE
@@ -85,7 +86,7 @@ type User {
     name: String!
     accessLevel: AccessLevel!
     slackId: String
-    hasAdminAccess: Boolean!
+    canViewAdminPanel: Boolean!
 }
 
 input UserInput {

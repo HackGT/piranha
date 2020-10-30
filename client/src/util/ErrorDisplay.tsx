@@ -13,17 +13,6 @@ const ErrorDisplay: React.FC<Props> = (props) => {
     console.error(props.error);
   }
 
-  // @ts-ignore
-  if (props.error?.networkError?.statusCode === 403) {
-    return (
-      <Result
-        status="error"
-        title="Sorry, you don't have access :("
-        subTitle="Please contact a tech team member."
-      />
-    );
-  }
-
   return (
     <Result
       status="error"

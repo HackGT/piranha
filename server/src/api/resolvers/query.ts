@@ -2,8 +2,8 @@ import { GraphQLError } from 'graphql';
 import { User } from "@prisma/client";
 
 import { BUDGET_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from "./common";
-import { prisma } from '../common';
-import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryProjectsArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../generated/types';
+import { prisma } from '../../common';
+import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryProjectsArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../../generated/types';
 
 const user = async function (parent: any, args: any, context: { user: User }) {
     let user = await prisma.user.findOne({
