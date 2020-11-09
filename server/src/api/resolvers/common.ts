@@ -1,6 +1,6 @@
 import { ApprovalInclude, BudgetInclude, PaymentInclude, ProjectInclude, RequisitionInclude, RequisitionStatus } from "@prisma/client";
 
-export const requisitionReferenceString = (requisition: any) => `${requisition.project.year}-${requisition.project.shortCode} -${requisition.projectRequisitionId}`;
+export const requisitionReferenceString = (requisition: any) => `${requisition.project.year}-${requisition.project.shortCode}-${requisition.projectRequisitionId}`;
 export const projectReferenceString = (project: any) => `${project.year}-${project.shortCode}`;
 
 export const statusToString = (status: RequisitionStatus) => {
