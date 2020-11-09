@@ -1,4 +1,25 @@
-import { ApprovalInclude, BudgetInclude, PaymentInclude, ProjectInclude, RequisitionInclude } from "@prisma/client"
+import { ApprovalInclude, BudgetInclude, PaymentInclude, ProjectInclude, RequisitionInclude, RequisitionStatus } from "@prisma/client";
+
+export const requisitionReferenceString = (requisition: any) => `${requisition.project.year}-${requisition.project.shortCode} -${requisition.projectRequisitionId}`;
+export const projectReferenceString = (project: any) => `${project.year}-${project.shortCode}`;
+
+export const statusToString = (status: RequisitionStatus) => {
+    switch (status) {
+        case RequisitionStatus.DRAFT: return "Draft";
+        case RequisitionStatus.SUBMITTED: return "Submitted";
+        case RequisitionStatus.PENDING_CHANGES: return "Pending Changes";
+        case RequisitionStatus.READY_TO_ORDER: return "Ready to Order";
+        case RequisitionStatus.ORDERED: return "Ordered";
+        case RequisitionStatus.PARTIALLY_RECEIVED: return "Partially Received";
+        case RequisitionStatus.RECEIVED: return "Received";
+        case RequisitionStatus.CLOSED: return "Closed";
+        case RequisitionStatus.CANCELLED: return "Cancelled";
+        case RequisitionStatus.READY_FOR_REIMBURSEMENT: return "Ready for Reimbursement";
+        case RequisitionStatus.AWAITING_INFORMATION: return "Awaiting Information";
+        case RequisitionStatus.REIMBURSEMENT_IN_PROGRESS: return "Reimbursement in Progress";
+        default: return "Unknown";
+    }
+};
 
 export const PROJECT_INCLUDE: ProjectInclude = {
     leads: true,

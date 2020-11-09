@@ -26,9 +26,7 @@ const users = async function (parent: any, args: any) {
 const project = async function (parent: any, args: QueryProjectArgs) {
     const project = await prisma.project.findFirst({
         where: args,
-        include: {
-            ...PROJECT_INCLUDE
-        }
+        include: PROJECT_INCLUDE
     });
 
     return project;
@@ -36,9 +34,7 @@ const project = async function (parent: any, args: QueryProjectArgs) {
 
 const projects = async function (parent: any, args: QueryProjectsArgs) {
     return await prisma.project.findMany({
-        include: {
-            ...PROJECT_INCLUDE
-        }
+        include: PROJECT_INCLUDE
     });
 };
 
@@ -65,9 +61,7 @@ const requisition = async function (parent: any, args: QueryRequisitionArgs, con
             },
             projectRequisitionId: args.projectRequisitionId
         },
-        include: {
-            ...REQUISITION_INCLUDE
-        }
+        include: REQUISITION_INCLUDE
     });
 };
 
@@ -78,9 +72,7 @@ const requisitions = async function (parent: any, args: any, context: { user: Us
                 id: context.user.id
             }
         },
-        include: {
-            ...REQUISITION_INCLUDE
-        }
+        include: REQUISITION_INCLUDE
     })
 };
 
@@ -94,9 +86,7 @@ const paymentMethods = async function (parent: any, args: QueryPaymentMethodsArg
 
 const budgets = async function (parent: any, args: any) {
     return await prisma.budget.findMany({
-        include: {
-            ...BUDGET_INCLUDE
-        }
+        include: BUDGET_INCLUDE
     });
 };
 

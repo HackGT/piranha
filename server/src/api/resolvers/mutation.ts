@@ -50,15 +50,10 @@ const createRequisition = async function (parent: any, args: any, context: { use
             items: { create: createItems },
             files: undefined
         },
-        include: {
-            ...REQUISITION_INCLUDE
-        }
+        include: REQUISITION_INCLUDE
     });
 
-    if (requisition.status != RequisitionStatus.DRAFT) {
-        sendSlackNotification(requisition);
-    }
-
+    await sendSlackNotification(requisition.id);
     await uploadFiles(data.files?.map((file: any) => file.originFileObj), requisition);
 
     return requisition;
@@ -166,13 +161,11 @@ const updateRequisition = async function (parent: any, args: any) {
             ...itemIds.length != 0 && { items: { set: itemIds.map(id => ({ id })) } },
             files: undefined
         },
-        include: {
-            ...REQUISITION_INCLUDE
-        }
+        include: REQUISITION_INCLUDE
     });
 
     if (requisition.status != oldRequisition.status) {
-        sendSlackNotification(requisition);
+        sendSlackNotification(requisition.id);
     }
 
     return requisition;
@@ -187,9 +180,7 @@ const createProject = async function (parent: any, args: MutationCreateProjectAr
                 connect: args.data.leads.map(lead => ({ id: lead }))
             }
         },
-        include: {
-            ...PROJECT_INCLUDE
-        }
+        include: PROJECT_INCLUDE
     });
 }
 
@@ -205,9 +196,7 @@ const updateProject = async function (parent: any, args: MutationUpdateProjectAr
                 connect: args.data.leads.map(lead => ({ id: lead }))
             }
         },
-        include: {
-            ...PROJECT_INCLUDE
-        }
+        include: PROJECT_INCLUDE
     });
 }
 
@@ -270,9 +259,7 @@ const createPayment = async function (parent: any, args: MutationCreatePaymentAr
                 }
             }
         },
-        include: {
-            ...PAYMENT_INCLUDE
-        }
+        include: PAYMENT_INCLUDE
     })
 }
 
@@ -291,9 +278,7 @@ const createApproval = async function (parent: any, args: MutationCreateApproval
                 }
             }
         },
-        include: {
-            ...APPROVAL_INCLUDE
-        }
+        include: APPROVAL_INCLUDE
     })
 }
 

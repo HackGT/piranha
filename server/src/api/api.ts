@@ -5,6 +5,7 @@ import { Query } from "./resolvers/query";
 import { Mutation } from "./resolvers/mutation";
 import { getFileLink } from "../util/googleUpload";
 import { and, shield } from "graphql-shield";
+import { projectReferenceString, requisitionReferenceString } from "./resolvers/common";
 
 export const permissions = shield({
     Query: {
@@ -71,11 +72,11 @@ export const resolvers: IResolvers = {
         canEdit: canEdit,
         canCancel: canCancel,
         canExpense: canExpense,
-        referenceString: (parent: any) => `${parent.project.year}-${parent.project.shortCode}-${parent.projectRequisitionId}`,
+        referenceString: (parent: any) => requisitionReferenceString(parent),
         files: (parent: any) => parent.files.filter((file: any) => file.isActive) // Filter so only active files are sent to client
     },
     Project: {
-        referenceString: (parent: any) => `${parent.year}-${parent.shortCode}`
+        referenceString: (parent: any) => projectReferenceString(parent)
     },
     File: {
         signedUrl: (parent: any) => getFileLink(parent)
