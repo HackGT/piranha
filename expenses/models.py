@@ -57,7 +57,6 @@ class Requisition(TimestampedModel):
     created_by = ForeignKey(auth.get_user_model(), on_delete=models.PROTECT, related_name="created_by",
                             related_query_name="created_by")
     project = ForeignKey('Project', on_delete=models.CASCADE)
-    vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
     project_requisition_id = PositiveIntegerField()
     payment_required_by = DateField(null=True, blank=True)
     other_fees = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
@@ -67,6 +66,7 @@ class Requisition(TimestampedModel):
     # Only used for non-reimbursements
     shipping_location = CharField(max_length=150, blank=True)
     order_date = DateField(null=True, blank=True)
+    vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
 
     # Only used for reimbursements
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
@@ -95,10 +95,11 @@ class RequisitionItem(models.Model):
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
     quantity = PositiveIntegerField(null=True, blank=True)
     unit_price = DecimalField(max_digits=15, decimal_places=4, null=True, blank=True)
-    link = URLField(blank=True)
+    link = URLField(blank=True, max_length=400)
     notes = TextField(blank=True)
     received = BooleanField(default=False)
     line_item = ForeignKey('budgets.LineItem', on_delete=models.PROTECT, null=True, blank=True)
+    vendor = ForeignKey('Vendor', on_delete=models.PROTECT, limit_choices_to={"is_active": True}, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -149,13 +150,12 @@ class PaymentMethod(TimestampedModel):
 
 class Payment(TimestampedModel):
     requisition = ForeignKey('Requisition', on_delete=models.CASCADE)
-    recipient = ForeignKey('Vendor', on_delete=models.PROTECT)
     amount = DecimalField(max_digits=15, decimal_places=4)
     funding_source = ForeignKey('PaymentMethod', on_delete=models.PROTECT, limit_choices_to={"is_active": True})
     date = DateField()
 
     def __str__(self):
-        return "{} from {} to {} on {}".format(self.amount, self.funding_source, self.recipient.name, self.date)
+        return "{} from {} for {} on {}".format(self.amount, self.funding_source, self.requisition, self.date)
 
 
 class File(TimestampedModel):
