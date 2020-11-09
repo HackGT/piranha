@@ -1,14 +1,9 @@
 /venv/
 .env
 db.sqlite3
-**/__pycache__/
-*.pyc
 **/.DS_Store
 **/.vscode/
-**/.idea
-
-expenses/config/**
-!expenses/config/google-application-key-example.json
+**/.idea/
 
 server/config/**
 !server/config/google-application-key-example.json
