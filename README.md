@@ -34,23 +34,9 @@ Piranha is an application to help HackGT manage our internal financial processes
 #### Environment Variables
 
 Once you have the backend dependencies installed,
-configure the backend environment variables by copying [.env.example](.env.example) to a new file called `.env`.
+configure the backend environment variables by copying [.env.example](.env.example) to a new file called `.env` and filling in the variables.
 
-| Environment variable | Description |
-| ------ | -----|
-| SESSION_SECRET | Sets secret for user session cookie  |
-| POSTGRES_URL | Connection string for a Postgres database.  Format: `postgres://USERNAME:PASSWORD@localhost:5432/DATABASE_NAME` |
-| GROUND_TRUTH_URL | URL to a [Ground Truth](https://github.com/hackgt/ground-truth) login service for authenticating users.  |
-| GROUND_TRUTH_ID | Client Id - Obtain from Ground Truth admin panel |
-| GROUND_TRUTH_SECRET | Client Secret - Obtain from Ground Truth admin panel |
-| PRODUCTION | Use `true` to enable production settings |
-| GOOGLE_APPLICATION_CREDENTIALS | Stores path to service account credentials for Google Cloud |
-| GOOGLE_STORAGE_BUCKET | Name of storage bucket in Google Cloud |
-| SENTRY_DSN | The Sentry.io URL to use for error reporting (only used in production) |
-| SLACK_API_TOKEN | Slack api bot token |
-| ROOT_URL | URL for the root of the app |
-
-To setup google file upload, add your google application key to a file called `google-application-key.json` in the config directory.
+To setup google file upload, add your Google service account credentials to a file called `google-application-key.json` in the config directory.
 
 #### Client
 1. `cd client` then `yarn install`
