@@ -54,9 +54,9 @@ export const isExecRule = rule({ cache: 'contextual' })(
     },
 );
 
-export const canEditRule = rule({ cache: 'strict' })(canEdit);
+export const canEditRule = rule()(canEdit);
 
-export const canExpenseRule = rule({ cache: 'strict' })(canExpense);
+export const canExpenseRule = rule()(canExpense);
 
 export const fallbackRule = rule({ cache: false })(
     async (parent, args, ctx, info) => {
