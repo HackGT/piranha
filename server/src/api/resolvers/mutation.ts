@@ -1,14 +1,13 @@
 import { GraphQLError } from 'graphql';
-import { User, RequisitionStatus } from "@prisma/client";
+import { User } from "@prisma/client";
 
 import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
-import { APPROVAL_INCLUDE, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
+import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationResolvers, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../../generated/types';
 
-
-const updateUser = async function (parent: any, args: MutationUpdateUserArgs, context: { user: User }) {
+const updateUser = async function (parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
         where: {
             id: args.id
@@ -17,7 +16,7 @@ const updateUser = async function (parent: any, args: MutationUpdateUserArgs, co
     });
 }
 
-const createRequisition = async function (parent: any, args: any, context: { user: User }) {
+const createRequisition = async function (parent: any, args: MutationCreateRequisitionArgs, context: { user: User }) {
     let aggregate = await prisma.requisition.aggregate({
         max: {
             projectRequisitionId: true
@@ -35,17 +34,18 @@ const createRequisition = async function (parent: any, args: any, context: { use
         unitPrice: item.unitPrice,
         link: item.link,
         notes: item.notes,
-        ...item.lineItem && { lineItem: { connect: { id: item.lineItem } } },
-        ...item.vendor && { vendor: { connect: { id: item.vendor } } }
-    }))
+        lineItem: connectOrUndefined(item.lineItem),
+        vendor: connectOrUndefined(item.vendor)
+    }));
 
     let requisition = await prisma.requisition.create({
         data: {
             ...data,
+            isReimbursement: data.isReimbursement || false,
             projectRequisitionId: aggregate.max.projectRequisitionId + 1,
-            ...data.fundingSource && { fundingSource: { connect: { id: data.fundingSource } } },
-            ...data.budget && { budget: { connect: { id: data.budget } } },
-            ...data.project && { project: { connect: { id: data.project } } },
+            fundingSource: connectOrUndefined(data.fundingSource),
+            budget: connectOrUndefined(data.budget),
+            project: { connect: { id: data.project || undefined } },
             createdBy: { connect: { id: context.user.id } },
             items: { create: createItems },
             files: undefined
@@ -59,7 +59,7 @@ const createRequisition = async function (parent: any, args: any, context: { use
     return requisition;
 }
 
-const updateRequisition = async function (parent: any, args: any) {
+const updateRequisition = async function (parent: any, args: MutationUpdateRequisitionArgs) {
     let oldRequisition = await prisma.requisition.findFirst({
         where: {
             id: args.id
@@ -90,10 +90,8 @@ const updateRequisition = async function (parent: any, args: any) {
                     },
                     data: {
                         ...newItems[index],
-                        ...newItems[index].vendor && { vendor: { connect: { id: newItems[index].vendor } } },
-                        ...(!newItems[index].vendor && oldItems[index].vendorId) && { vendor: { disconnect: true } },
-                        ...newItems[index].lineItem && { lineItem: { connect: { id: newItems[index].lineItem } } },
-                        ...(!newItems[index].lineItem && oldItems[index].lineItemId) && { lineItem: { disconnect: true } }
+                        vendor: connectOrDisconnect(newItems[index].vendor, oldItems[index].vendorId),
+                        lineItem: connectOrDisconnect(newItems[index].lineItem, oldItems[index].lineItemId)
                     }
                 });
                 itemIds.push(item.id);
@@ -107,13 +105,9 @@ const updateRequisition = async function (parent: any, args: any) {
                 const item = await prisma.requisitionItem.create({
                     data: {
                         ...newItems[index],
-                        ...newItems[index].vendor && { vendor: { connect: { id: newItems[index].vendor } } },
-                        ...newItems[index].lineItem && { lineItem: { connect: { id: newItems[index].lineItem } } },
-                        requisition: {
-                            connect: {
-                                id: oldRequisition.id
-                            }
-                        }
+                        vendor: connectOrUndefined(newItems[index].vendor),
+                        lineItem: connectOrUndefined(newItems[index].lineItem),
+                        requisition: { connect: { id: oldRequisition.id } }
                     }
                 });
                 itemIds.push(item.id);
@@ -130,17 +124,16 @@ const updateRequisition = async function (parent: any, args: any) {
             if (file.originFileObj) {
                 filesToUpload.push(file.originFileObj);
             } else if (file.id) {
-                existingFileIds.push(file.id);
+                existingFileIds.push(parseInt(file.id));
             }
         }
+
         await uploadFiles(filesToUpload, oldRequisition);
 
-        const oldFileIds = oldRequisition.files.filter(file => file.isActive).map(file => file.id);
-
-        for (let inactiveFileId of oldFileIds.filter(id => !existingFileIds.includes(id))) {
+        for (let inactiveFile of oldRequisition.files.filter(file => file.isActive && !existingFileIds.includes(file.id))) {
             await prisma.file.update({
                 where: {
-                    id: inactiveFileId
+                    id: inactiveFile.id
                 },
                 data: {
                     isActive: false
@@ -155,10 +148,11 @@ const updateRequisition = async function (parent: any, args: any) {
         },
         data: {
             ...data,
-            ...data.fundingSource && { fundingSource: { connect: { id: data.fundingSource } } },
-            ...data.budget && { budget: { connect: { id: data.budget } } },
-            ...data.project && { project: { connect: { id: data.project } } },
-            ...itemIds.length != 0 && { items: { set: itemIds.map(id => ({ id })) } },
+            isReimbursement: data.isReimbursement || false,
+            fundingSource: connectOrUndefined(data.fundingSource),
+            budget: connectOrUndefined(data.budget),
+            project: connectOrUndefined(data.project),
+            items: itemIds.length == 0 ? undefined : { set: itemIds.map(id => ({ id })) },
             files: undefined
         },
         include: REQUISITION_INCLUDE
@@ -171,7 +165,7 @@ const updateRequisition = async function (parent: any, args: any) {
     return requisition;
 }
 
-const createProject = async function (parent: any, args: MutationCreateProjectArgs, context: { user: User }) {
+const createProject = async function (parent: any, args: MutationCreateProjectArgs) {
     return await prisma.project.create({
         data: {
             ...args.data,
@@ -184,7 +178,7 @@ const createProject = async function (parent: any, args: MutationCreateProjectAr
     });
 }
 
-const updateProject = async function (parent: any, args: MutationUpdateProjectArgs, context: { user: User }) {
+const updateProject = async function (parent: any, args: MutationUpdateProjectArgs) {
     return await prisma.project.update({
         where: {
             id: args.id
@@ -200,7 +194,7 @@ const updateProject = async function (parent: any, args: MutationUpdateProjectAr
     });
 }
 
-const createVendor = async function (parent: any, args: MutationCreateVendorArgs, context: { user: User }) {
+const createVendor = async function (parent: any, args: MutationCreateVendorArgs) {
     return await prisma.vendor.create({
         data: {
             ...args.data,
@@ -209,7 +203,7 @@ const createVendor = async function (parent: any, args: MutationCreateVendorArgs
     });
 }
 
-const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs, context: { user: User }) {
+const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs) {
     return await prisma.vendor.update({
         where: {
             id: args.id
@@ -221,7 +215,7 @@ const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs
     });
 }
 
-const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs, context: { user: User }) {
+const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs) {
     return await prisma.paymentMethod.create({
         data: {
             ...args.data,
@@ -231,7 +225,7 @@ const createPaymentMethod = async function (parent: any, args: MutationCreatePay
     });
 }
 
-const updatePaymentMethod = async function (parent: any, args: MutationUpdatePaymentMethodArgs, context: { user: User }) {
+const updatePaymentMethod = async function (parent: any, args: MutationUpdatePaymentMethodArgs) {
     return await prisma.paymentMethod.update({
         where: {
             id: args.id
@@ -244,7 +238,7 @@ const updatePaymentMethod = async function (parent: any, args: MutationUpdatePay
     });
 }
 
-const createPayment = async function (parent: any, args: MutationCreatePaymentArgs, context: { user: User }) {
+const createPayment = async function (parent: any, args: MutationCreatePaymentArgs) {
     return await prisma.payment.create({
         data: {
             ...args.data,

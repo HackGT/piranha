@@ -21,6 +21,22 @@ export const statusToString = (status: RequisitionStatus) => {
     }
 };
 
+export const connectOrUndefined = (value?: number | null) => {
+    if (value) {
+        return { connect: { id: value } };
+    }
+    return undefined;
+}
+
+export const connectOrDisconnect = (value?: number | null, oldValue?: number | null) => {
+    if (!value && oldValue) {
+        return { disconnect: true };
+    } else if (value) {
+        return { connect: { id: value } };
+    }
+    return undefined;
+}
+
 export const PROJECT_INCLUDE: ProjectInclude = {
     leads: true,
     requisitions: {

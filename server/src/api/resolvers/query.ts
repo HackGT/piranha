@@ -52,7 +52,7 @@ const vendors = async function (parent: any, args: QueryVendorsArgs) {
     });
 };
 
-const requisition = async function (parent: any, args: QueryRequisitionArgs, context: { user: User }) {
+const requisition = async function (parent: any, args: QueryRequisitionArgs) {
     return await prisma.requisition.findFirst({
         where: {
             project: {
