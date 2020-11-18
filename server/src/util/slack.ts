@@ -22,7 +22,12 @@ export const sendSlackNotification = async (requisitionId: number) => {
         }
     });
 
-    if (!process.env.SLACK_API_TOKEN || !process.env.ROOT_URL || !requisition?.createdBy.slackId || requisition.status == RequisitionStatus.DRAFT) {
+    if (!process.env.SLACK_API_TOKEN || !process.env.ROOT_URL) {
+        console.log("No slack api token or root url provided. Not sending slack message.");
+        return;
+    }
+
+    if (!requisition?.createdBy.slackId || requisition.status == RequisitionStatus.DRAFT) {
         return;
     }
 
