@@ -58,4 +58,4 @@ After changing the prisma schema file `schema.prisma`, run the following command
 
 1. `yarn migrate:save`
 2. `yarn migrate:up`
-3. `yarn prisma generate`
+3. `yarn prisma-generate`
