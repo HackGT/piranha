@@ -61,7 +61,7 @@ const RequisitionDetail: React.FC = () => {
           <RequisitionTag status={rekData.status} style={{ marginBottom: "5px" }} />
           {rekData.isReimbursement && <Tag>Reimbursement</Tag>}
           <Title level={2} style={{ marginBottom: "10px" }}>{loading ? "Loading..." : rekData.headline}</Title>
-          <Text style={{ display: "block" }}>{rekData.description}</Text>
+          <Text style={{ display: "block", whiteSpace: "pre-line" }}>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
           <ActionsSection data={rekData} loading={loading} />
