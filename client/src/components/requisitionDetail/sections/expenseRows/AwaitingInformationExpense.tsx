@@ -6,6 +6,7 @@ import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../queries/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import ErrorDisplay from "../../../../util/ErrorDisplay";
+import SelectFundingSourceRow from "./SelectFundingSourceRow";
 
 const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
   const [updateRequisitionAndCreatePayment] = useMutation(UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION);
@@ -82,6 +83,7 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
           <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
         </Form.Item>
       </RequisitionExpenseRow>
+      <SelectFundingSourceRow requisition={props.requisition} />
     </Collapse>
   );
 };
