@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
     "@testing-library/user-event": "^11.4.2",
-    "antd": "^4.4.2",
+    "antd": "^4.8.4",
     "apollo-upload-client": "^14.1.1",
     "graphql": "^14.6.0",
     "js-cookie": "^2.2.1",
