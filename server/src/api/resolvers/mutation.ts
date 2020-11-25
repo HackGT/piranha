@@ -41,7 +41,7 @@ const createRequisition = async function (parent: any, args: MutationCreateRequi
     let requisition = await prisma.requisition.create({
         data: {
             ...data,
-            isReimbursement: data.isReimbursement || false,
+            isReimbursement: data.isReimbursement || undefined,
             projectRequisitionId: aggregate.max.projectRequisitionId + 1,
             fundingSource: connectOrUndefined(data.fundingSource),
             budget: connectOrUndefined(data.budget),
@@ -148,7 +148,7 @@ const updateRequisition = async function (parent: any, args: MutationUpdateRequi
         },
         data: {
             ...data,
-            isReimbursement: data.isReimbursement || false,
+            isReimbursement: data.isReimbursement || undefined,
             fundingSource: connectOrUndefined(data.fundingSource),
             budget: connectOrUndefined(data.budget),
             project: connectOrUndefined(data.project),
@@ -185,7 +185,7 @@ const updateProject = async function (parent: any, args: MutationUpdateProjectAr
         },
         data: {
             ...args.data,
-            archived: args.data.archived || false,
+            archived: args.data.archived || undefined,
             leads: {
                 connect: args.data.leads.map(lead => ({ id: lead }))
             }
@@ -210,7 +210,7 @@ const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs
         },
         data: {
             ...args.data,
-            isActive: args.data.isActive || true
+            isActive: args.data.isActive || undefined
         }
     });
 }
@@ -232,8 +232,8 @@ const updatePaymentMethod = async function (parent: any, args: MutationUpdatePay
         },
         data: {
             ...args.data,
-            isActive: args.data.isActive || true,
-            isDirectPayment: args.data.isActive || false
+            isActive: args.data.isActive || undefined,
+            isDirectPayment: args.data.isActive || undefined
         }
     });
 }
