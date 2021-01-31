@@ -6,7 +6,7 @@ import { prisma } from '../../common';
 import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryProjectsArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../../generated/types';
 
 const user = async function (parent: any, args: any, context: { user: User }) {
-    let user = await prisma.user.findOne({
+    let user = await prisma.user.findUnique({
         where: {
             uuid: context.user.uuid
         }
@@ -39,7 +39,7 @@ const projects = async function (parent: any, args: QueryProjectsArgs) {
 };
 
 const vendor = async function (parent: any, args: QueryVendorArgs) {
-    return await prisma.vendor.findOne({
+    return await prisma.vendor.findUnique({
         where: args
     });
 };

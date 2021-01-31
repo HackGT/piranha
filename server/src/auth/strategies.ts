@@ -73,7 +73,7 @@ export class GroundTruthStrategy extends OAuthStrategy {
     }
 
     protected static async passportCallback(req: Request, accessToken: string, refreshToken: string, profile: IProfile, done: PassportDone) {
-        let user = await prisma.user.findOne({
+        let user = await prisma.user.findUnique({
             where: {
                 uuid: profile.uuid
             }

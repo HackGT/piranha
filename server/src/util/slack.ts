@@ -7,7 +7,7 @@ import { prisma } from "../common";
 const web = new WebClient(process.env.SLACK_API_TOKEN);
 
 export const sendSlackNotification = async (requisitionId: number) => {
-    const requisition = await prisma.requisition.findOne({
+    const requisition = await prisma.requisition.findUnique({
         where: {
             id: requisitionId
         },
