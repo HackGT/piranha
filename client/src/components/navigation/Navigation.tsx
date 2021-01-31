@@ -9,7 +9,7 @@ class Page {
   link: string;
   privateRoute: boolean;
 
-  constructor(name: string, link: string, privateRoute: boolean = false) {
+  constructor(name: string, link: string, privateRoute = false) {
     this.name = name;
     this.link = link;
     this.privateRoute = privateRoute;

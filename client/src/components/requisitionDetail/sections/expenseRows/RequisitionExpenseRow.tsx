@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Form, Collapse, Typography } from "antd";
 import { FormInstance } from "antd/es/form";
+import { FaShieldAlt } from "react-icons/fa";
 import { RequisitionTag } from "../../../../util/CustomTags";
 import { RequisitionStatus } from "../../../../generated/types";
-import { FaShieldAlt } from "react-icons/fa";
 
 const { Text } = Typography;
 const { Panel } = Collapse;
@@ -41,7 +41,10 @@ const RequisitionExpenseRow: React.FC<Props> = (props) => {
       >
         {props.children}
         <Form.Item style={{ marginBottom: 0 }}>
-          <Button type="primary" htmlType="submit"><FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.5em" }} />{props.buttonText}</Button>
+          <Button type="primary" htmlType="submit">
+            <FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.5em" }} />
+            {props.buttonText}
+          </Button>
         </Form.Item>
       </Form>
     </Panel>

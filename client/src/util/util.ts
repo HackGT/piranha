@@ -59,7 +59,7 @@ export const StatusToStep = (status: RequisitionStatus) => {
   }
 };
 
-export const formatPrice = (num: (number | undefined | null), noDollarSign: boolean = false) => {
+export const formatPrice = (num: (number | undefined | null), noDollarSign = false) => {
   const options = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

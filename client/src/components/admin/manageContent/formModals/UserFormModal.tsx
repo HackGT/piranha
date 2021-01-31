@@ -75,6 +75,7 @@ const UserFormModal: React.FC<FormModalProps> = (props) => {
             <Radio.Group>
               {accessLevelOptions.map((item: any) => (
                 <Radio
+                  key={item.label}
                   style={{ display: "block", height: "30px", lineHeight: "30px" }}
                   value={item.value}
                   disabled={initialValues && initialValues.id === currentUser.id} // You can't change your own access level

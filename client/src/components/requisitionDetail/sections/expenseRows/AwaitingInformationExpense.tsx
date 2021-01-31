@@ -29,7 +29,7 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = (pr
     };
 
     const paymentData = {
-      amount: parseFloat(values.amount.replace(/,/g, '')),
+      amount: parseFloat(values.amount.replace(/,/g, "")),
       fundingSource: props.requisition.fundingSource.id,
       date: values.date.format("YYYY-MM-DD"),
       requisition: props.requisition.id

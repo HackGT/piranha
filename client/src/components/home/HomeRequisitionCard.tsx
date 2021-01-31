@@ -10,7 +10,7 @@ interface Props {
   rek: Requisition;
 }
 
-const HomeRequisitionCard: React.FC<Props> = (props) => (
+const HomeRequisitionCard: React.FC<Props> = props => (
   <Card
     title={(
       <Skeleton loading={props.loading} paragraph={false} active>
