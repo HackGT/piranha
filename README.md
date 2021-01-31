@@ -25,9 +25,14 @@ Piranha is an application to help HackGT manage our internal financial processes
 
 ## Setup
 
+#### Root Folder
+1. `yarn install`
+2. `yarn generate` to generate types
+
 #### Server
 1. `cd server` then `yarn install`
-2. `yarn prisma-generate` to generate prisma types
+2. `yarn migrate:up` to setup database
+3. `yarn prisma-generate` to generate prisma types
 3. `yarn dev`
 
 
