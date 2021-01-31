@@ -15,4 +15,4 @@ COPY --from=build /usr/src/piranha/client/ /usr/src/piranha/client/
 WORKDIR /usr/src/piranha/server/
 
 EXPOSE 3000
-CMD ["yarn", "start-migrate"]
+CMD ["yarn", "start"]
