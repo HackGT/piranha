@@ -53,11 +53,11 @@ export function isAuthenticated(request: express.Request, response: express.Resp
 const groundTruthStrategy = new GroundTruthStrategy(String(process.env.GROUND_TRUTH_URL));
 
 passport.use(groundTruthStrategy);
-passport.serializeUser<User, string>((user, done) => {
+passport.serializeUser<string>((user, done) => {
     done(null, user.uuid);
 });
-passport.deserializeUser<User, string>(async (id, done) => {
-    let user = await prisma.user.findOne({
+passport.deserializeUser<string>(async (id, done) => {
+    let user = await prisma.user.findUnique({
         where: {
             uuid: id
         }
