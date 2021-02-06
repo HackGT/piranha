@@ -122,7 +122,7 @@ const updateRequisition = async function updateRequisition(parent: any, args: Mu
 
         for (const file of data.files) {
             if (file.originFileObj) {
-                filesToUpload.push(file.originFileObj);
+                filesToUpload.push(file.originFileObj.promise);
             } else if (file.id) {
                 existingFileIds.push(parseInt(file.id));
             }

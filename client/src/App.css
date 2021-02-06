@@ -40,10 +40,10 @@
 
 /* Makes dropdown get smaller on mobile */
 .ui.selection.dropdown {
-    min-width: 0 !important;
+  min-width: 0 !important;
 }
 
 /* Allows question mark icon to be on same line as label in form */
-.ui.form .field>label {
-    display: inline !important;
+.ui.form .field > label {
+  display: inline !important;
 }

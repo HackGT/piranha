@@ -8,6 +8,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express';
 import { applyMiddleware } from "graphql-middleware";
+import { graphqlUploadExpress } from 'graphql-upload';
 
 dotenv.config();
 
@@ -54,9 +55,12 @@ const server = new ApolloServer({
         console.error(err);
         return err;
     },
+    uploads: false // https://github.com/apollographql/apollo-server/issues/3508#issuecomment-662371289
 });
 
 app.use(isAuthenticated);
+app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1024 * 6, maxFiles: 15 }));
+
 server.applyMiddleware({ app });
 
 app.use(isAuthenticated, express.static(path.join(__dirname, "../../client/build")));

@@ -1,6 +1,7 @@
 import { IResolvers } from "apollo-server-express";
-import { GraphQLScalarType, Kind } from 'graphql';
+import { GraphQLError, GraphQLScalarType, Kind } from 'graphql';
 import { and, shield } from "graphql-shield";
+
 import { canCancel, canEdit, canEditRule, canExpense, canExpenseRule, canViewAdminPanel, fallbackRule, isAuthenticatedRule, isExecRule } from "./permissions";
 import { Query } from "./resolvers/query";
 import { Mutation } from "./resolvers/mutation";
@@ -63,6 +64,23 @@ export const resolvers: IResolvers = {
                 return parseInt(ast.value); // ast value is always in string format
             }
             return null;
+        },
+    }),
+    Upload: new GraphQLScalarType({ // Based off graphql-upload library
+        name: 'Upload',
+        description: 'The `Upload` scalar type represents a file upload.',
+        parseValue(value) {
+            if (value.originFileObj?.promise instanceof Promise) {
+                return value
+            }
+
+            throw new GraphQLError('Upload value invalid.');
+        },
+        parseLiteral(ast) {
+            throw new GraphQLError('Upload literal unsupported.', ast);
+        },
+        serialize() {
+            throw new GraphQLError('Upload serialization unsupported.');
         },
     }),
     User: {
