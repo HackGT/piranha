@@ -2,7 +2,7 @@ import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
 import { Rule, RuleObject } from "antd/es/form";
 import { StoreValue } from "@apollo/client";
-import { Requisition, RequisitionStatus } from "../generated/types";
+import { Project, Requisition, RequisitionStatus } from "../generated/types";
 import { RequisitionFormData } from "../types/types";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {
@@ -89,6 +89,22 @@ export const getTotalCost = (requisition: Requisition | RequisitionFormData | un
 
   return 0;
 };
+
+export const getProjectTotalCost = (requisitions: Requisition[] | undefined) => {
+  if (!requisitions || requisitions.length === 0) {
+    return 0;
+  }
+
+  let total = 0;
+
+  requisitions.forEach(requisition => {
+    if (requisition.status !== "CANCELLED") {
+      total += getTotalCost(requisition, true);
+    }
+  });
+
+  return total;
+}
 
 export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAction<number>>) => {
   const handleResize = () => setScreenWidth(window.innerWidth);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Typography, Table, Tag, Button } from "antd";
+import { Typography, Table, Tag, Button, Switch } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
 import { Helmet } from "react-helmet";
 import { PROJECT_DETAIL_QUERY } from "../../queries/Project";
-import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook } from "../../util/util";
+import { formatPrice, getTotalCost, StatusToColor, StatusToString, screenWidthHook, getProjectTotalCost } from "../../util/util";
 
 import "./index.css";
 import ErrorDisplay from "../../util/ErrorDisplay";
@@ -29,6 +29,7 @@ type RequisitionTableData = {
 const ProjectDetail: React.FC = () => {
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [hideCancelledReks, setHideCancelledReks] = useState(true);
 
   useEffect(screenWidthHook(setScreenWidth));
 
@@ -101,9 +102,13 @@ const ProjectDetail: React.FC = () => {
     }
   ];
 
-  const sortedData: Requisition[] = data
-    ? data.project.requisitions.concat().sort((first: Requisition, second: Requisition) => first.projectRequisitionId - second.projectRequisitionId)
-    : [];
+  let sortedData: Requisition[] = [];
+
+  if (data) {
+    sortedData = data.project.requisitions.concat();
+    sortedData = sortedData.sort((first, second) => first.projectRequisitionId - second.projectRequisitionId);
+    sortedData = sortedData.filter(rek => hideCancelledReks ? rek.status !== "CANCELLED" : true);
+  }
 
   const rows: RequisitionTableData[] = sortedData.map((requisition) => {
     const row: RequisitionTableData = {
@@ -188,11 +193,24 @@ const ProjectDetail: React.FC = () => {
           onExpand: onRowExpand,
           indentSize: 1
         }}
+        summary={() => (
+          <Table.Summary.Row>
+            <Table.Summary.Cell index={1}>
+              <Text style={{ fontWeight: "bold" }}>Total Cost</Text>
+            </Table.Summary.Cell>
+            <Table.Summary.Cell index={1} colSpan={3} />
+            <Table.Summary.Cell index={1}>
+              <Text>{formatPrice(getProjectTotalCost(sortedData))}</Text>
+            </Table.Summary.Cell>
+          </Table.Summary.Row>
+        )}
         scroll={{ x: true }}
         bordered={screenWidth < 525}
         size={screenWidth < 768 ? "small" : undefined}
         id="table"
       />
+      <Text style={{ display: "block", margin: "10px 0" }}>Hide Cancelled Requisitions</Text>
+      <Switch checked={hideCancelledReks} onClick={() => setHideCancelledReks(hideCancelledReks => !hideCancelledReks)} checkedChildren="Yes" unCheckedChildren="No" />
     </>
   );
 };

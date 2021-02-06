@@ -100,7 +100,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
         unitPrice: item.unitPrice,
         notes: item.notes,
         lineItem: item.lineItem ? item.lineItem[1] : undefined, // Get id of line item, index 0 is category,
-        vendor: item.vendor || undefined,
+        vendor: item.vendor || undefined
       })),
       status: requisitionStatus,
       files: values.files,
@@ -185,7 +185,7 @@ const RequisitionForm: React.FC<Props> = (props) => {
     notes: null,
     received: null,
     lineItem: null
-  }
+  };
 
   const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"]; // Has backend validation as well
   const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3 MB

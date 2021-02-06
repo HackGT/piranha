@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Form, Collapse, Typography } from "antd";
 import { FormInstance } from "antd/es/form";
+import { FaShieldAlt } from "react-icons/fa";
 import { RequisitionTag } from "../../../../util/CustomTags";
 import { RequisitionStatus } from "../../../../generated/types";
-import { FaShieldAlt } from "react-icons/fa";
 
 const { Text } = Typography;
 const { Panel } = Collapse;
