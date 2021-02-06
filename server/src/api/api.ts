@@ -70,7 +70,7 @@ export const resolvers: IResolvers = {
         name: 'Upload',
         description: 'The `Upload` scalar type represents a file upload.',
         parseValue(value) {
-            if (value.originFileObj?.promise instanceof Promise) {
+            if (value.originFileObj?.promise instanceof Promise || value.signedUrl) {
                 return value
             }
 
