@@ -3,9 +3,9 @@ import { User } from "@prisma/client";
 
 import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
-import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
+import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, BUDGET_INCLUDE, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs } from '../../generated/types';
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -238,6 +238,22 @@ const updatePaymentMethod = async function updatePaymentMethod(parent: any, args
     });
 }
 
+const updateBudgetMethod = async function updateBudgetMethod(parent: any, args: MutationUpdateBudgetArgs) {
+    return await prisma.budget.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            ...args.data,
+            isActive: args.data.isActive || undefined,
+            categories: {
+                connect: args.data.categories.map(category => ({id: category}))
+            }
+        },
+        include: BUDGET_INCLUDE
+    })
+}
+
 const createPayment = async function createPayment(parent: any, args: MutationCreatePaymentArgs) {
     return await prisma.payment.create({
         data: {
@@ -290,6 +306,8 @@ export const Mutation = {
 
     createPaymentMethod,
     updatePaymentMethod,
+
+    updateBudgetMethod,
 
     createPayment,
     createApproval

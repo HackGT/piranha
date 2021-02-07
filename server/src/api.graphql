@@ -33,6 +33,8 @@ type Mutation {
     createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
     updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
 
+    updateBudget(data: BudgetInput!, id: ID!): Budget
+
     createPayment(data: PaymentInput!): Payment
 
     createApproval(data: ApprovalInput!): Approval
@@ -264,6 +266,12 @@ type Budget {
     name: String!
     categories: [Category!]!
     isActive: Boolean!
+}
+
+type BudgetInput {
+    name: String!
+    categories: [ID!]!
+    isActive: Boolean
 }
 
 type OperatingLineItem {
