@@ -50,7 +50,7 @@ const App: React.FC = () => {
                   <Route exact path="/project" component={ProjectList} />
                   <Route exact path="/requisition" component={RequisitionForm} />
                   <PrivateRoute exact path="/admin/:activeTab?" component={AdminHome} user={user} />
-                  <Route exact path="/budgets" component={Budgets} />
+                  <PrivateRoute exact path="/budgets" component={Budgets} user={user} />
                   <Route exact path="/" component={Home} />
                   <Route component={NotFound} />
                 </Switch>
