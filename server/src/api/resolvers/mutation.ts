@@ -221,8 +221,7 @@ const updateBudget = async function updateBudget(parent: any, args: MutationUpda
             id: args.id
         },
         data: {
-            ...args.data,
-            name: args.data.name
+            ...args.data
         }
     })
 }
