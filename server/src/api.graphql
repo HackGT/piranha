@@ -30,6 +30,9 @@ type Mutation {
     createVendor(data: VendorInput!): Vendor
     updateVendor(data: VendorInput!, id: ID!): Vendor
 
+    createBudget(data: BudgetInput!): Budget
+    updateBudget(data: BudgetInput!, id: ID!): Budget
+
     createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
     updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
 
@@ -264,6 +267,10 @@ type Budget {
     name: String!
     categories: [Category!]!
     isActive: Boolean!
+}
+
+input BudgetInput {
+    name: String!
 }
 
 type OperatingLineItem {

@@ -5,7 +5,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs} from '../../generated/types';
 
 const updateUser = async function (parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -215,6 +215,25 @@ const updateVendor = async function (parent: any, args: MutationUpdateVendorArgs
     });
 }
 
+const createBudget = async function (parent: any, args: MutationCreateBudgetArgs) {
+    return await prisma.budget.create({
+        data: {
+            ...args.data
+        }
+    });
+}
+
+const updateBudget = async function (parent: any, args: MutationUpdateBudgetArgs) {
+    return await prisma.budget.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            ...args.data
+        }
+    });
+}
+
 const createPaymentMethod = async function (parent: any, args: MutationCreatePaymentMethodArgs) {
     return await prisma.paymentMethod.create({
         data: {
@@ -290,6 +309,9 @@ export const Mutation = {
 
     createPaymentMethod: createPaymentMethod,
     updatePaymentMethod: updatePaymentMethod,
+
+    createBudget: createBudget,
+    updateBudget: updateBudget,
 
     createPayment: createPayment,
     createApproval: createApproval
