@@ -30,6 +30,7 @@ type Mutation {
     createVendor(data: VendorInput!): Vendor
     updateVendor(data: VendorInput!, id: ID!): Vendor
 
+    createBudget(data: BudgetInput!): Budget
     updateBudget(data: BudgetInput!, id: ID!): Budget
 
     createPaymentMethod(data: PaymentMethodInput!): PaymentMethod

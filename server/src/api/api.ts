@@ -20,6 +20,8 @@ export const permissions = shield({
         updateProject: and(isAuthenticatedRule, isExecRule),
         createVendor: and(isAuthenticatedRule, isExecRule),
         updateVendor: and(isAuthenticatedRule, isExecRule),
+        createBudget: and(isAuthenticatedRule, isExecRule),
+        updateBudget: and(isAuthenticatedRule, isExecRule),
         createPaymentMethod: and(isAuthenticatedRule, isExecRule),
         updatePaymentMethod: and(isAuthenticatedRule, isExecRule),
         createPayment: and(isAuthenticatedRule, isExecRule),

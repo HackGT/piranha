@@ -5,7 +5,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationUpdateBudgetArgs, MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs } from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs} from '../../generated/types';
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -215,6 +215,14 @@ const updateVendor = async function updateVendor(parent: any, args: MutationUpda
     });
 }
 
+const createBudget = async function createBudget(parent: any, args: MutationCreateBudgetArgs) {
+    return await prisma.budget.create({
+        data: {
+            ...args.data
+        }
+    });
+}
+
 const updateBudget = async function updateBudget(parent: any, args: MutationUpdateBudgetArgs) {
     return await prisma.budget.update({
         where: {
@@ -223,7 +231,7 @@ const updateBudget = async function updateBudget(parent: any, args: MutationUpda
         data: {
             ...args.data
         }
-    })
+    });
 }
 
 const createPaymentMethod = async function createPaymentMethod(parent: any, args: MutationCreatePaymentMethodArgs) {
@@ -303,6 +311,9 @@ export const Mutation = {
 
     createPaymentMethod,
     updatePaymentMethod,
+
+    createBudget,
+    updateBudget,
 
     createPayment,
     createApproval
