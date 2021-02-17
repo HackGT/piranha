@@ -20,7 +20,8 @@ export const routes = [
   new Page("Home", "/"),
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
-  new Page("Admin", "/admin", true)
+  new Page("Admin", "/admin", true),
+  new Page("Budgets", "/budgets", true)
 ];
 
 interface Props {
