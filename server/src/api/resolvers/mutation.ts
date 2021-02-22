@@ -5,7 +5,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs} from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs } from '../../generated/types';
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -306,8 +306,6 @@ export const Mutation = {
 
     createVendor,
     updateVendor,
-
-    updateBudget,
 
     createPaymentMethod,
     updatePaymentMethod,
