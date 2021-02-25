@@ -54,7 +54,7 @@ const createRequisition = async function createRequisition(parent: any, args: Mu
     });
 
     await sendSlackNotification(requisition.id);
-    await uploadFiles(data.files?.map((file: any) => file.originFileObj), requisition);
+    await uploadFiles(data.files?.map((file: any) => file.originFileObj.promise), requisition);
 
     return requisition;
 }
