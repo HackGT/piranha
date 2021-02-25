@@ -67,7 +67,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
     },
     {
       title: "Quantity",
-      render: (text: number, record: RequisitionItemRow, index: number) => {
+      render: (text: number, record: RequisitionItemRow) => {
         if (record.isDetailsRow) {
           return {
             props: {
@@ -88,7 +88,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
     },
     {
       title: "Subtotal",
-      render: (text: string, record: RequisitionItemRow, index: number) => {
+      render: (text: string, record: RequisitionItemRow) => {
         if (record.isDetailsRow) {
           return {
             props: {

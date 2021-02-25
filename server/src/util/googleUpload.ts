@@ -15,22 +15,22 @@ export const uploadFiles = async (promiseFiles: any, requisition: Requisition) =
         return
     }
 
-    let files: any[] = await Promise.all(promiseFiles);
+    const files: any[] = await Promise.all(promiseFiles);
 
-    let promiseStreams: Promise<any>[] = [];
-    let createPrismaFiles = []
+    const promiseStreams: Promise<any>[] = [];
+    const createPrismaFiles: any[] = []
 
-    for (const file of files) {
+    files.forEach(file => {
         if (!["image/jpeg", "image/png", "application/pdf", "text/plain"].includes(file.mimetype)) { // Has frontend validation as well
             throw new GraphQLError("File type is not accepted.");
         }
 
         const name = file.filename;
-        const googleName = name + "_" + Date.now();
+        const googleName = `${name}_${Date.now()}`;
 
         createPrismaFiles.push({
-            name: name,
-            googleName: googleName,
+            name,
+            googleName,
             mimetype: file.mimetype
         });
 
@@ -45,13 +45,13 @@ export const uploadFiles = async (promiseFiles: any, requisition: Requisition) =
             file.createReadStream()
                 .pipe(writeStream)
                 .on('finish', () => resolve(true))
-                .on('error', () => reject(false))
+                .on('error', () => reject(false)) // eslint-disable prefer-promise-reject-errors
         }))
-    }
+    });
 
     const uploadResults: boolean[] = await Promise.all(promiseStreams);
 
-    if (!uploadResults.every(success => success == true)) {
+    if (!uploadResults.every(success => success === true)) {
         throw new GraphQLError("Files could not be uploaded");
     }
 

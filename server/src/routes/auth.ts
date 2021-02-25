@@ -5,7 +5,7 @@ import passport from "passport";
 
 import { createLink, AuthenticateOptions } from "../auth/strategies"
 
-export let authRoutes = express.Router();
+export const authRoutes = express.Router();
 
 authRoutes.route("/login").get((req, res, next) => {
     const callbackURL = createLink(req, "auth/login/callback");
@@ -30,9 +30,9 @@ authRoutes.route("/login/callback").get((req, res, next) => {
 authRoutes.route("/check").get((req, res) => {
     if (req.user) {
         return res.status(200).json(req.user);
-    } else {
+    } 
         return res.status(400).json({ "success": false });
-    }
+    
 });
 
 authRoutes.route("/logout").all(async (req, res) => {
@@ -40,7 +40,7 @@ authRoutes.route("/logout").all(async (req, res) => {
 
     if (user) {
         try {
-            await fetch(process.env.GROUND_TRUTH_URL + '/auth/logout', {
+            await fetch(`${process.env.GROUND_TRUTH_URL  }/auth/logout`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${user.token}`

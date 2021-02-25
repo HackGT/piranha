@@ -31,7 +31,8 @@ export const connectOrUndefined = (value?: number | null) => {
 export const connectOrDisconnect = (value?: number | null, oldValue?: number | null) => {
     if (!value && oldValue) {
         return { disconnect: true };
-    } else if (value) {
+    }
+    if (value) {
         return { connect: { id: value } };
     }
     return undefined;

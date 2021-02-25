@@ -3,7 +3,6 @@ import passport from "passport";
 import session from "express-session";
 import dotenv from "dotenv";
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import { User } from "@prisma/client";
 
 import { app } from "../app";
 import { GroundTruthStrategy } from "./strategies";
@@ -57,7 +56,7 @@ passport.serializeUser<string>((user, done) => {
     done(null, user.uuid);
 });
 passport.deserializeUser<string>(async (id, done) => {
-    let user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
         where: {
             uuid: id
         }
