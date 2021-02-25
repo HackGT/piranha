@@ -30,6 +30,9 @@ type Mutation {
     createVendor(data: VendorInput!): Vendor
     updateVendor(data: VendorInput!, id: ID!): Vendor
 
+    createCategory(data: CategoryInput!): Category
+    updateCategory(data: CategoryInput!, id: ID!): Category
+
     createBudget(data: BudgetInput!): Budget
     updateBudget(data: BudgetInput!, id: ID!): Budget
 
@@ -254,6 +257,11 @@ type LineItem {
     quantity: Int
     unitCost: Float
     category: Category!
+}
+
+input CategoryInput {
+    name: String!
+    budget: ID!
 }
 
 type Category {

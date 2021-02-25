@@ -1,0 +1,12 @@
+SESSION_SECRET="mmza2@gkp4jf@2ja4y#efyh"
+POSTGRES_URL="postgres://chris@localhost:5432/piranha"
+GROUND_TRUTH_URL=https://login.dev.hack.gt
+GROUND_TRUTH_ID=954d664ee01fc937e9819dd4d6c7c04166c7ce60317616e6cb0e30f5a2f6d3e1
+GROUND_TRUTH_SECRET=fba1fb6120423bd81122488ab7a7ed2119c257a39eb0a1005b38fad20026adcee67e7ff6a3402b58d82f609f509bd79112f8433bbb4a4945f9b8bee9c963e6f5
+PORT=3000
+PRODUCTION=false
+GOOGLE_APPLICATION_CREDENTIALS="/Users/agoyal/Personal/piranha/server/config/google-application-key.json"
+GOOGLE_STORAGE_BUCKET=piranha-uploads
+SENTRY_DSN=""
+SLACK_API_TOKEN=xoxb-15533117780-1324897428694-VGkPv51jINJjQqst1eSZuqAZ
+ROOT_URL=http://localhost:3000
