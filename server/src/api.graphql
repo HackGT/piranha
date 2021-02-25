@@ -33,6 +33,9 @@ type Mutation {
     createBudget(data: BudgetInput!): Budget
     updateBudget(data: BudgetInput!, id: ID!): Budget
 
+    createLineItem(data: LineItemInput!) : LineItem
+    updateLineItem(data: LineItemInput!, id: ID!): LineItem
+
     createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
     updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
 
@@ -254,6 +257,13 @@ type LineItem {
     quantity: Int
     unitCost: Float
     category: Category!
+}
+
+input LineItemInput {
+    name: String!
+    quantity: Int!
+    unitCost: Float!
+    category: ID!
 }
 
 type Category {

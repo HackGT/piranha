@@ -5,7 +5,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs} from '../../generated/types';
+import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs, MutationCreateLineItemArgs, MutationUpdateLineItemArgs} from '../../generated/types';
 
 const updateUser = async function (parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -295,6 +295,35 @@ const createApproval = async function (parent: any, args: MutationCreateApproval
     })
 }
 
+const createLineItem = async function (parent: any, args: MutationCreateLineItemArgs) {
+    return await prisma.lineItem.create({
+        data: {
+            ...args.data,
+            category: {
+                connect: {
+                    id: args.data.category
+                }
+            }
+        }
+    });
+}
+
+const updateLineItem = async function (parent: any, args: MutationUpdateLineItemArgs) {
+    return await prisma.lineItem.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            ...args.data,
+            category: {
+                connect: {
+                    id: args.data.category
+                }
+            }
+        }
+    });
+}
+
 export const Mutation = {
     updateUser: updateUser,
 
@@ -314,5 +343,8 @@ export const Mutation = {
     updateBudget: updateBudget,
 
     createPayment: createPayment,
-    createApproval: createApproval
+    createApproval: createApproval,
+
+    createLineItem: createLineItem,
+    updateLineItem: updateLineItem
 }
