@@ -1,119 +1,133 @@
 import { Prisma, RequisitionStatus } from "@prisma/client";
 
-export const requisitionReferenceString = (requisition: any) => `${requisition.project.year}-${requisition.project.shortCode}-${requisition.projectRequisitionId}`;
+export const requisitionReferenceString = (requisition: any) =>
+  `${requisition.project.year}-${requisition.project.shortCode}-${requisition.projectRequisitionId}`;
 export const projectReferenceString = (project: any) => `${project.year}-${project.shortCode}`;
 
 export const statusToString = (status: RequisitionStatus) => {
-    switch (status) {
-        case RequisitionStatus.DRAFT: return "Draft";
-        case RequisitionStatus.SUBMITTED: return "Submitted";
-        case RequisitionStatus.PENDING_CHANGES: return "Pending Changes";
-        case RequisitionStatus.READY_TO_ORDER: return "Ready to Order";
-        case RequisitionStatus.ORDERED: return "Ordered";
-        case RequisitionStatus.PARTIALLY_RECEIVED: return "Partially Received";
-        case RequisitionStatus.RECEIVED: return "Received";
-        case RequisitionStatus.CLOSED: return "Closed";
-        case RequisitionStatus.CANCELLED: return "Cancelled";
-        case RequisitionStatus.READY_FOR_REIMBURSEMENT: return "Ready for Reimbursement";
-        case RequisitionStatus.AWAITING_INFORMATION: return "Awaiting Information";
-        case RequisitionStatus.REIMBURSEMENT_IN_PROGRESS: return "Reimbursement in Progress";
-        default: return "Unknown";
-    }
+  switch (status) {
+    case RequisitionStatus.DRAFT:
+      return "Draft";
+    case RequisitionStatus.SUBMITTED:
+      return "Submitted";
+    case RequisitionStatus.PENDING_CHANGES:
+      return "Pending Changes";
+    case RequisitionStatus.READY_TO_ORDER:
+      return "Ready to Order";
+    case RequisitionStatus.ORDERED:
+      return "Ordered";
+    case RequisitionStatus.PARTIALLY_RECEIVED:
+      return "Partially Received";
+    case RequisitionStatus.RECEIVED:
+      return "Received";
+    case RequisitionStatus.CLOSED:
+      return "Closed";
+    case RequisitionStatus.CANCELLED:
+      return "Cancelled";
+    case RequisitionStatus.READY_FOR_REIMBURSEMENT:
+      return "Ready for Reimbursement";
+    case RequisitionStatus.AWAITING_INFORMATION:
+      return "Awaiting Information";
+    case RequisitionStatus.REIMBURSEMENT_IN_PROGRESS:
+      return "Reimbursement in Progress";
+    default:
+      return "Unknown";
+  }
 };
 
 export const connectOrUndefined = (value?: number | null) => {
-    if (value) {
-        return { connect: { id: value } };
-    }
-    return undefined;
-}
+  if (value) {
+    return { connect: { id: value } };
+  }
+  return undefined;
+};
 
 export const connectOrDisconnect = (value?: number | null, oldValue?: number | null) => {
-    if (!value && oldValue) {
-        return { disconnect: true };
-    }
-    if (value) {
-        return { connect: { id: value } };
-    }
-    return undefined;
-}
+  if (!value && oldValue) {
+    return { disconnect: true };
+  }
+  if (value) {
+    return { connect: { id: value } };
+  }
+  return undefined;
+};
 
 export const PROJECT_INCLUDE: Prisma.ProjectInclude = {
-    leads: true,
-    requisitions: {
+  leads: true,
+  requisitions: {
+    include: {
+      project: {
         include: {
-            project: {
-                include: {
-                    leads: true
-                }
-            },
-            items: true,
-            createdBy: true
-        }
-    }
-}
+          leads: true,
+        },
+      },
+      items: true,
+      createdBy: true,
+    },
+  },
+};
 
 export const REQUISITION_INCLUDE: Prisma.RequisitionInclude = {
-    budget: true,
-    createdBy: true,
-    fundingSource: true,
-    approvals: {
-        include: {
-            approver: true
-        }
+  budget: true,
+  createdBy: true,
+  fundingSource: true,
+  approvals: {
+    include: {
+      approver: true,
     },
-    files: true,
-    payments: {
-        include: {
-            fundingSource: true
-        }
+  },
+  files: true,
+  payments: {
+    include: {
+      fundingSource: true,
     },
-    items: {
+  },
+  items: {
+    include: {
+      lineItem: {
         include: {
-            lineItem: {
-                include: {
-                    category: true
-                }
-            },
-            vendor: true
-        }
+          category: true,
+        },
+      },
+      vendor: true,
     },
-    project: {
-        include: {
-            leads: true,
-            requisitions: true
-        }
-    }
-}
+  },
+  project: {
+    include: {
+      leads: true,
+      requisitions: true,
+    },
+  },
+};
 
 export const BUDGET_INCLUDE: Prisma.BudgetInclude = {
-    categories: {
-        include: {
-            lineItems: true
-        }
-    }
-}
+  categories: {
+    include: {
+      lineItems: true,
+    },
+  },
+};
 
 export const APPROVAL_INCLUDE: Prisma.ApprovalInclude = {
-    requisition: {
+  requisition: {
+    include: {
+      approvals: {
         include: {
-            approvals: {
-                include: {
-                    approver: true
-                }
-            }
-        }
-    }
-}
+          approver: true,
+        },
+      },
+    },
+  },
+};
 
 export const PAYMENT_INCLUDE: Prisma.PaymentInclude = {
-    requisition: {
+  requisition: {
+    include: {
+      payments: {
         include: {
-            payments: {
-                include: {
-                    fundingSource: true
-                }
-            }
-        }
-    }
-}
+          fundingSource: true,
+        },
+      },
+    },
+  },
+};
