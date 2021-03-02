@@ -97,14 +97,14 @@ export const getProjectTotalCost = (requisitions: Requisition[] | undefined) => 
 
   let total = 0;
 
-  requisitions.forEach(requisition => {
+  requisitions.forEach((requisition) => {
     if (requisition.status !== "CANCELLED") {
       total += getTotalCost(requisition, true);
     }
   });
 
   return total;
-}
+};
 
 export const screenWidthHook = (setScreenWidth: React.Dispatch<React.SetStateAction<number>>) => {
   const handleResize = () => setScreenWidth(window.innerWidth);

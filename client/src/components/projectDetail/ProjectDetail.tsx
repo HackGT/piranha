@@ -107,7 +107,7 @@ const ProjectDetail: React.FC = () => {
   if (data) {
     sortedData = data.project.requisitions.concat();
     sortedData = sortedData.sort((first, second) => first.projectRequisitionId - second.projectRequisitionId);
-    sortedData = sortedData.filter(rek => hideCancelledReks ? rek.status !== "CANCELLED" : true);
+    sortedData = sortedData.filter(rek => (hideCancelledReks ? rek.status !== "CANCELLED" : true));
   }
 
   const rows: RequisitionTableData[] = sortedData.map((requisition) => {
@@ -210,7 +210,7 @@ const ProjectDetail: React.FC = () => {
         id="table"
       />
       <Text style={{ display: "block", margin: "10px 0" }}>Hide Cancelled Requisitions</Text>
-      <Switch checked={hideCancelledReks} onClick={() => setHideCancelledReks(hideCancelledReks => !hideCancelledReks)} checkedChildren="Yes" unCheckedChildren="No" />
+      <Switch checked={hideCancelledReks} onClick={() => setHideCancelledReks(!hideCancelledReks)} checkedChildren="Yes" unCheckedChildren="No" />
     </>
   );
 };
