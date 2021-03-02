@@ -51,9 +51,6 @@ const ManageContentModal: React.FC<Props> = (props) => {
     }
   };
 
-  console.log(props.name)
-  console.log(props.initialValues);
-
   return (
     <>
       <Modal

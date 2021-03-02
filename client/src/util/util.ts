@@ -2,7 +2,7 @@ import { PresetColorType } from "antd/es/_util/colors";
 import React from "react";
 import { Rule, RuleObject } from "antd/es/form";
 import { StoreValue } from "@apollo/client";
-import { Project, Requisition, RequisitionStatus } from "../generated/types";
+import { Requisition, RequisitionStatus } from "../generated/types";
 import { RequisitionFormData } from "../types/types";
 
 export const StatusToColor = (status: RequisitionStatus): PresetColorType | undefined => {

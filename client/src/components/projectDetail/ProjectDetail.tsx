@@ -193,7 +193,7 @@ const ProjectDetail: React.FC = () => {
           onExpand: onRowExpand,
           indentSize: 1
         }}
-        summary={() => (
+        summary={() => screenWidth > 768 && (
           <Table.Summary.Row>
             <Table.Summary.Cell index={1}>
               <Text style={{ fontWeight: "bold" }}>Total Cost</Text>
