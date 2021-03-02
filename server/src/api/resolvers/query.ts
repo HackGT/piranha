@@ -3,48 +3,46 @@ import { User } from "@prisma/client";
 
 import { BUDGET_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from "./common";
 import { prisma } from '../../common';
-import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryProjectsArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../../generated/types';
+import { QueryPaymentMethodsArgs, QueryProjectArgs, QueryRequisitionArgs, QueryVendorArgs, QueryVendorsArgs } from '../../generated/types';
 
-const user = async function (parent: any, args: any, context: { user: User }) {
-    let user = await prisma.user.findOne({
+const user = async function user(parent: any, args: any, context: { user: User }) {
+    const prismaUser = await prisma.user.findUnique({
         where: {
             uuid: context.user.uuid
         }
     });
 
-    if (!user) {
+    if (!prismaUser) {
         throw new GraphQLError("User not found");
     }
 
-    return user;
+    return prismaUser;
 };
 
-const users = async function (parent: any, args: any) {
+const users = async function users() {
     return await prisma.user.findMany();
 };
 
-const project = async function (parent: any, args: QueryProjectArgs) {
-    const project = await prisma.project.findFirst({
+const project = async function project(parent: any, args: QueryProjectArgs) {
+    return await prisma.project.findFirst({
         where: args,
         include: PROJECT_INCLUDE
     });
-
-    return project;
 };
 
-const projects = async function (parent: any, args: QueryProjectsArgs) {
+const projects = async function projects() {
     return await prisma.project.findMany({
         include: PROJECT_INCLUDE
     });
 };
 
-const vendor = async function (parent: any, args: QueryVendorArgs) {
-    return await prisma.vendor.findOne({
+const vendor = async function vendor(parent: any, args: QueryVendorArgs) {
+    return await prisma.vendor.findUnique({
         where: args
     });
 };
 
-const vendors = async function (parent: any, args: QueryVendorsArgs) {
+const vendors = async function vendors(parent: any, args: QueryVendorsArgs) {
     return await prisma.vendor.findMany({
         where: {
             isActive: args.isActive || undefined
@@ -52,7 +50,7 @@ const vendors = async function (parent: any, args: QueryVendorsArgs) {
     });
 };
 
-const requisition = async function (parent: any, args: QueryRequisitionArgs) {
+const requisition = async function requisition(parent: any, args: QueryRequisitionArgs) {
     return await prisma.requisition.findFirst({
         where: {
             project: {
@@ -65,7 +63,7 @@ const requisition = async function (parent: any, args: QueryRequisitionArgs) {
     });
 };
 
-const requisitions = async function (parent: any, args: any, context: { user: User }) {
+const requisitions = async function requisitions(parent: any, args: any, context: { user: User }) {
     return await prisma.requisition.findMany({
         where: {
             createdBy: {
@@ -76,7 +74,7 @@ const requisitions = async function (parent: any, args: any, context: { user: Us
     })
 };
 
-const paymentMethods = async function (parent: any, args: QueryPaymentMethodsArgs) {
+const paymentMethods = async function paymentMethods(parent: any, args: QueryPaymentMethodsArgs) {
     return await prisma.paymentMethod.findMany({
         where: {
             isActive: args.isActive || undefined
@@ -84,21 +82,21 @@ const paymentMethods = async function (parent: any, args: QueryPaymentMethodsArg
     });
 };
 
-const budgets = async function (parent: any, args: any) {
+const budgets = async function budgets() {
     return await prisma.budget.findMany({
         include: BUDGET_INCLUDE
     });
 };
 
 export const Query = {
-    user: user,
-    users: users,
-    project: project,
-    projects: projects,
-    vendor: vendor,
-    vendors: vendors,
-    requisition: requisition,
-    requisitions: requisitions,
-    paymentMethods: paymentMethods,
-    budgets: budgets
+    user,
+    users,
+    project,
+    projects,
+    vendor,
+    vendors,
+    requisition,
+    requisitions,
+    paymentMethods,
+    budgets
 }

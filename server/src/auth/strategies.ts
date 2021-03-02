@@ -42,7 +42,7 @@ export class GroundTruthStrategy extends OAuthStrategy {
         if (!secret || !id) {
             throw new Error(`Client ID or secret not configured in environment variables for Ground Truth`);
         }
-        let options: IOAuthStrategyOptions = {
+        const options: IOAuthStrategyOptions = {
             authorizationURL: new URL("/oauth/authorize", url).toString(),
             tokenURL: new URL("/oauth/token", url).toString(),
             clientID: id,
@@ -54,26 +54,27 @@ export class GroundTruthStrategy extends OAuthStrategy {
     }
 
     public userProfile(accessToken: string, done: PassportProfileDone) {
-        (this._oauth2 as any)._request("GET", new URL("/api/user", this.url).toString(), null, null, accessToken, (err: Error | null, data: string) => {
-            if (err) {
-                done(err);
+        // eslint-disable-next-line no-underscore-dangle
+        (this._oauth2 as any)._request("GET", new URL("/api/user", this.url).toString(), null, null, accessToken, (error: Error | null, data: string) => {
+            if (error) {
+                done(error);
                 return;
             }
+
             try {
-                let profile: IProfile = {
+                const profile: IProfile = {
                     ...JSON.parse(data),
                     token: accessToken
                 };
                 done(null, profile);
-            }
-            catch (err) {
-                return done(err);
+            } catch (parseError) {
+                done(parseError);
             }
         });
     }
 
     protected static async passportCallback(req: Request, accessToken: string, refreshToken: string, profile: IProfile, done: PassportDone) {
-        let user = await prisma.user.findOne({
+        let user = await prisma.user.findUnique({
             where: {
                 uuid: profile.uuid
             }
@@ -110,7 +111,7 @@ function getExternalPort(req: Request): number {
         return req.protocol === "http" ? 80 : 443;
     }
 
-    const host = req.headers.host;
+    const { host } = req.headers;
 
     if (!host || Array.isArray(host)) {
         return defaultPort();
@@ -121,21 +122,22 @@ function getExternalPort(req: Request): number {
     const index = host.indexOf(":", offset);
 
     if (index !== -1) {
-        return parseInt(host.substring(index + 1), 10);
+        return parseInt(host.substring(index + 1));
     }
-    else {
-        return defaultPort();
-    }
+
+    return defaultPort();
+
 }
 
 export function createLink(req: Request, link: string): string {
     if (link[0] === "/") {
+        // eslint-disable-next-line no-param-reassign
         link = link.substring(1);
     }
     if ((req.secure && getExternalPort(req) === 443) || (!req.secure && getExternalPort(req) === 80)) {
         return `http${req.secure ? "s" : ""}://${req.hostname}/${link}`;
     }
-    else {
-        return `http${req.secure ? "s" : ""}://${req.hostname}:${getExternalPort(req)}/${link}`;
-    }
+
+    return `http${req.secure ? "s" : ""}://${req.hostname}:${getExternalPort(req)}/${link}`;
+
 }

@@ -1,4 +1,4 @@
-import { ApprovalInclude, BudgetInclude, PaymentInclude, ProjectInclude, RequisitionInclude, RequisitionStatus } from "@prisma/client";
+import { Prisma, RequisitionStatus } from "@prisma/client";
 
 export const requisitionReferenceString = (requisition: any) => `${requisition.project.year}-${requisition.project.shortCode}-${requisition.projectRequisitionId}`;
 export const projectReferenceString = (project: any) => `${project.year}-${project.shortCode}`;
@@ -31,13 +31,14 @@ export const connectOrUndefined = (value?: number | null) => {
 export const connectOrDisconnect = (value?: number | null, oldValue?: number | null) => {
     if (!value && oldValue) {
         return { disconnect: true };
-    } else if (value) {
+    }
+    if (value) {
         return { connect: { id: value } };
     }
     return undefined;
 }
 
-export const PROJECT_INCLUDE: ProjectInclude = {
+export const PROJECT_INCLUDE: Prisma.ProjectInclude = {
     leads: true,
     requisitions: {
         include: {
@@ -52,7 +53,7 @@ export const PROJECT_INCLUDE: ProjectInclude = {
     }
 }
 
-export const REQUISITION_INCLUDE: RequisitionInclude = {
+export const REQUISITION_INCLUDE: Prisma.RequisitionInclude = {
     budget: true,
     createdBy: true,
     fundingSource: true,
@@ -85,7 +86,7 @@ export const REQUISITION_INCLUDE: RequisitionInclude = {
     }
 }
 
-export const BUDGET_INCLUDE: BudgetInclude = {
+export const BUDGET_INCLUDE: Prisma.BudgetInclude = {
     categories: {
         include: {
             lineItems: true
@@ -93,7 +94,7 @@ export const BUDGET_INCLUDE: BudgetInclude = {
     }
 }
 
-export const APPROVAL_INCLUDE: ApprovalInclude = {
+export const APPROVAL_INCLUDE: Prisma.ApprovalInclude = {
     requisition: {
         include: {
             approvals: {
@@ -105,7 +106,7 @@ export const APPROVAL_INCLUDE: ApprovalInclude = {
     }
 }
 
-export const PAYMENT_INCLUDE: PaymentInclude = {
+export const PAYMENT_INCLUDE: Prisma.PaymentInclude = {
     requisition: {
         include: {
             payments: {

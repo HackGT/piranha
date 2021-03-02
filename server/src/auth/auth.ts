@@ -3,7 +3,6 @@ import passport from "passport";
 import session from "express-session";
 import dotenv from "dotenv";
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import { User } from "@prisma/client";
 
 import { app } from "../app";
 import { GroundTruthStrategy } from "./strategies";
@@ -53,11 +52,11 @@ export function isAuthenticated(request: express.Request, response: express.Resp
 const groundTruthStrategy = new GroundTruthStrategy(String(process.env.GROUND_TRUTH_URL));
 
 passport.use(groundTruthStrategy);
-passport.serializeUser<User, string>((user, done) => {
+passport.serializeUser<string>((user, done) => {
     done(null, user.uuid);
 });
-passport.deserializeUser<User, string>(async (id, done) => {
-    let user = await prisma.user.findOne({
+passport.deserializeUser<string>(async (id, done) => {
+    const user = await prisma.user.findUnique({
         where: {
             uuid: id
         }

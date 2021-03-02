@@ -4,10 +4,11 @@
     "es2020": true
   },
   "extends": [
+    "airbnb",
     "eslint:recommended",
     "plugin:react/recommended",
-    "react-app",
-    "airbnb"
+    "plugin:@typescript-eslint/recommended",
+    "react-app"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -60,6 +61,11 @@
     "one-var": "off",
     "one-var-declaration-per-line": "off",
     "lines-between-class-members": "off",
-    "arrow-parens": ["error", "as-needed", {"requireForBlockBody":  true}]
+    "arrow-parens": ["error", "as-needed", {"requireForBlockBody":  true}],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "import/prefer-default-export": "off",
+    "react/display-name": 1,
+    "prefer-const": 1
   }
 }

@@ -1,8 +1,6 @@
 git:
   branch: master
 
-target_port: 3000
-
 wants:
   postgres: true
 

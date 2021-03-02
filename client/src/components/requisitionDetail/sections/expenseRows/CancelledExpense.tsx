@@ -20,7 +20,7 @@ const CancelledExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     <Collapse>
       <RequisitionExpenseRow
         onFinish={onFinish}
-        newStatus={"DRAFT"}
+        newStatus="DRAFT"
         title="Reactivate Requisition"
         description="This will make the requisition open to edit again."
         key="reactivate"

@@ -25,9 +25,14 @@ Piranha is an application to help HackGT manage our internal financial processes
 
 ## Setup
 
+#### Root Folder
+1. `yarn install`
+2. `yarn generate` to generate types
+
 #### Server
 1. `cd server` then `yarn install`
-2. `yarn prisma-generate` to generate prisma types
+2. `yarn migrate:dev` to setup database
+3. `yarn prisma-generate` to generate prisma types
 3. `yarn dev`
 
 
@@ -56,6 +61,5 @@ Note, anytime the graphql schema is changed (`api.graphql`) you will need to rer
 
 After changing the prisma schema file `schema.prisma`, run the following commands in the server folder to migrate the database and generate a new prisma client.
 
-1. `yarn migrate:save`
-2. `yarn migrate:up`
-3. `yarn prisma-generate`
+1. `yarn migrate:dev`
+2. `yarn prisma-generate`

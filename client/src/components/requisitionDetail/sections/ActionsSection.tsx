@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Popconfirm, Tooltip, Typography } from "antd";
 import { useMutation } from "@apollo/client";
 import { useHistory, useLocation } from "react-router-dom";
+import { FaShieldAlt } from "react-icons/fa";
 import { UPDATE_REQUISITION_MUTATION } from "../../../queries/Requisition";
 import { saveExpenseData } from "./ManageStatusSection";
 import { RequisitionSectionProps } from "../RequisitionDetail";
-import { FaShieldAlt } from "react-icons/fa";
 
 const { Title } = Typography;
 
@@ -51,7 +51,10 @@ const ActionsSection: React.FC<RequisitionSectionProps> = (props) => {
           cancelText="No"
           disabled={!data.canCancel}
         >
-          <Button className="action-button" danger disabled={!data.canCancel}><FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.25em" }} />Cancel</Button>
+          <Button className="action-button" danger disabled={!data.canCancel}>
+            <FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.25em" }} />
+            Cancel
+          </Button>
         </Popconfirm>
       </Tooltip>
     </>

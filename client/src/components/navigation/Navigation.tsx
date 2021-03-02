@@ -9,7 +9,7 @@ class Page {
   link: string;
   privateRoute: boolean;
 
-  constructor(name: string, link: string, privateRoute: boolean = false) {
+  constructor(name: string, link: string, privateRoute = false) {
     this.name = name;
     this.link = link;
     this.privateRoute = privateRoute;
@@ -20,7 +20,8 @@ export const routes = [
   new Page("Home", "/"),
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
-  new Page("Admin", "/admin", true)
+  new Page("Admin", "/admin", true),
+  new Page("Budgets", "/budgets", true)
 ];
 
 interface Props {

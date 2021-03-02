@@ -51,7 +51,13 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         buttonText="Submit"
       >
         {props.requisition.items.map((item: RequisitionItem) => (
-          <Form.Item name={item.name || ""} valuePropName="checked" style={{ marginBottom: "10px" }} initialValue={item.received}>
+          <Form.Item
+            name={item.name || ""}
+            valuePropName="checked"
+            style={{ marginBottom: "10px" }}
+            initialValue={item.received}
+            key={item.id}
+          >
             <Checkbox>{item.name}</Checkbox>
           </Form.Item>
         ))}

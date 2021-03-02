@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 import fs from "fs";
 import path from "path";
 import express, { Request } from "express";
@@ -7,12 +8,13 @@ import cors from "cors"
 import dotenv from "dotenv"
 import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express';
 import { applyMiddleware } from "graphql-middleware";
+import { graphqlUploadExpress } from 'graphql-upload';
 
 dotenv.config();
 
 const VERSION_NUMBER = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../package.json"), "utf8")).version;
 
-export let app = express();
+export const app = express();
 
 app.use(morgan("dev"));
 app.use(compression());
@@ -28,11 +30,11 @@ app.get("/status", (req, res) => {
 
 app.use("/auth", authRoutes);
 
+import { resolvers, permissions } from "./api/api";
+
 const typeDefs = gql`
     ${fs.readFileSync(path.resolve(__dirname, "./api.graphql"), "utf8")}
 `;
-import { resolvers } from "./api/api";
-import { permissions } from "./api/api";
 
 const schema = applyMiddleware(
     makeExecutableSchema({ typeDefs, resolvers }),
@@ -41,9 +43,7 @@ const schema = applyMiddleware(
 
 const server = new ApolloServer({
     schema,
-    context: ({ req }: { req: Request }) => {
-        return { user: req.user };
-    },
+    context: ({ req }: { req: Request }) => ({ user: req.user }),
     playground: process.env.PRODUCTION !== "true" && {
         settings: {
             "editor.theme": "dark",
@@ -55,9 +55,12 @@ const server = new ApolloServer({
         console.error(err);
         return err;
     },
+    uploads: false // https://github.com/apollographql/apollo-server/issues/3508#issuecomment-662371289
 });
 
 app.use(isAuthenticated);
+app.use(graphqlUploadExpress({ maxFileSize: 1024 * 1024 * 6, maxFiles: 15 }));
+
 server.applyMiddleware({ app });
 
 app.use(isAuthenticated, express.static(path.join(__dirname, "../../client/build")));

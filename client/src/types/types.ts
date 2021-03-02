@@ -1,6 +1,7 @@
 import moment from "moment";
 import { RequisitionItem, RequisitionStatus } from "../generated/types";
 
+// eslint-disable-next-line no-shadow
 export enum UserAccessLevel {
   NONE = "NONE",
   MEMBER = "MEMBER",
