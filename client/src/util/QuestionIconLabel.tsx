@@ -9,8 +9,7 @@ interface Props {
 
 const QuestionIconLabel: React.FC<Props> = props => (
   <span>
-    {props.label}
-    {" "}
+    {props.label}{" "}
     <Tooltip title={props.helpText}>
       <QuestionCircleOutlined />
     </Tooltip>

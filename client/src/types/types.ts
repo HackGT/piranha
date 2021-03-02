@@ -1,4 +1,5 @@
 import moment from "moment";
+
 import { RequisitionItem, RequisitionStatus } from "../generated/types";
 
 // eslint-disable-next-line no-shadow
@@ -6,7 +7,7 @@ export enum UserAccessLevel {
   NONE = "NONE",
   MEMBER = "MEMBER",
   EXEC = "EXEC",
-  ADMIN = "ADMIN"
+  ADMIN = "ADMIN",
 }
 
 export type RequisitionFormData = {
@@ -22,4 +23,4 @@ export type RequisitionFormData = {
   status: RequisitionStatus;
   files: any[];
   purchaseDate: moment.Moment | null;
-}
+};

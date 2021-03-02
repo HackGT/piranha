@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, Collapse, Typography } from "antd";
 import { FormInstance } from "antd/es/form";
 import { FaShieldAlt } from "react-icons/fa";
+
 import { RequisitionTag } from "../../../../util/CustomTags";
 import { RequisitionStatus } from "../../../../generated/types";
 
@@ -9,7 +10,7 @@ const { Text } = Typography;
 const { Panel } = Collapse;
 
 interface Props {
-  onFinish: (values: any, form: FormInstance) => void
+  onFinish: (values: any, form: FormInstance) => void;
   newStatus?: RequisitionStatus;
   title: string;
   description: string;
@@ -17,17 +18,19 @@ interface Props {
   buttonText: string;
 }
 
-const RequisitionExpenseRow: React.FC<Props> = (props) => {
+const RequisitionExpenseRow: React.FC<Props> = props => {
   const [form] = Form.useForm();
 
   return (
     <Panel
-      extra={props.newStatus && (
-        <>
-          <Text>Update status to</Text>
-          <RequisitionTag status={props.newStatus} style={{ margin: "0 0 0 8px" }} />
-        </>
-      )}
+      extra={
+        props.newStatus && (
+          <>
+            <Text>Update status to</Text>
+            <RequisitionTag status={props.newStatus} style={{ margin: "0 0 0 8px" }} />
+          </>
+        )
+      }
       {...props} // https://github.com/ant-design/ant-design/issues/4853
       header={<Text strong>{props.title}</Text>}
     >

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, List, Typography, Input } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
+
 import { FormModalProps } from "./formModals/FormModalProps";
 import ErrorDisplay from "../../../util/ErrorDisplay";
 
@@ -11,7 +12,7 @@ const { Search } = Input;
 export type ModalState = {
   visible: boolean;
   initialValues: any;
-}
+};
 
 interface Props {
   query: DocumentNode;
@@ -24,10 +25,10 @@ interface Props {
   searchFilterField: string;
 }
 
-const ManageContentList: React.FC<Props> = (props) => {
+const ManageContentList: React.FC<Props> = props => {
   const [modalState, setModalState] = useState({
     visible: false,
-    initialValues: null
+    initialValues: null,
   } as ModalState);
   const [searchText, setSearchText] = useState("");
 
@@ -36,7 +37,7 @@ const ManageContentList: React.FC<Props> = (props) => {
   const openModal = (values: any) => {
     setModalState({
       visible: true,
-      initialValues: values
+      initialValues: values,
     });
   };
 
@@ -45,7 +46,11 @@ const ManageContentList: React.FC<Props> = (props) => {
   }
 
   const updatedData = data
-    ? props.sortData(data).filter((item: any) => item[props.searchFilterField!].toLowerCase().includes(searchText.toLowerCase()))
+    ? props
+        .sortData(data)
+        .filter((item: any) =>
+          item[props.searchFilterField].toLowerCase().includes(searchText.toLowerCase())
+        )
     : [];
 
   const Modal = props.modal;
@@ -56,7 +61,11 @@ const ManageContentList: React.FC<Props> = (props) => {
         <title>{`Piranha - Admin - ${props.title}`}</title>
       </Helmet>
       <Title level={3}>{props.title}</Title>
-      {!props.hideAddButton && <Button style={{ marginRight: "10px" }} onClick={() => openModal(null)}>Add +</Button>}
+      {!props.hideAddButton && (
+        <Button style={{ marginRight: "10px" }} onClick={() => openModal(null)}>
+          Add +
+        </Button>
+      )}
       <Search
         placeholder="Search"
         style={{ width: "200px" }}
@@ -71,7 +80,9 @@ const ManageContentList: React.FC<Props> = (props) => {
         renderItem={(item: any) => (
           <List.Item>
             {props.tag(item)}
-            <Text style={{ textAlign: "center", maxWidth: "33%", wordBreak: "break-word" }}>{props.name(item)}</Text>
+            <Text style={{ textAlign: "center", maxWidth: "33%", wordBreak: "break-word" }}>
+              {props.name(item)}
+            </Text>
             <Button onClick={() => openModal(item)}>Edit</Button>
           </List.Item>
         )}

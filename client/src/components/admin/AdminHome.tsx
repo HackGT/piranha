@@ -1,6 +1,7 @@
 import React from "react";
 import { Tabs, Tag, Typography } from "antd";
 import { useParams, useHistory } from "react-router-dom";
+
 import ManageContentList from "./manageContent/ManageContentList";
 import { PROJECT_LIST_QUERY } from "../../queries/Project";
 import { VENDOR_LIST_QUERY } from "../../queries/Vendor";
@@ -43,12 +44,20 @@ const AdminHome: React.FC = () => {
   return (
     <>
       <Title>Admin Panel</Title>
-      <Tabs activeKey={activeTab} defaultActiveKey="projects" onTabClick={key => history.push(`/admin/${key}`)}>
+      <Tabs
+        activeKey={activeTab}
+        defaultActiveKey="projects"
+        onTabClick={key => history.push(`/admin/${key}`)}
+      >
         <TabPane tab="Projects" key={tabKeys[0]}>
           <ManageContentList
             query={PROJECT_LIST_QUERY}
             title="Projects"
-            tag={item => <Tag color={item.archived ? "gold" : "green"}>{item.archived ? "Archived" : "Active"}</Tag>}
+            tag={item => (
+              <Tag color={item.archived ? "gold" : "green"}>
+                {item.archived ? "Archived" : "Active"}
+              </Tag>
+            )}
             sortData={data => data.projects.concat().sort((a: any, b: any) => b.year - a.year)}
             name={item => `${item.name} (${item.year})`}
             modal={ProjectFormModal}
@@ -59,8 +68,14 @@ const AdminHome: React.FC = () => {
           <ManageContentList
             query={VENDOR_LIST_QUERY}
             title="Vendors"
-            tag={item => <Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>}
-            sortData={data => data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+            tag={item => (
+              <Tag color={item.isActive ? "green" : "red"}>
+                {item.isActive ? "Active" : "Inactive"}
+              </Tag>
+            )}
+            sortData={data =>
+              data.vendors.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))
+            }
             name={item => item.name}
             modal={VendorFormModal}
             searchFilterField="name"
@@ -70,8 +85,14 @@ const AdminHome: React.FC = () => {
           <ManageContentList
             query={PAYMENT_METHOD_LIST_QUERY}
             title="Payment Methods"
-            tag={item => <Tag color={item.isActive ? "green" : "red"}>{item.isActive ? "Active" : "Inactive"}</Tag>}
-            sortData={data => data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+            tag={item => (
+              <Tag color={item.isActive ? "green" : "red"}>
+                {item.isActive ? "Active" : "Inactive"}
+              </Tag>
+            )}
+            sortData={data =>
+              data.paymentMethods.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))
+            }
             name={item => item.name}
             modal={PaymentMethodFormModal}
             searchFilterField="name"
@@ -82,7 +103,9 @@ const AdminHome: React.FC = () => {
             query={USER_LIST_QUERY}
             title="Users"
             tag={getUserTag}
-            sortData={data => data.users.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))}
+            sortData={data =>
+              data.users.concat().sort((a: any, b: any) => a.name.localeCompare(b.name))
+            }
             name={item => item.name}
             modal={UserFormModal}
             searchFilterField="name"

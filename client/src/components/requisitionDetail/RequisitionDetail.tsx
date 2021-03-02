@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Col, Pagination, Row, Tag, Typography } from "antd";
 import { Helmet } from "react-helmet";
+
 import { REQUISITION_DETAIL_QUERY } from "../../queries/Requisition";
 import { parseRequisitionParams } from "../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
@@ -31,20 +32,24 @@ const RequisitionDetail: React.FC = () => {
   const { projectReference, requisitionReference } = useParams<any>();
   const history = useHistory();
 
-  const { year, shortCode, projectRequisitionId } = parseRequisitionParams(projectReference, requisitionReference);
+  const { year, shortCode, projectRequisitionId } = parseRequisitionParams(
+    projectReference,
+    requisitionReference
+  );
 
   const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
-    variables: { year, shortCode, projectRequisitionId }
+    variables: { year, shortCode, projectRequisitionId },
   });
 
   if (error) {
     return <ErrorDisplay error={error} />;
-  } if (data && !data.requisition) {
+  }
+  if (data && !data.requisition) {
     return <NotFound />;
   }
 
   // @ts-ignore
-  const rekData: Requisition = loading ? {} : data.requisition as Requisition;
+  const rekData: Requisition = loading ? {} : (data.requisition as Requisition);
 
   return (
     <>
@@ -60,7 +65,9 @@ const RequisitionDetail: React.FC = () => {
           />
           <RequisitionTag status={rekData.status} style={{ marginBottom: "5px" }} />
           {rekData.isReimbursement && <Tag>Reimbursement</Tag>}
-          <Title level={2} style={{ marginBottom: "10px" }}>{loading ? "Loading..." : rekData.headline}</Title>
+          <Title level={2} style={{ marginBottom: "10px" }}>
+            {loading ? "Loading..." : rekData.headline}
+          </Title>
           <Text style={{ display: "block", whiteSpace: "pre-line" }}>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
@@ -87,7 +94,9 @@ const RequisitionDetail: React.FC = () => {
         pageSize={1}
         defaultCurrent={projectRequisitionId}
         total={loading ? projectRequisitionId : rekData.project.requisitions.length}
-        onChange={(page: number) => history.push(`/project/${projectReference}/requisition/${page}`)}
+        onChange={(page: number) =>
+          history.push(`/project/${projectReference}/requisition/${page}`)
+        }
         style={{ textAlign: "center", marginTop: "25px" }}
         simple
       />

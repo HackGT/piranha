@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { List, Typography } from "antd";
 import { Helmet } from "react-helmet";
+
 import { PROJECT_LIST_QUERY } from "../../queries/Project";
 import ProjectListCard from "./ProjectListCard";
 import ErrorDisplay from "../../util/ErrorDisplay";
@@ -16,11 +17,9 @@ const ProjectList: React.FC = () => {
     return <ErrorDisplay error={error} />;
   }
 
-  const projectData = loading ? [
-    { archived: true },
-    { archived: true },
-    { archived: false },
-    { archived: false }] : data.projects;
+  const projectData = loading
+    ? [{ archived: true }, { archived: true }, { archived: false }, { archived: false }]
+    : data.projects;
 
   const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 
@@ -30,7 +29,9 @@ const ProjectList: React.FC = () => {
         <title>Piranha - Projects</title>
       </Helmet>
       <Title>{loading ? "Loading..." : "Projects"}</Title>
-      <Title style={{ textAlign: "center" }} level={3}>Active Projects</Title>
+      <Title style={{ textAlign: "center" }} level={3}>
+        Active Projects
+      </Title>
       <List
         grid={grid}
         dataSource={projectData.filter((item: Project) => !item.archived)}
@@ -40,7 +41,9 @@ const ProjectList: React.FC = () => {
           </List.Item>
         )}
       />
-      <Title style={{ textAlign: "center", marginTop: "20px" }} level={3}>Archived Projects</Title>
+      <Title style={{ textAlign: "center", marginTop: "20px" }} level={3}>
+        Archived Projects
+      </Title>
       <List
         grid={grid}
         dataSource={projectData.filter((item: Project) => item.archived)}

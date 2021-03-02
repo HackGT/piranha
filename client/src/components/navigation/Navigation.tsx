@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Drawer, Menu, Button, Typography } from "antd";
 import { MenuOutlined } from "@ant-design/icons/lib";
 import { Link } from "react-router-dom";
+
 import { User } from "../../generated/types";
 
 class Page {
@@ -21,14 +22,14 @@ export const routes = [
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
   new Page("Admin", "/admin", true),
-  new Page("Budgets", "/budgets", true)
+  new Page("Budgets", "/budgets", true),
 ];
 
 interface Props {
   user: User;
 }
 
-const Navigation: React.FC<Props> = (props) => {
+const Navigation: React.FC<Props> = props => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -40,7 +41,9 @@ const Navigation: React.FC<Props> = (props) => {
     };
   });
 
-  const filteredRoutes = routes.filter((page: Page) => !page.privateRoute || (props.user && props.user.canViewAdminPanel));
+  const filteredRoutes = routes.filter(
+    (page: Page) => !page.privateRoute || (props.user && props.user.canViewAdminPanel)
+  );
 
   return (
     <div style={{ direction: "rtl" }}>
@@ -54,7 +57,9 @@ const Navigation: React.FC<Props> = (props) => {
         <Menu mode="vertical" style={{ borderRight: "None" }} selectable={false}>
           {filteredRoutes.map((route: Page) => (
             <Menu.Item key={route.name}>
-              <Link onClick={() => setSidebarVisible(false)} to={route.link}>{route.name}</Link>
+              <Link onClick={() => setSidebarVisible(false)} to={route.link}>
+                {route.name}
+              </Link>
             </Menu.Item>
           ))}
         </Menu>
@@ -68,27 +73,32 @@ const Navigation: React.FC<Props> = (props) => {
             display: "inline-block",
             color: "white",
             verticalAlign: "middle",
-            letterSpacing: "7px"
+            letterSpacing: "7px",
           }}
         >
           PIRANHA
         </Typography.Title>
       </div>
 
-      {width < 768
-        ? (
-          <Button
-            style={{ textAlign: "right" }}
-            icon={<MenuOutlined />}
-            type="link"
-            onClick={() => setSidebarVisible(true)}
-          />
-        )
-        : (
-          <Menu theme="dark" mode="horizontal" selectable={false}>
-            {filteredRoutes.slice().reverse().map((route: Page) => <Menu.Item key={route.name}><Link to={route.link}>{route.name}</Link></Menu.Item>)}
-          </Menu>
-        )}
+      {width < 768 ? (
+        <Button
+          style={{ textAlign: "right" }}
+          icon={<MenuOutlined />}
+          type="link"
+          onClick={() => setSidebarVisible(true)}
+        />
+      ) : (
+        <Menu theme="dark" mode="horizontal" selectable={false}>
+          {filteredRoutes
+            .slice()
+            .reverse()
+            .map((route: Page) => (
+              <Menu.Item key={route.name}>
+                <Link to={route.link}>{route.name}</Link>
+              </Menu.Item>
+            ))}
+        </Menu>
+      )}
     </div>
   );
 };

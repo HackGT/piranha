@@ -1,5 +1,6 @@
 import React from "react";
 import { message, Typography } from "antd";
+
 import CancelledExpense from "./expenseRows/CancelledExpense";
 import SubmittedExpense from "./expenseRows/SubmittedExpense";
 import OrderedExpense from "./expenseRows/OrderedExpense";
@@ -31,7 +32,7 @@ export const saveExpenseData = async (mutation: any, variables: any) => {
   }
 };
 
-const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
+const ManageStatusSection: React.FC<RequisitionSectionProps> = props => {
   const { data } = props;
 
   const content = (() => {
@@ -74,7 +75,9 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = (props) => {
 
   return (
     <>
-      <Title level={3} style={{ marginTop: "30px" }}>Manage Status</Title>
+      <Title level={3} style={{ marginTop: "30px" }}>
+        Manage Status
+      </Title>
       {content}
     </>
   );
