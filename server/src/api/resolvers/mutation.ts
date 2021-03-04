@@ -21,12 +21,14 @@ import {
   MutationCreateRequisitionArgs,
   MutationCreateVendorArgs,
   MutationCreateBudgetArgs,
+  MutationCreateLineItemArgs,
   MutationUpdatePaymentMethodArgs,
   MutationUpdateProjectArgs,
   MutationUpdateRequisitionArgs,
   MutationUpdateUserArgs,
   MutationUpdateVendorArgs,
   MutationUpdateBudgetArgs,
+  MutationUpdateLineItemArgs
 } from "../../generated/types";
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
@@ -342,7 +344,7 @@ const createApproval = async function createApproval(
     include: APPROVAL_INCLUDE,
   });
 };
-/*
+
 const createLineItem = async function (parent: any, args: MutationCreateLineItemArgs) {
     return await prisma.lineItem.create({
         data: {
@@ -354,7 +356,7 @@ const createLineItem = async function (parent: any, args: MutationCreateLineItem
             }
         }
     });
-}
+};
 
 const updateLineItem = async function (parent: any, args: MutationUpdateLineItemArgs) {
     return await prisma.lineItem.update({
@@ -370,8 +372,8 @@ const updateLineItem = async function (parent: any, args: MutationUpdateLineItem
             }
         }
     });
-}
-*/
+};
+
 export const Mutation = {
   updateUser,
 
@@ -392,5 +394,8 @@ export const Mutation = {
 
   createPayment,
   createApproval,
+
+  createLineItem,
+  updateLineItem,
 };
 

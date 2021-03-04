@@ -24,25 +24,6 @@ export const permissions = shield(
       "*": isAuthenticatedRule,
     },
     Mutation: {
-<<<<<<< HEAD
-        updateUser: and(isAuthenticatedRule, isExecRule),
-        createRequisition: isAuthenticatedRule,
-        updateRequisition: and(isAuthenticatedRule, canEditRule),
-        createProject: and(isAuthenticatedRule, isExecRule),
-        updateProject: and(isAuthenticatedRule, isExecRule),
-        createVendor: and(isAuthenticatedRule, isExecRule),
-        updateVendor: and(isAuthenticatedRule, isExecRule),
-        createBudget: and(isAuthenticatedRule, isExecRule),
-        updateBudget: and(isAuthenticatedRule, isExecRule),
-        createPaymentMethod: and(isAuthenticatedRule, isExecRule),
-        updatePaymentMethod: and(isAuthenticatedRule, isExecRule),
-        createLineItem: and(isAuthenticatedRule, isExecRule),
-        updateLineItem: and(isAuthenticatedRule, isExecRule),
-        createPayment: and(isAuthenticatedRule, isExecRule),
-        createApproval: and(isAuthenticatedRule, canExpenseRule)
-    }
-}, {
-=======
       updateUser: and(isAuthenticatedRule, isExecRule),
       createRequisition: isAuthenticatedRule,
       updateRequisition: and(isAuthenticatedRule, canEditRule),
@@ -56,10 +37,11 @@ export const permissions = shield(
       updatePaymentMethod: and(isAuthenticatedRule, isExecRule),
       createPayment: and(isAuthenticatedRule, isExecRule),
       createApproval: and(isAuthenticatedRule, canExpenseRule),
+      createLineItem: and(isAuthenticatedRule, isExecRule),
+      updateLineItem: and(isAuthenticatedRule, isExecRule),
     },
   },
   {
->>>>>>> master
     allowExternalErrors: true,
     fallbackRule,
     fallbackError: "Sorry, you don't have access. Please contact a tech team member for help.",

@@ -33,16 +33,11 @@ type Mutation {
   createBudget(data: BudgetInput!): Budget
   updateBudget(data: BudgetInput!, id: ID!): Budget
 
-<<<<<<< HEAD
-    createLineItem(data: LineItemInput!) : LineItem
-    updateLineItem(data: LineItemInput!, id: ID!): LineItem
-
-    createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
-    updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
-=======
   createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
   updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
->>>>>>> master
+
+  createLineItem(data: LineItemInput!) : LineItem
+  updateLineItem(data: LineItemInput!, id: ID!): LineItem
 
   createPayment(data: PaymentInput!): Payment
 
