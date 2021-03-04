@@ -1,14 +1,17 @@
 import React from "react";
 import { Collapse, Form, Input, message } from "antd";
 import { useMutation } from "@apollo/client";
+
 import { FORM_RULES } from "../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION } from "../../../../queries/Approval";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import { RequisitionStatus } from "../../../../generated/types";
 
-const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
-  const [updateRequisitionAndCreateApproval] = useMutation(UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION);
+const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
+  const [updateRequisitionAndCreateApproval] = useMutation(
+    UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION
+  );
 
   const onFinish = async (values: any, isApproving: boolean) => {
     if (isApproving) {
@@ -32,19 +35,19 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
     }
 
     const requisitionData = {
-      status: newRequisitionStatus
+      status: newRequisitionStatus,
     };
 
     const approvalData = {
       isApproving,
       requisition: props.requisition.id,
-      ...values
+      ...values,
     };
 
     await saveExpenseData(updateRequisitionAndCreateApproval, {
       id: props.requisition.id,
       requisitionData,
-      approvalData
+      approvalData,
     });
   };
 
@@ -66,11 +69,7 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         key="pending"
         buttonText="Request Changes"
       >
-        <Form.Item
-          name="notes"
-          rules={[FORM_RULES.requiredRule]}
-          label="Notes"
-        >
+        <Form.Item name="notes" rules={[FORM_RULES.requiredRule]} label="Notes">
           <Input placeholder="Needs more detail in description." />
         </Form.Item>
       </RequisitionExpenseRow>

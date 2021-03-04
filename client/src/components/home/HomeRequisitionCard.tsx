@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Skeleton, Tag, Typography } from "antd";
+
 import { formatPrice, getTotalCost, StatusToColor, StatusToString } from "../../util/util";
 import { Requisition } from "../../generated/types";
 
@@ -12,7 +13,7 @@ interface Props {
 
 const HomeRequisitionCard: React.FC<Props> = props => (
   <Card
-    title={(
+    title={
       <Skeleton loading={props.loading} paragraph={false} active>
         <div className="card-head-wrapper">
           <Text className="card-head-title" style={{ color: "black" }} strong>
@@ -23,7 +24,7 @@ const HomeRequisitionCard: React.FC<Props> = props => (
           </Tag>
         </div>
       </Skeleton>
-    )}
+    }
     loading={props.loading}
     hoverable
   >

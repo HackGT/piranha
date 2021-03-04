@@ -12,18 +12,18 @@ interface Props {
 const ProjectBreadcrumb: React.FC<Props> = props => (
   <Breadcrumb style={{ marginBottom: "8px" }}>
     <Breadcrumb.Item>
-      <Link to="/project"><HomeOutlined /></Link>
+      <Link to="/project">
+        <HomeOutlined />
+      </Link>
     </Breadcrumb.Item>
     <Breadcrumb.Item>
-      {props.projectReference
-        ? <Link to={`/project/${props.projectReference}`}>{props.secondItem}</Link>
-        : props.secondItem}
+      {props.projectReference ? (
+        <Link to={`/project/${props.projectReference}`}>{props.secondItem}</Link>
+      ) : (
+        props.secondItem
+      )}
     </Breadcrumb.Item>
-    {props.thirdItem && (
-      <Breadcrumb.Item>
-        {props.thirdItem}
-      </Breadcrumb.Item>
-    )}
+    {props.thirdItem && <Breadcrumb.Item>{props.thirdItem}</Breadcrumb.Item>}
   </Breadcrumb>
 );
 

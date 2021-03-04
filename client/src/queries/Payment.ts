@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+
 import { REQUISITION_INFO_FRAGMENT } from "./Requisition";
 
 export const PAYMENT_INFO_FRAGMENT = gql`
@@ -30,11 +31,15 @@ export const CREATE_PAYMENT_MUTATION = gql`
 `;
 
 export const UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION = gql`
-  mutation updateRequisitionAndCreatePayment($requisitionData: RequisitionInput!, $id: ID!, $paymentData: PaymentInput!) {
+  mutation updateRequisitionAndCreatePayment(
+    $requisitionData: RequisitionInput!
+    $id: ID!
+    $paymentData: PaymentInput!
+  ) {
     updateRequisition(data: $requisitionData, id: $id) {
       ...RequisitionInfoFragment
     }
-    
+
     createPayment(data: $paymentData) {
       ...PaymentInfoFragment
     }

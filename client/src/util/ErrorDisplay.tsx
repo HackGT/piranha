@@ -6,7 +6,7 @@ interface Props {
   error: ApolloError | Error | undefined;
 }
 
-const ErrorDisplay: React.FC<Props> = (props) => {
+const ErrorDisplay: React.FC<Props> = props => {
   try {
     console.error(JSON.parse(JSON.stringify(props.error)));
   } catch {
@@ -18,7 +18,11 @@ const ErrorDisplay: React.FC<Props> = (props) => {
       status="error"
       title="Something Went Wrong :("
       subTitle={props.error?.message}
-      extra={<Button type="primary" onClick={() => window.location.reload()}>Refresh Page</Button>}
+      extra={
+        <Button type="primary" onClick={() => window.location.reload()}>
+          Refresh Page
+        </Button>
+      }
     />
   );
 };

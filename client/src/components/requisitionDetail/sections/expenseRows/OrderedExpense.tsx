@@ -1,17 +1,21 @@
 import React from "react";
 import { Checkbox, Collapse, Form } from "antd";
 import { useMutation } from "@apollo/client";
+
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { UPDATE_REQUISITION_MUTATION } from "../../../../queries/Requisition";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import CreatePaymentRow from "./CreatePaymentRow";
 import { RequisitionItem } from "../../../../generated/types";
 
-const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
+const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   const onFinish = async (values: any) => {
-    const numReceived = Object.values(values).reduce((prev: number, curr: any) => prev + (curr ? 1 : 0), 0);
+    const numReceived = Object.values(values).reduce(
+      (prev: number, curr: any) => prev + (curr ? 1 : 0),
+      0
+    );
 
     let status = ""; // Calculates the requisition status based on the number of items received
 
@@ -32,9 +36,9 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = (props) => {
         notes: item.notes,
         lineItem: item.lineItem?.id,
         vendor: item.vendor?.id,
-        received: !!values[item.name || ""]
+        received: !!values[item.name || ""],
       })),
-      status
+      status,
     };
 
     await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });

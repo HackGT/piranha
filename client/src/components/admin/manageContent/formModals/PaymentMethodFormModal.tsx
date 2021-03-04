@@ -1,9 +1,14 @@
 import React from "react";
 import { Form, Input, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
+
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_PAYMENT_METHOD_MUTATION, UPDATE_PAYMENT_METHOD_MUTATION, PAYMENT_METHOD_LIST_QUERY } from "../../../../queries/PaymentMethod";
+import {
+  CREATE_PAYMENT_METHOD_MUTATION,
+  UPDATE_PAYMENT_METHOD_MUTATION,
+  PAYMENT_METHOD_LIST_QUERY,
+} from "../../../../queries/PaymentMethod";
 import { FormModalProps } from "./FormModalProps";
 import QuestionIconLabel from "../../../../util/QuestionIconLabel";
 
@@ -13,10 +18,12 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
     visible={props.modalState.visible}
     initialValues={props.modalState.initialValues}
-    closeModal={() => props.setModalState({
-      visible: false,
-      initialValues: props.modalState.initialValues
-    })}
+    closeModal={() =>
+      props.setModalState({
+        visible: false,
+        initialValues: props.modalState.initialValues,
+      })
+    }
     createMutation={CREATE_PAYMENT_METHOD_MUTATION}
     updateMutation={UPDATE_PAYMENT_METHOD_MUTATION}
     name="Payment Method"
@@ -25,7 +32,7 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
       const { paymentMethods } = cache.readQuery({ query: PAYMENT_METHOD_LIST_QUERY });
       cache.writeQuery({
         query: PAYMENT_METHOD_LIST_QUERY,
-        data: { paymentMethods: paymentMethods.concat([createMutationData.createPaymentMethod]) }
+        data: { paymentMethods: paymentMethods.concat([createMutationData.createPaymentMethod]) },
       });
     }}
   >
@@ -41,7 +48,12 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
         </Form.Item>
         <Form.Item
           name="reimbursementInstructions"
-          label={<QuestionIconLabel label="Reimbursement Instructions" helpText="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc. Note: Any URL will be converted into a link for easier access." />}
+          label={
+            <QuestionIconLabel
+              label="Reimbursement Instructions"
+              helpText="These notes will be shown to the submitter when they are requesting a reimbursement from this payment method. These instructions could include forms to fill out, a Wiki link, etc. Note: Any URL will be converted into a link for easier access."
+            />
+          }
           initialValue={initialValues ? initialValues.reimbursementInstructions : ""}
         >
           <TextArea
@@ -51,7 +63,12 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
         </Form.Item>
         <Form.Item
           name="isDirectPayment"
-          label={<QuestionIconLabel label="Direct Payment" helpText="For reimbursements, select yes for direct payment if the funding source can immediately send funds after approval. If the funding source requires forms or other documents to be submitted, select no for direct payment." />}
+          label={
+            <QuestionIconLabel
+              label="Direct Payment"
+              helpText="For reimbursements, select yes for direct payment if the funding source can immediately send funds after approval. If the funding source requires forms or other documents to be submitted, select no for direct payment."
+            />
+          }
           valuePropName="checked"
           initialValue={initialValues ? initialValues.isDirectPayment : false}
         >

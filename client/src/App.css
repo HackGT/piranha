@@ -5,8 +5,8 @@
 
 .card-head-wrapper {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .card-head-title {
@@ -17,10 +17,10 @@
 
 .card-head-subtitle {
   margin: 0 0 0 10px !important;
-  white-space: normal !important;
-  word-break: normal;
-  text-align: right;
   color: grey;
+  white-space: normal !important;
+  text-align: right;
+  word-break: normal;
 }
 
 .card-head-tag {

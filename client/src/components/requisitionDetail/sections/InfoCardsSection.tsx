@@ -1,41 +1,42 @@
 import React from "react";
 import { Card, List, Skeleton } from "antd";
 import moment from "moment";
+
 import { RequisitionSectionProps } from "../RequisitionDetail";
 import { Approval } from "../../../generated/types";
 
-const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
+const InfoCardsSection: React.FC<RequisitionSectionProps> = props => {
   const { data, loading } = props;
 
   const listData = [
     {
       title: "Created By",
-      body: (loading || !data.createdBy) ? "Not Set" : data.createdBy.name
+      body: loading || !data.createdBy ? "Not Set" : data.createdBy.name,
     },
     {
       title: "Budget",
-      body: (loading || !data.budget) ? "Not Set" : data.budget.name
-    }
+      body: loading || !data.budget ? "Not Set" : data.budget.name,
+    },
   ];
 
   if (!data.isReimbursement) {
     listData.push({
       title: "Vendor",
-      body: (loading || !data.items[0].vendor) ? "Not Set" : data.items[0].vendor.name
+      body: loading || !data.items[0].vendor ? "Not Set" : data.items[0].vendor.name,
     });
   }
 
   if (data.paymentRequiredBy) {
     listData.push({
       title: "Payment Required By",
-      body: moment(data.paymentRequiredBy).format("dddd, MMMM Do, YYYY")
+      body: moment(data.paymentRequiredBy).format("dddd, MMMM Do, YYYY"),
     });
   }
 
   if (data.purchaseDate) {
     listData.push({
       title: "Purchase Date",
-      body: moment(data.purchaseDate).format("dddd, MMMM Do, YYYY")
+      body: moment(data.purchaseDate).format("dddd, MMMM Do, YYYY"),
     });
   }
 
@@ -55,7 +56,7 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
 
     listData.push({
       title: "Approval",
-      body: text
+      body: text,
     });
   }
 
@@ -63,14 +64,16 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
     let text = "";
 
     if (data.shippingLocation) {
-      text = `Ordered on ${moment(data.orderDate).format("M/D/YY")} and shipped to ${data.shippingLocation}`;
+      text = `Ordered on ${moment(data.orderDate).format("M/D/YY")} and shipped to ${
+        data.shippingLocation
+      }`;
     } else {
       text = `Ordered on ${moment(data.orderDate).format("M/D/YY")}`;
     }
 
     listData.push({
       title: "Order Info",
-      body: text
+      body: text,
     });
   }
 
@@ -82,11 +85,7 @@ const InfoCardsSection: React.FC<RequisitionSectionProps> = (props) => {
       style={{ margin: 0 }}
       renderItem={(item: any) => (
         <List.Item>
-          <Card
-            title={item.title}
-            size="small"
-            headStyle={{ wordWrap: "break-word" }}
-          >
+          <Card title={item.title} size="small" headStyle={{ wordWrap: "break-word" }}>
             {loading ? <Skeleton active loading={loading} paragraph={false} /> : item.body}
           </Card>
         </List.Item>
