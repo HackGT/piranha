@@ -5,7 +5,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import { APPROVAL_INCLUDE, connectOrDisconnect, connectOrUndefined, PAYMENT_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from './common';
 import { prisma } from '../../common';
-import { MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs } from '../../generated/types';
+import { MutationCreateCategoryArgs, MutationUpdateCategoryArgs, MutationCreateApprovalArgs, MutationCreatePaymentArgs, MutationCreatePaymentMethodArgs, MutationCreateProjectArgs, MutationCreateRequisitionArgs, MutationCreateVendorArgs, MutationCreateBudgetArgs, MutationUpdatePaymentMethodArgs, MutationUpdateProjectArgs, MutationUpdateRequisitionArgs, MutationUpdateUserArgs, MutationUpdateVendorArgs, MutationUpdateBudgetArgs } from '../../generated/types';
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
     return await prisma.user.update({
@@ -223,6 +223,35 @@ const createBudget = async function createBudget(parent: any, args: MutationCrea
     });
 }
 
+const createCategory = async function createCategory(parent: any, args: MutationCreateCategoryArgs) {
+    return await prisma.category.create({
+        data: {
+            ...args.data,
+            budget: {
+                connect: {
+                    id: args.data.budget
+                }
+            }
+        },
+    });
+}
+
+const updateCategory = async function updateCategory(parent: any, args: MutationUpdateCategoryArgs) {
+    return await prisma.category.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            ...args.data,
+            budget: {
+                connect: {
+                    id: args.data.budget
+                }
+            }
+        }
+    })
+}
+
 const updateBudget = async function updateBudget(parent: any, args: MutationUpdateBudgetArgs) {
     return await prisma.budget.update({
         where: {
@@ -309,6 +338,9 @@ export const Mutation = {
 
     createPaymentMethod,
     updatePaymentMethod,
+
+    createCategory,
+    updateCategory,
 
     createBudget,
     updateBudget,

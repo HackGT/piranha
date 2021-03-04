@@ -27,6 +27,9 @@ type Mutation {
     createProject(data: ProjectInput!): Project
     updateProject(data: ProjectInput!, id: ID!): Project
 
+    createCategory(data: CategoryInput!): Category
+    updateCategory(data: CategoryInput!, id: ID!): Category
+
     createVendor(data: VendorInput!): Vendor
     updateVendor(data: VendorInput!, id: ID!): Vendor
 
@@ -260,6 +263,11 @@ type Category {
     id: ID!
     name: String!
     lineItems: [LineItem!]!
+}
+
+input CategoryInput {
+    name: String!
+    budget: ID!
 }
 
 type Budget {
