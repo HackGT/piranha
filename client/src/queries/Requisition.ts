@@ -7,12 +7,12 @@ export const REQUISITION_FORM_QUERY = gql`
       name
       referenceString
     }
-  
+
     vendors(isActive: true) {
       id
       name
     }
-    
+
     budgets {
       id
       name
@@ -129,7 +129,7 @@ export const REQUISITION_INFO_FRAGMENT = gql`
     purchaseDate
     fundingSource {
       id
-      name    
+      name
       reimbursementInstructions
       isDirectPayment
     }

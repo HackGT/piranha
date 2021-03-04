@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Steps } from "antd";
+
 import { RequisitionSectionProps } from "../RequisitionDetail";
-import { screenWidthHook, StatusToStep } from "../../../util/util";
+import { useScreenWidth, StatusToStep } from "../../../util/util";
 
 const { Step } = Steps;
 
-const StatusStepsSection: React.FC<RequisitionSectionProps> = (props) => {
+const StatusStepsSection: React.FC<RequisitionSectionProps> = props => {
   const { data, loading } = props;
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  useEffect(screenWidthHook(setScreenWidth));
-
+  const screenWidth = useScreenWidth();
   let content = null;
 
   if (data.isReimbursement) {

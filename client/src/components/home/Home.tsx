@@ -3,6 +3,7 @@ import { ConfigProvider, Empty, List, Typography, Button } from "antd";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+
 import { OPEN_REQUISITIONS_QUERY } from "../../queries/Requisition";
 import HomeRequisitionCard from "./HomeRequisitionCard";
 import ErrorDisplay from "../../util/ErrorDisplay";
@@ -16,13 +17,13 @@ const funPhrases: string[] = [
   "Create a requis-WHAT?",
   "Rubber duckies.  You want to buy rubber duckies.",
   "Nice to see you",
-  "\"No application is complete without some random phrases\" -Evan Strat",
+  '"No application is complete without some random phrases" -Evan Strat',
   "It's a wonderful day to use Piranha",
   "Millions of coins look up to you",
   "Would you kindly submit a requisition for 1 premium Piranha license?",
   "Can I expense that?",
   "A developer somewhere spent multiple minutes adding these random phrases",
-  "🎶 I'm just a poor REK, I need no sympathy... 🎵"
+  "🎶 I'm just a poor REK, I need no sympathy... 🎵",
 ];
 
 export function pickRandomElement<T>(arr: T[]): T {
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
   }
 
   const emptyRek = {
-    items: []
+    items: [],
   };
 
   const rekData = loading ? [emptyRek, emptyRek] : data.requisitions;
@@ -51,7 +52,9 @@ const Home: React.FC = () => {
       </Helmet>
       <Title style={{ marginBottom: 0 }}>Home</Title>
       <Text>{randomPhrase}</Text>
-      <Title style={{ textAlign: "center" }} level={3}>Your Requisitions</Title>
+      <Title style={{ textAlign: "center" }} level={3}>
+        Your Requisitions
+      </Title>
       <ConfigProvider
         renderEmpty={() => (
           <Empty description="No Open Requisitions">
@@ -66,7 +69,13 @@ const Home: React.FC = () => {
           dataSource={rekData}
           renderItem={(rek: Requisition) => (
             <List.Item>
-              <Link to={loading ? "" : `/project/${rek.project.referenceString}/requisition/${rek.projectRequisitionId}`}>
+              <Link
+                to={
+                  loading
+                    ? ""
+                    : `/project/${rek.project.referenceString}/requisition/${rek.projectRequisitionId}`
+                }
+              >
                 <HomeRequisitionCard loading={loading} rek={rek} />
               </Link>
             </List.Item>

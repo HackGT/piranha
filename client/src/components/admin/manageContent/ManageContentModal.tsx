@@ -12,14 +12,14 @@ interface Props {
   updateCache?: (cache: ApolloCache<any>, createMutationData: any) => void;
 }
 
-const ManageContentModal: React.FC<Props> = (props) => {
+const ManageContentModal: React.FC<Props> = props => {
   const [form] = Form.useForm();
 
   // For types without create option (ex. users), default to using update mutation, since this will not be called anyways
   const [createMutation] = useMutation(props.createMutation || props.updateMutation, {
     update(cache, { data: createMutationData }) {
       props.updateCache?.(cache, createMutationData);
-    }
+    },
   });
   const [updateMutation] = useMutation(props.updateMutation);
 
@@ -62,11 +62,7 @@ const ManageContentModal: React.FC<Props> = (props) => {
         onOk={onSubmit}
         bodyStyle={{ paddingBottom: 0 }}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          autoComplete="off"
-        >
+        <Form form={form} layout="vertical" autoComplete="off">
           {/* @ts-ignore */}
           {props.children(props.initialValues)}
         </Form>

@@ -1,19 +1,26 @@
 import React from "react";
 import { Form, Input, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
+
 import { FORM_RULES } from "../../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_VENDOR_MUTATION, UPDATE_VENDOR_MUTATION, VENDOR_LIST_QUERY } from "../../../../queries/Vendor";
+import {
+  CREATE_VENDOR_MUTATION,
+  UPDATE_VENDOR_MUTATION,
+  VENDOR_LIST_QUERY,
+} from "../../../../queries/Vendor";
 import { FormModalProps } from "./FormModalProps";
 
 const VendorFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
     visible={props.modalState.visible}
     initialValues={props.modalState.initialValues}
-    closeModal={() => props.setModalState({
-      visible: false,
-      initialValues: props.modalState.initialValues
-    })}
+    closeModal={() =>
+      props.setModalState({
+        visible: false,
+        initialValues: props.modalState.initialValues,
+      })
+    }
     createMutation={CREATE_VENDOR_MUTATION}
     updateMutation={UPDATE_VENDOR_MUTATION}
     name="Vendor"
@@ -22,7 +29,7 @@ const VendorFormModal: React.FC<FormModalProps> = props => (
       const { vendors } = cache.readQuery({ query: VENDOR_LIST_QUERY });
       cache.writeQuery({
         query: VENDOR_LIST_QUERY,
-        data: { vendors: vendors.concat([createMutationData.createVendor]) }
+        data: { vendors: vendors.concat([createMutationData.createVendor]) },
       });
     }}
   >

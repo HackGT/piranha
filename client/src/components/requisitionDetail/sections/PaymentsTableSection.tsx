@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, Typography } from "antd";
 import moment from "moment";
+
 import { formatPrice, getTotalCost } from "../../../util/util";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 import { Payment } from "../../../generated/types";
@@ -8,7 +9,7 @@ import { Payment } from "../../../generated/types";
 const { Text, Title } = Typography;
 const { Summary } = Table;
 
-const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
+const PaymentsTableSection: React.FC<RequisitionSectionProps> = props => {
   const { data } = props;
 
   if (!data.payments || data.payments.length === 0) {
@@ -20,20 +21,20 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       title: "Date",
       dataIndex: "date",
       render: (value: any) => moment(value).format("MMM D, YYYY"),
-      key: "date"
+      key: "date",
     },
     {
       title: "Amount",
       dataIndex: "amount",
       render: (value: any) => formatPrice(value),
-      key: "amount"
+      key: "amount",
     },
     {
       title: "Source",
       dataIndex: "fundingSource",
       render: (value: any) => value.name,
-      key: "source"
-    }
+      key: "source",
+    },
   ];
 
   const summaryRow = (rowData: Payment[]) => {
@@ -62,10 +63,11 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = (props) => {
     );
   };
 
-
   return (
     <>
-      <Title level={3} style={{ marginTop: "30px" }}>Payments</Title>
+      <Title level={3} style={{ marginTop: "30px" }}>
+        Payments
+      </Title>
       <Table
         columns={columns}
         dataSource={data.payments}

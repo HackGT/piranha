@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { createUploadLink } from "apollo-upload-client";
 import * as Sentry from "@sentry/react";
+
 import App from "./App";
 
 if (process.env.NODE_ENV === "production") {
@@ -15,8 +16,8 @@ const client = new ApolloClient({
   // @ts-ignore
   link: createUploadLink({
     uri: "/graphql",
-    credentials: "include"
-  })
+    credentials: "include",
+  }),
 });
 
 ReactDOM.render(

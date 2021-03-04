@@ -15,13 +15,18 @@
   }
 
   /* Force table to not be like tables anymore */
-  #table thead, #table tbody, #table th, #table td, #table tr {
+  #table thead,
+  #table tbody,
+  #table th,
+  #table td,
+  #table tr {
     display: block;
   }
 
-  #table td, #table th {
-    border-bottom: none !important;
+  #table td,
+  #table th {
     text-align: center !important;
+    border-bottom: none !important;
   }
 
   #table tr {

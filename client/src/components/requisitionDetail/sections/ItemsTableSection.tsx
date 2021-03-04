@@ -1,14 +1,15 @@
 import React from "react";
 import { Typography, Table } from "antd";
+
 import { formatPrice, getTotalCost } from "../../../util/util";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 import { RequisitionItem } from "../../../generated/types";
 
 const { Text, Link } = Typography;
 
-type RequisitionItemRow = RequisitionItem & { isDetailsRow: boolean }
+type RequisitionItemRow = RequisitionItem & { isDetailsRow: boolean };
 
-const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
+const ItemsTableSection: React.FC<RequisitionSectionProps> = props => {
   const { data, loading } = props;
 
   // Boolean determines whether to show green highlights and table footer
@@ -47,8 +48,8 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
             ),
             props: {
               colSpan: 3,
-              style: { background: record.received && showReceived ? greenColor : "" }
-            }
+              style: { background: record.received && showReceived ? greenColor : "" },
+            },
           };
         }
 
@@ -58,21 +59,27 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         }
 
         return {
-          children: record.link ? <Link href={record.link} target="_blank">{record.name}</Link> : <Text>{record.name}</Text>,
+          children: record.link ? (
+            <Link href={record.link} target="_blank">
+              {record.name}
+            </Link>
+          ) : (
+            <Text>{record.name}</Text>
+          ),
           props: {
-            style: { background: record.received && showReceived ? greenColor : "" }
-          }
+            style: { background: record.received && showReceived ? greenColor : "" },
+          },
         };
-      }
+      },
     },
     {
       title: "Quantity",
-      render: (text: number, record: RequisitionItemRow, index: number) => {
+      render: (text: number, record: RequisitionItemRow) => {
         if (record.isDetailsRow) {
           return {
             props: {
-              colSpan: 0
-            }
+              colSpan: 0,
+            },
           };
         }
         if (!record.quantity || !record.unitPrice) {
@@ -81,38 +88,43 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
         return {
           children: `${record.quantity} @ ${formatPrice(record.unitPrice)}`,
           props: {
-            style: { background: record.received && showReceived ? greenColor : "" }
-          }
+            style: { background: record.received && showReceived ? greenColor : "" },
+          },
         };
-      }
+      },
     },
     {
       title: "Subtotal",
-      render: (text: string, record: RequisitionItemRow, index: number) => {
+      render: (text: string, record: RequisitionItemRow) => {
         if (record.isDetailsRow) {
           return {
             props: {
-              colSpan: 0
-            }
+              colSpan: 0,
+            },
           };
         }
         return {
           children: formatPrice((record.quantity || 0) * (record.unitPrice || 0)),
           props: {
-            style: { background: record.received && showReceived ? greenColor : "" }
-          }
+            style: { background: record.received && showReceived ? greenColor : "" },
+          },
         };
-      }
-    }
+      },
+    },
   ];
 
   // Duplicates the rows so that items with notes have an extra row
-  const rows = loading ? [] : data.items.flatMap((item) => {
-    if (item.notes || item.lineItem || (props.data.isReimbursement && item.vendor)) {
-      return [{ ...item, isDetailsRow: false }, { ...item, isDetailsRow: true }];
-    }
-    return [{ ...item, isDetailsRow: false }];
-  });
+  const rows = loading
+    ? []
+    : data.items.flatMap(item => {
+        if (item.notes || item.lineItem || (props.data.isReimbursement && item.vendor)) {
+          return [
+            { ...item, isDetailsRow: false },
+            { ...item, isDetailsRow: true },
+          ];
+        }
+        return [{ ...item, isDetailsRow: false }];
+      });
 
   return (
     <Table
@@ -125,8 +137,8 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
       bordered
       scroll={{ x: true }}
       footer={showReceived ? () => <em>* Items in green have been received</em> : undefined}
-      summary={() => (loading ? null
-        : (
+      summary={() =>
+        loading ? null : (
           <>
             <Table.Summary.Row>
               <Table.Summary.Cell index={1} colSpan={2}>
@@ -153,7 +165,8 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = (props) => {
               </Table.Summary.Cell>
             </Table.Summary.Row>
           </>
-        ))}
+        )
+      }
     />
   );
 };

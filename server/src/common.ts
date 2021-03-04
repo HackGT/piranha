@@ -1,19 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-import { User as PrismaUser } from "@prisma/client";
+/* eslint-disable @typescript-eslint/no-namespace, @typescript-eslint/no-empty-interface */
+import { PrismaClient, User as PrismaUser } from "@prisma/client";
 
 export const prisma = new PrismaClient({
-    errorFormat: 'pretty'
+  errorFormat: "pretty",
 });
 
-
 declare global {
-    namespace Express {
-        interface User extends PrismaUser { }
-    }
+  namespace Express {
+    interface User extends PrismaUser {}
+  }
 }
 
 declare module "express-session" {
-    interface Session {
-        returnTo?: string;
-    }
+  interface Session {
+    returnTo?: string;
+  }
 }
