@@ -37,6 +37,8 @@ export const permissions = shield(
       updatePaymentMethod: and(isAuthenticatedRule, isExecRule),
       createPayment: and(isAuthenticatedRule, isExecRule),
       createApproval: and(isAuthenticatedRule, canExpenseRule),
+      createLineItem: and(isAuthenticatedRule, isExecRule),
+      updateLineItem: and(isAuthenticatedRule, isExecRule),
     },
   },
   {

@@ -39,6 +39,9 @@ type Mutation {
   createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
   updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
 
+  createLineItem(data: LineItemInput!) : LineItem
+  updateLineItem(data: LineItemInput!, id: ID!): LineItem
+
   createPayment(data: PaymentInput!): Payment
 
   createApproval(data: ApprovalInput!): Approval
@@ -257,6 +260,13 @@ type LineItem {
   quantity: Int
   unitCost: Float
   category: Category!
+}
+
+input LineItemInput {
+    name: String!
+    quantity: Int!
+    unitCost: Float!
+    category: ID!
 }
 
 type Category {
