@@ -15,6 +15,7 @@ import {
 import { prisma } from "../../common";
 import {
   MutationCreateApprovalArgs,
+  MutationCreateCategoryArgs,
   MutationCreatePaymentArgs,
   MutationCreatePaymentMethodArgs,
   MutationCreateProjectArgs,
@@ -22,6 +23,7 @@ import {
   MutationCreateVendorArgs,
   MutationCreateBudgetArgs,
   MutationCreateLineItemArgs,
+  MutationUpdateCategoryArgs,
   MutationUpdatePaymentMethodArgs,
   MutationUpdateProjectArgs,
   MutationUpdateRequisitionArgs,
@@ -263,6 +265,35 @@ const createBudget = async function createBudget(parent: any, args: MutationCrea
   });
 };
 
+const createCategory = async function createCategory(parent: any, args: MutationCreateCategoryArgs) {
+    return await prisma.category.create({
+        data: {
+            ...args.data,
+            budget: {
+                connect: {
+                    id: args.data.budget
+                }
+            }
+        },
+    });
+}
+
+const updateCategory = async function updateCategory(parent: any, args: MutationUpdateCategoryArgs) {
+    return await prisma.category.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            ...args.data,
+            budget: {
+                connect: {
+                    id: args.data.budget
+                }
+            }
+        }
+    })
+}
+
 const updateBudget = async function updateBudget(parent: any, args: MutationUpdateBudgetArgs) {
   return await prisma.budget.update({
     where: {
@@ -388,6 +419,9 @@ export const Mutation = {
 
   createPaymentMethod,
   updatePaymentMethod,
+  
+  createCategory,
+  updateCategory,
 
   createBudget,
   updateBudget,
