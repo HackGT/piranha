@@ -1,6 +1,8 @@
 import { AccessLevel, RequisitionStatus, User } from "@prisma/client";
 import { rule } from "graphql-shield";
 
+import { prisma } from "../common";
+
 const UNLOCKED_REQUISITION_STATUSES = [RequisitionStatus.DRAFT, RequisitionStatus.PENDING_CHANGES];
 
 // HELPER METHODS
@@ -14,11 +16,33 @@ export const isProjectLead = (user: any, requisition: any) => {
 };
 
 // PERMISSION METHODS FOR GRAPHQL
-export const canEdit = (parent: any, args: any, context: { user: User }) =>
-  isExec(context.user) ||
-  isProjectLead(context.user, parent) ||
-  (UNLOCKED_REQUISITION_STATUSES.includes(parent.status) &&
-    context.user.id === parent.createdBy.id); // Requisition is unlocked and user is the creator
+export const canEdit = async (parent: any, args: any, context: { user: User }) => {
+  // Do the following below hacks, since the permission function is run once before and once after each resolver
+  if (Object.keys(args).length === 0) {
+    return true;
+  }
+
+  const currentRequisition = await prisma.requisition.findUnique({
+    where: {
+      id: args.id,
+    },
+    include: {
+      createdBy: true,
+    },
+  });
+
+  if (!currentRequisition) {
+    return true;
+  }
+
+  return (
+    isExec(context.user) ||
+    // @ts-ignore - Requisition is unlocked and user is the creator
+    (UNLOCKED_REQUISITION_STATUSES.includes(currentRequisition.status) &&
+      context.user.id === currentRequisition.createdBy.id) ||
+    isProjectLead(context.user, currentRequisition)
+  );
+};
 
 export const canCancel = (parent: any, args: any, context: { user: User }) => isExec(context.user);
 
