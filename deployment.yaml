@@ -26,3 +26,4 @@ env:
   TIME_ZONE: America/New_York
   PRODUCTION: true
   GOOGLE_STORAGE_BUCKET: piranha-uploads
+  ADMIN_ALERT_CHANNEL: finance-alerts
