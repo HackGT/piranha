@@ -284,7 +284,6 @@ type Budget {
   id: ID!
   name: String!
   categories: [Category!]!
-  isActive: Boolean!
 }
 
 input BudgetInput {
