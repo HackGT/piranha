@@ -19,7 +19,7 @@ const Budgets: React.FC = () => {
 
   const budgetData = loading
     ? [{ archived: true }, { archived: true }, { archived: false }, { archived: false }]
-    : data.projects;
+    : data.budgets;
     
   const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 

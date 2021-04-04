@@ -13,6 +13,7 @@ interface Props {
 }
 
 const BudgetsCard: React.FC<Props> = props => (  
+  <Link to={`/budget/${props.item.id}`}>
     <Card
       title={
         <Skeleton loading={props.loading} paragraph={false} active>
@@ -25,7 +26,8 @@ const BudgetsCard: React.FC<Props> = props => (
       }
       loading={props.loading}
       hoverable
-    />       
+    />
+  </Link>
 );
 
 export default BudgetsCard;
