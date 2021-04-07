@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Typography, Table, Tag, Button, Switch } from "antd";
+import { Typography, Table, Tag, Button, Switch, Input } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
 import { Helmet } from "react-helmet";
 
@@ -22,6 +22,7 @@ import { Requisition } from "../../generated/types";
 import "./index.css";
 
 const { Text, Title } = Typography;
+const { Search } = Input;
 
 type RequisitionTableData = {
   key: number;
@@ -33,11 +34,11 @@ type RequisitionTableData = {
   }[];
 } & Requisition;
 
-const ProjectDetail: React.FC = () => {
+const ProjectDetail: React.FC = props => {
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
   const [hideCancelledReks, setHideCancelledReks] = useState(true);
   const screenWidth = useScreenWidth();
-
+  const [searchInput, setSearchInput] = useState("");
   const { projectReference } = useParams<any>();
   let [year, shortCode] = (projectReference || "").split("-"); // eslint-disable-line prefer-const
 
@@ -124,8 +125,10 @@ const ProjectDetail: React.FC = () => {
       (first, second) => first.projectRequisitionId - second.projectRequisitionId
     );
     sortedData = sortedData.filter(rek => (hideCancelledReks ? rek.status !== "CANCELLED" : true));
+    sortedData = sortedData.filter(item => Object.values(item).join(" ").toLowerCase().concat(item.createdBy.name).toLowerCase().includes(searchInput.toLowerCase()))
   }
-
+  
+  
   const rows: RequisitionTableData[] = sortedData.map(requisition => {
     const row: RequisitionTableData = {
       key: requisition.projectRequisitionId,
@@ -189,6 +192,12 @@ const ProjectDetail: React.FC = () => {
       </Helmet>
       <ProjectBreadcrumb secondItem={loading ? shortCode : data.project.name} />
       <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
+      <Search
+        placeholder="Search"
+        style={{ width: "200px" }}
+        value={searchInput}
+        onChange={event => setSearchInput(event.target.value)}
+      />
       <Table
         columns={columns}
         dataSource={rows}
