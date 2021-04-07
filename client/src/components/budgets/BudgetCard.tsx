@@ -8,7 +8,7 @@ interface Props {
 }
 
 const BudgetCard: React.FC<Props> = (props) => {
-
+  
   const lineItemsData = props.category.lineItems.map(item => (
       {
         key: item.id,
