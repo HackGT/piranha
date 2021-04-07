@@ -106,6 +106,11 @@ export const BUDGET_INCLUDE: Prisma.BudgetInclude = {
       lineItems: true,
     },
   },
+  requisitions: {
+    include: {
+      budget: true
+    }
+  }
 };
 
 export const APPROVAL_INCLUDE: Prisma.ApprovalInclude = {
