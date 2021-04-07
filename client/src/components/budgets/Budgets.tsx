@@ -11,7 +11,7 @@ import BudgetsCard from "./BudgetsCard";
 const { Title, Text } = Typography;
 
 const Budgets: React.FC = () => {  
-  const { loading, data, error } = useQuery(BUDGET_QUERY);    
+  const { loading, data, error } = useQuery(BUDGET_QUERY);   
 
   if (error || (data && !data.budgets)) {    
     return <ErrorDisplay error={error} />;

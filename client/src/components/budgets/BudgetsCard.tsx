@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, List, Skeleton, Typography } from "antd";
-import { UserOutlined } from "@ant-design/icons/lib";
+import { Card, Skeleton, Typography } from "antd";
 import { Link } from "react-router-dom";
 
+import { getProjectTotalCost } from '../../util/util';
 import { Budget, User } from "../../generated/types";
 
 const { Title, Text } = Typography;
@@ -26,7 +26,16 @@ const BudgetsCard: React.FC<Props> = props => (
       }
       loading={props.loading}
       hoverable
-    />
+    >      
+      <Text>{props.item.categories.length} Categories</Text>
+      <br />
+      <Text>{props.item.requisitions.length} Requisitions</Text>    
+      <br />  
+      <Text>
+        <strong>Total Project Cost: </strong>
+        {getProjectTotalCost(props.item.requisitions)}
+      </Text>
+    </Card>
   </Link>
 );
 
