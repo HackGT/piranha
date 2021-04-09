@@ -7,12 +7,12 @@ import { useQuery } from "@apollo/client";
 
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
-import RequisitionForm from "./components/requisitionForm/RequisitionForm";
-import ProjectDetail from "./components/projectDetail/ProjectDetail";
-import BudgetDetail from "./components/budgetDetail/BudgetDetail";
-import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail";
-import ProjectList from "./components/projectList/ProjectList";
-import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
+import RequisitionForm from "./components/requisitions/form/RequisitionForm";
+import ProjectDetail from "./components/projects/detail/ProjectDetail";
+import BudgetDetail from "./components/budgets/detail/BudgetDetail";
+import RequisitionDetail from "./components/requisitions/detail/RequisitionDetail";
+import ProjectList from "./components/projects/list/ProjectList";
+import RequisitionEdit from "./components/requisitions/form/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
 import { USER_INFO_QUERY } from "./queries/User";
 import PrivateRoute from "./util/PrivateRoute";
@@ -20,7 +20,7 @@ import NotFound from "./components/NotFound";
 import ErrorDisplay from "./util/ErrorDisplay";
 import ScrollToTop from "./util/ScrollToTop";
 import { User } from "./generated/types";
-import BudgetList from "./components/budgetList/BudgetList";
+import BudgetList from "./components/budgets/list/BudgetList";
 
 const { Header, Content, Footer } = Layout;
 
