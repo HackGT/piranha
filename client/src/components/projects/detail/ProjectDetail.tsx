@@ -13,6 +13,7 @@ import {
   StatusToString,
   getProjectTotalCost,
   useScreenWidth,
+  StatusToStep,
 } from "../../../util/util";
 import ErrorDisplay from "../../displays/ErrorDisplay";
 import { ReimbursementTag } from "../../../util/CustomTags";
@@ -80,6 +81,7 @@ const ProjectDetail: React.FC = props => {
           </Tag>
         );
       },
+      sorter: (a: any, b: any) => StatusToStep(a.status) - StatusToStep(b.status),
     },
     {
       title: "Name",
