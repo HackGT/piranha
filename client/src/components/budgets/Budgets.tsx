@@ -3,35 +3,35 @@ import { List, Typography } from "antd";
 import { useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
-import { BUDGET_QUERY } from '../../queries/Budget'
-import ErrorDisplay from '../../util/ErrorDisplay';
+import { BUDGET_QUERY } from "../../queries/Budget";
+import ErrorDisplay from "../../util/ErrorDisplay";
 import { Budget } from "../../generated/types";
 import BudgetsCard from "./BudgetsCard";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const Budgets: React.FC = () => {  
-  const { loading, data, error } = useQuery(BUDGET_QUERY);   
+const Budgets: React.FC = () => {
+  const { loading, data, error } = useQuery(BUDGET_QUERY);
 
-  if (error || (data && !data.budgets)) {    
+  if (error || (data && !data.budgets)) {
     return <ErrorDisplay error={error} />;
   }
 
   const budgetData = loading
     ? [{ archived: true }, { archived: true }, { archived: false }, { archived: false }]
     : data.budgets;
-    
+
   const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 
   return (
     <>
       <Helmet>
         <title>Piranha - Budgets</title>
-      </Helmet>      
+      </Helmet>
       <Title>{loading ? "Loading..." : "Budgets"}</Title>
       <Title style={{ textAlign: "center" }} level={3}>
         Active Budgets
-      </Title>      
+      </Title>
       <List
         grid={grid}
         dataSource={budgetData}
@@ -41,7 +41,7 @@ const Budgets: React.FC = () => {
           </List.Item>
         )}
       />
-    </>  
+    </>
   );
 };
 
