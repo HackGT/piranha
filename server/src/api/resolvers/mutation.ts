@@ -30,7 +30,7 @@ import {
   MutationUpdateUserArgs,
   MutationUpdateVendorArgs,
   MutationUpdateBudgetArgs,
-  MutationUpdateLineItemArgs
+  MutationUpdateLineItemArgs,
 } from "../../generated/types";
 
 const updateUser = async function updateUser(parent: any, args: MutationUpdateUserArgs) {
@@ -265,34 +265,40 @@ const createBudget = async function createBudget(parent: any, args: MutationCrea
   });
 };
 
-const createCategory = async function createCategory(parent: any, args: MutationCreateCategoryArgs) {
-    return await prisma.category.create({
-        data: {
-            ...args.data,
-            budget: {
-                connect: {
-                    id: args.data.budget
-                }
-            }
+const createCategory = async function createCategory(
+  parent: any,
+  args: MutationCreateCategoryArgs
+) {
+  return await prisma.category.create({
+    data: {
+      ...args.data,
+      budget: {
+        connect: {
+          id: args.data.budget,
         },
-    });
-}
+      },
+    },
+  });
+};
 
-const updateCategory = async function updateCategory(parent: any, args: MutationUpdateCategoryArgs) {
-    return await prisma.category.update({
-        where: {
-            id: args.id
+const updateCategory = async function updateCategory(
+  parent: any,
+  args: MutationUpdateCategoryArgs
+) {
+  return await prisma.category.update({
+    where: {
+      id: args.id,
+    },
+    data: {
+      ...args.data,
+      budget: {
+        connect: {
+          id: args.data.budget,
         },
-        data: {
-            ...args.data,
-            budget: {
-                connect: {
-                    id: args.data.budget
-                }
-            }
-        }
-    })
-}
+      },
+    },
+  });
+};
 
 const updateBudget = async function updateBudget(parent: any, args: MutationUpdateBudgetArgs) {
   return await prisma.budget.update({
@@ -376,33 +382,39 @@ const createApproval = async function createApproval(
   });
 };
 
-const createLineItem = async function (parent: any, args: MutationCreateLineItemArgs) {
-    return await prisma.lineItem.create({
-        data: {
-            ...args.data,
-            category: {
-                connect: {
-                    id: args.data.category
-                }
-            }
-        }
-    });
+const createLineItem = async function createLineItem(
+  parent: any,
+  args: MutationCreateLineItemArgs
+) {
+  return await prisma.lineItem.create({
+    data: {
+      ...args.data,
+      category: {
+        connect: {
+          id: args.data.category,
+        },
+      },
+    },
+  });
 };
 
-const updateLineItem = async function (parent: any, args: MutationUpdateLineItemArgs) {
-    return await prisma.lineItem.update({
-        where: {
-            id: args.id
+const updateLineItem = async function updateLineItem(
+  parent: any,
+  args: MutationUpdateLineItemArgs
+) {
+  return await prisma.lineItem.update({
+    where: {
+      id: args.id,
+    },
+    data: {
+      ...args.data,
+      category: {
+        connect: {
+          id: args.data.category,
         },
-        data: {
-            ...args.data,
-            category: {
-                connect: {
-                    id: args.data.category
-                }
-            }
-        }
-    });
+      },
+    },
+  });
 };
 
 export const Mutation = {
@@ -419,7 +431,7 @@ export const Mutation = {
 
   createPaymentMethod,
   updatePaymentMethod,
-  
+
   createCategory,
   updateCategory,
 
@@ -432,4 +444,3 @@ export const Mutation = {
   createLineItem,
   updateLineItem,
 };
-
