@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
 import { BUDGET_QUERY } from "../../../queries/Budget";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import { Budget } from "../../../generated/types";
 import BudgetListCard from "./BudgetListCard";
 

@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 
 import { OPEN_REQUISITIONS_QUERY } from "../../queries/Requisition";
 import HomeRequisitionCard from "./HomeRequisitionCard";
-import ErrorDisplay from "../../util/ErrorDisplay";
+import ErrorDisplay from "../displays/ErrorDisplay";
 import { Requisition } from "../../generated/types";
 
 const { Title, Text } = Typography;

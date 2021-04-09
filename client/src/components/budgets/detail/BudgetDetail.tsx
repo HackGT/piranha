@@ -7,7 +7,7 @@ import { useQuery } from "@apollo/client";
 import BudgetDetailCard from "./BudgetDetailCard";
 import { Category } from "../../../generated/types";
 import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 
 const BudgetDetail: React.FC = () => {
   const { id } = useParams<any>();

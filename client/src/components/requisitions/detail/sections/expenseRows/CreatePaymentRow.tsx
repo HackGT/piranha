@@ -4,7 +4,7 @@ import { DatePicker, Form, Input, Select } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
 
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../../queries/PaymentMethod";
-import ErrorDisplay from "../../../../../util/ErrorDisplay";
+import ErrorDisplay from "../../../../displays/ErrorDisplay";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { CREATE_PAYMENT_MUTATION } from "../../../../../queries/Payment";

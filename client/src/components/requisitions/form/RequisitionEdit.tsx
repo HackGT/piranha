@@ -7,7 +7,7 @@ import moment from "moment";
 import { parseRequisitionParams } from "../../../util/util";
 import { REQUISITION_DETAIL_QUERY } from "../../../queries/Requisition";
 import RequisitionForm from "./RequisitionForm";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import { RequisitionFormData } from "../../../types/types";
 
 const RequisitionEdit: React.FC = () => {

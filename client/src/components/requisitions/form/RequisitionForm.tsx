@@ -26,7 +26,7 @@ import {
   OPEN_REQUISITIONS_QUERY,
 } from "../../../queries/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../util/util";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 import { RequisitionItem, RequisitionStatus } from "../../../generated/types";
 import { RequisitionFormData } from "../../../types/types";

@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet";
 import { REQUISITION_DETAIL_QUERY } from "../../../queries/Requisition";
 import { parseRequisitionParams } from "../../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import ManageStatusSection from "./sections/ManageStatusSection";
 import { RequisitionTag } from "../../../util/CustomTags";
 import ActionsSection from "./sections/ActionsSection";
@@ -18,7 +18,7 @@ import UploadedFilesSection from "./sections/UploadedFilesSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 import ProjectBreadcrumb from "../../projects/detail/ProjectBreadcrumb";
 import "./index.css";
-import NotFound from "../../general/NotFound";
+import NotFoundDisplay from "../../displays/NotFoundDisplay";
 import { Requisition } from "../../../generated/types";
 
 const { Text, Title } = Typography;
@@ -45,7 +45,7 @@ const RequisitionDetail: React.FC = () => {
     return <ErrorDisplay error={error} />;
   }
   if (data && !data.requisition) {
-    return <NotFound />;
+    return <NotFoundDisplay />;
   }
 
   // @ts-ignore

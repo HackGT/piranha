@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Form, Select } from "antd";
 
 import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../../queries/PaymentMethod";
-import ErrorDisplay from "../../../../../util/ErrorDisplay";
+import ErrorDisplay from "../../../../displays/ErrorDisplay";
 import { FORM_RULES } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";

@@ -4,7 +4,7 @@ import { DocumentNode, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
 import { FormModalProps } from "../modal/FormModalProps";
-import ErrorDisplay from "../../util/ErrorDisplay";
+import ErrorDisplay from "../displays/ErrorDisplay";
 
 const { Title, Text } = Typography;
 const { Search } = Input;

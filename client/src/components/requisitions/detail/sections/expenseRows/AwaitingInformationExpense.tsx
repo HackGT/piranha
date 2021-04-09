@@ -6,7 +6,7 @@ import { FORM_RULES, formatPrice, getTotalCost } from "../../../../../util/util"
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../../queries/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import ErrorDisplay from "../../../../../util/ErrorDisplay";
+import ErrorDisplay from "../../../../displays/ErrorDisplay";
 import SelectFundingSourceRow from "./SelectFundingSourceRow";
 
 const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = props => {

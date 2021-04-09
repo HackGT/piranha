@@ -11,7 +11,7 @@ import {
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "../FormModalProps";
 import { ALL_USERS_QUERY } from "../../../queries/User";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 
 const ProjectFormModal: React.FC<FormModalProps> = props => {

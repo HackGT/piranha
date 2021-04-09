@@ -14,10 +14,10 @@ import {
   getProjectTotalCost,
   useScreenWidth,
 } from "../../../util/util";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import { ReimbursementTag } from "../../../util/CustomTags";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
-import NotFound from "../../general/NotFound";
+import NotFoundDisplay from "../../displays/NotFoundDisplay";
 import { Requisition } from "../../../generated/types";
 import "./index.css";
 
@@ -53,7 +53,7 @@ const ProjectDetail: React.FC = props => {
     return <ErrorDisplay error={error} />;
   }
   if (data && !data.project) {
-    return <NotFound />;
+    return <NotFoundDisplay />;
   }
 
   const columns = [

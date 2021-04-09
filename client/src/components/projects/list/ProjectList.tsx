@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 
 import { PROJECT_LIST_QUERY } from "../../../queries/Project";
 import ProjectListCard from "./ProjectListCard";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import ErrorDisplay from "../../displays/ErrorDisplay";
 import { Project } from "../../../generated/types";
 
 const { Title } = Typography;
