@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Skeleton, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-import { getProjectTotalCost } from "../../util/util";
+import { formatPrice, getProjectTotalCost } from "../../util/util";
 import { Budget } from "../../generated/types";
 
 const { Title, Text } = Typography;
@@ -12,28 +12,34 @@ interface Props {
   loading: boolean;
 }
 
-const BudgetListCard: React.FC<Props> = props => (
-  <Link to={`/budget/${props.item.id}`}>
+const BudgetListCard: React.FC<Props> = ({ item, loading }) => (
+  <Link to={`/budget/${item.id}`}>
     <Card
       title={
-        <Skeleton loading={props.loading} paragraph={false} active>
+        <Skeleton loading={loading} paragraph={false} active>
           <div className="card-head-wrapper">
             <Title level={4} className="card-head-title">
-              {props.item.name}
+              {item.name}
             </Title>
           </div>
         </Skeleton>
       }
-      loading={props.loading}
+      loading={loading}
       hoverable
     >
-      <Text>{props.item.categories.length} Categories</Text>
+      <Text>
+        <strong># of Categories: </strong>
+        {item.categories.length}
+      </Text>
       <br />
-      <Text>{props.item.requisitions.length} Requisitions</Text>
+      <Text>
+        <strong># of Requisitions: </strong>
+        {item.requisitions.length}
+      </Text>
       <br />
       <Text>
         <strong>Total Project Cost: </strong>
-        {getProjectTotalCost(props.item.requisitions)}
+        {formatPrice(getProjectTotalCost(item.requisitions))}
       </Text>
     </Card>
   </Link>

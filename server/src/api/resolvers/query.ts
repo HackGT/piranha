@@ -4,6 +4,7 @@ import { User } from "@prisma/client";
 import { BUDGET_INCLUDE, PROJECT_INCLUDE, REQUISITION_INCLUDE } from "./common";
 import { prisma } from "../../common";
 import {
+  QueryBudgetArgs,
   QueryPaymentMethodsArgs,
   QueryProjectArgs,
   QueryRequisitionArgs,
@@ -88,6 +89,13 @@ const paymentMethods = async function paymentMethods(parent: any, args: QueryPay
   });
 };
 
+const budget = async function budget(parent: any, args: QueryBudgetArgs) {
+  return await prisma.budget.findFirst({
+    where: args,
+    include: BUDGET_INCLUDE,
+  });
+};
+
 const budgets = async function budgets() {
   return await prisma.budget.findMany({
     include: BUDGET_INCLUDE,
@@ -104,5 +112,6 @@ export const Query = {
   requisition,
   requisitions,
   paymentMethods,
+  budget,
   budgets,
 };

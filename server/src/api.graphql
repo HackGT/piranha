@@ -15,6 +15,7 @@ type Query {
   "Gets all requisitions created by current user"
   requisitions: [Requisition]
   paymentMethods(isActive: Boolean): [PaymentMethod]
+  budget(id: ID!): Budget
   budgets: [Budget]
 }
 
@@ -39,7 +40,7 @@ type Mutation {
   createPaymentMethod(data: PaymentMethodInput!): PaymentMethod
   updatePaymentMethod(data: PaymentMethodInput!, id: ID!): PaymentMethod
 
-  createLineItem(data: LineItemInput!) : LineItem
+  createLineItem(data: LineItemInput!): LineItem
   updateLineItem(data: LineItemInput!, id: ID!): LineItem
 
   createPayment(data: PaymentInput!): Payment
@@ -263,10 +264,10 @@ type LineItem {
 }
 
 input LineItemInput {
-    name: String!
-    quantity: Int!
-    unitCost: Float!
-    category: ID!
+  name: String!
+  quantity: Int!
+  unitCost: Float!
+  category: ID!
 }
 
 type Category {
@@ -276,8 +277,8 @@ type Category {
 }
 
 input CategoryInput {
-    name: String!
-    budget: ID!
+  name: String!
+  budget: ID!
 }
 
 type Budget {

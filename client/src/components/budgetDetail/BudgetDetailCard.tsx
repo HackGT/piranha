@@ -34,11 +34,9 @@ const BudgetDetailCard: React.FC<Props> = props => {
   ];
 
   return (
-    <>
-      <Card title={props.category.name} style={{ width: 300 }}>
-        <Table dataSource={lineItemsData} columns={lineItemColumns} />
-      </Card>
-    </>
+    <Card title={props.category.name}>
+      <Table dataSource={lineItemsData} columns={lineItemColumns} pagination={false} />
+    </Card>
   );
 };
 

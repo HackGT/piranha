@@ -29,6 +29,15 @@ export const BUDGET_QUERY = gql`
   ${BUDGET_INFO_FRAGMENT}
 `;
 
+export const BUDGET_DETAIL_QUERY = gql`
+  query budgets($id: ID!) {
+    budget(id: $id) {
+      ...BudgetInfoFragment
+    }
+  }
+  ${BUDGET_INFO_FRAGMENT}
+`;
+
 export const CREATE_BUDGET_MUTATION = gql`
   mutation createBudget($data: BudgetInput!) {
     createBudget(data: $data) {

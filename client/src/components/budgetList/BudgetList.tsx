@@ -27,9 +27,6 @@ const BudgetList: React.FC = () => {
         <title>Piranha - Budgets</title>
       </Helmet>
       <Title>{loading ? "Loading..." : "Budgets"}</Title>
-      <Title style={{ textAlign: "center" }} level={3}>
-        Active Budgets
-      </Title>
       <List
         grid={grid}
         dataSource={budgetData}
