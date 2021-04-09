@@ -200,7 +200,7 @@ const ProjectDetail: React.FC = props => {
       <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
       <Search
         placeholder="Search"
-        style={{ width: "200px" }}
+        style={{ width: "250px", marginBottom: "15px" }}
         value={searchInput}
         onChange={event => setSearchInput(event.target.value)}
       />
