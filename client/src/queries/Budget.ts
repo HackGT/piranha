@@ -14,6 +14,9 @@ export const BUDGET_INFO_FRAGMENT = gql`
         unitCost
       }
     }
+    requisitions {
+      id
+    }
   }
 `;
 

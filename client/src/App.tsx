@@ -9,6 +9,7 @@ import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
 import RequisitionForm from "./components/requisitionForm/RequisitionForm";
 import ProjectDetail from "./components/projectDetail/ProjectDetail";
+import BudgetDetail from "./components/budgetDetail/BudgetDetail";
 import RequisitionDetail from "./components/requisitionDetail/RequisitionDetail";
 import ProjectList from "./components/projectList/ProjectList";
 import RequisitionEdit from "./components/requisitionForm/RequisitionEdit";
@@ -55,11 +56,12 @@ const App: React.FC = () => {
                   path="/project/:projectReference/requisition/:requisitionReference"
                   component={RequisitionDetail}
                 />
+                <Route exact path="/budget/:id" component={BudgetDetail} />
                 <Route exact path="/project/:projectReference" component={ProjectDetail} />
                 <Route exact path="/project" component={ProjectList} />
                 <Route exact path="/requisition" component={RequisitionForm} />
                 <PrivateRoute exact path="/admin/:activeTab?" component={AdminHome} user={user} />
-                <PrivateRoute exact path="/budgets" component={Budgets} user={user} />
+                <Route exact path="/budgets" component={Budgets} />
                 <Route exact path="/" component={Home} />
                 <Route component={NotFound} />
               </Switch>
