@@ -22,7 +22,7 @@ export const routes = [
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
   new Page("Admin", "/admin", true),
-  new Page("Budgets", "/budget"),
+  new Page("Budgets", "/budget", true),
 ];
 
 interface Props {

@@ -56,8 +56,8 @@ const App: React.FC = () => {
                   path="/project/:projectReference/requisition/:requisitionReference"
                   component={RequisitionDetail}
                 />
-                <Route exact path="/budget/:id" component={BudgetDetail} />
-                <Route exact path="/budget" component={BudgetList} />
+                <PrivateRoute exact path="/budget/:id" component={BudgetDetail} user={user} />
+                <PrivateRoute exact path="/budget" component={BudgetList} user={user} />
                 <Route exact path="/project/:projectReference" component={ProjectDetail} />
                 <Route exact path="/project" component={ProjectList} />
                 <Route exact path="/requisition" component={RequisitionForm} />
