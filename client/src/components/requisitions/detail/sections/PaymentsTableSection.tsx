@@ -37,7 +37,7 @@ const PaymentsTableSection: React.FC<RequisitionSectionProps> = props => {
     },
   ];
 
-  const summaryRow = (rowData: Payment[]) => {
+  const summaryRow = (rowData: readonly Payment[]) => {
     const requisitionTotal = getTotalCost(data, true);
     const paymentsTotal = rowData.reduce((prev, curr) => prev + curr.amount, 0);
 
