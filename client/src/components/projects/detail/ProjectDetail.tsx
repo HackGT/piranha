@@ -17,7 +17,7 @@ import {
 import ErrorDisplay from "../../../util/ErrorDisplay";
 import { ReimbursementTag } from "../../../util/CustomTags";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
-import NotFound from "../../NotFound";
+import NotFound from "../../general/NotFound";
 import { Requisition } from "../../../generated/types";
 import "./index.css";
 

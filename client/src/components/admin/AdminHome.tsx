@@ -2,17 +2,17 @@ import React from "react";
 import { Tabs, Tag, Typography } from "antd";
 import { useParams, useHistory } from "react-router-dom";
 
-import ManageContentList from "./manageContent/ManageContentList";
+import AdminContentList from "./AdminContentList";
 import { PROJECT_LIST_QUERY } from "../../queries/Project";
 import { VENDOR_LIST_QUERY } from "../../queries/Vendor";
 import { PAYMENT_METHOD_LIST_QUERY } from "../../queries/PaymentMethod";
 import { USER_LIST_QUERY } from "../../queries/User";
-import ProjectFormModal from "./manageContent/formModals/ProjectFormModal";
-import VendorFormModal from "./manageContent/formModals/VendorFormModal";
-import PaymentMethodFormModal from "./manageContent/formModals/PaymentMethodFormModal";
-import UserFormModal from "./manageContent/formModals/UserFormModal";
-import "./index.css";
+import ProjectFormModal from "../modal/formModals/ProjectFormModal";
+import VendorFormModal from "../modal/formModals/VendorFormModal";
+import PaymentMethodFormModal from "../modal/formModals/PaymentMethodFormModal";
+import UserFormModal from "../modal/formModals/UserFormModal";
 import { UserAccessLevel } from "../../types/types";
+import "./index.css";
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -50,7 +50,7 @@ const AdminHome: React.FC = () => {
         onTabClick={key => history.push(`/admin/${key}`)}
       >
         <TabPane tab="Projects" key={tabKeys[0]}>
-          <ManageContentList
+          <AdminContentList
             query={PROJECT_LIST_QUERY}
             title="Projects"
             tag={item => (
@@ -65,7 +65,7 @@ const AdminHome: React.FC = () => {
           />
         </TabPane>
         <TabPane tab="Vendors" key={tabKeys[1]}>
-          <ManageContentList
+          <AdminContentList
             query={VENDOR_LIST_QUERY}
             title="Vendors"
             tag={item => (
@@ -82,7 +82,7 @@ const AdminHome: React.FC = () => {
           />
         </TabPane>
         <TabPane tab="Payment Methods" key={tabKeys[2]}>
-          <ManageContentList
+          <AdminContentList
             query={PAYMENT_METHOD_LIST_QUERY}
             title="Payment Methods"
             tag={item => (
@@ -99,7 +99,7 @@ const AdminHome: React.FC = () => {
           />
         </TabPane>
         <TabPane tab="Users" key={tabKeys[3]}>
-          <ManageContentList
+          <AdminContentList
             query={USER_LIST_QUERY}
             title="Users"
             tag={getUserTag}

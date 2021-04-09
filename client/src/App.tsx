@@ -5,7 +5,7 @@ import { Layout, Spin } from "antd";
 import "./App.css";
 import { useQuery } from "@apollo/client";
 
-import Navigation from "./components/navigation/Navigation";
+import Navigation from "./components/general/Navigation";
 import Home from "./components/home/Home";
 import RequisitionForm from "./components/requisitions/form/RequisitionForm";
 import ProjectDetail from "./components/projects/detail/ProjectDetail";
@@ -16,7 +16,7 @@ import RequisitionEdit from "./components/requisitions/form/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
 import { USER_INFO_QUERY } from "./queries/User";
 import PrivateRoute from "./util/PrivateRoute";
-import NotFound from "./components/NotFound";
+import NotFound from "./components/general/NotFound";
 import ErrorDisplay from "./util/ErrorDisplay";
 import ScrollToTop from "./util/ScrollToTop";
 import { User } from "./generated/types";

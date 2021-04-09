@@ -3,8 +3,8 @@ import { Button, List, Typography, Input } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
-import { FormModalProps } from "./formModals/FormModalProps";
-import ErrorDisplay from "../../../util/ErrorDisplay";
+import { FormModalProps } from "../modal/FormModalProps";
+import ErrorDisplay from "../../util/ErrorDisplay";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -25,7 +25,7 @@ interface Props {
   searchFilterField: string;
 }
 
-const ManageContentList: React.FC<Props> = props => {
+const AdminContentList: React.FC<Props> = props => {
   const [modalState, setModalState] = useState({
     visible: false,
     initialValues: null,
@@ -92,4 +92,4 @@ const ManageContentList: React.FC<Props> = props => {
   );
 };
 
-export default ManageContentList;
+export default AdminContentList;

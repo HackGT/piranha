@@ -18,7 +18,7 @@ import UploadedFilesSection from "./sections/UploadedFilesSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 import ProjectBreadcrumb from "../../projects/detail/ProjectBreadcrumb";
 import "./index.css";
-import NotFound from "../../NotFound";
+import NotFound from "../../general/NotFound";
 import { Requisition } from "../../../generated/types";
 
 const { Text, Title } = Typography;

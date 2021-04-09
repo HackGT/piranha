@@ -3,12 +3,12 @@ import { Form, Input, Radio, Tooltip, Typography } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons/lib";
 import { useApolloClient } from "@apollo/client";
 
-import { FORM_RULES } from "../../../../util/util";
+import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { FormModalProps } from "./FormModalProps";
-import { UPDATE_USER_MUTATION, USER_INFO_QUERY } from "../../../../queries/User";
-import QuestionIconLabel from "../../../../util/QuestionIconLabel";
-import { UserAccessLevel } from "../../../../types/types";
+import { FormModalProps } from "../FormModalProps";
+import { UPDATE_USER_MUTATION, USER_INFO_QUERY } from "../../../queries/User";
+import QuestionIconLabel from "../../../util/QuestionIconLabel";
+import { UserAccessLevel } from "../../../types/types";
 
 const { Text } = Typography;
 

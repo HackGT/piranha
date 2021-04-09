@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ModalState } from "../ManageContentList";
+import { ModalState } from "../admin/AdminContentList";
 
 export interface FormModalProps {
   modalState: ModalState;
