@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Skeleton, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-import { getProjectTotalCost } from '../../util/util';
-import { Budget, User } from "../../generated/types";
+import { getProjectTotalCost } from "../../util/util";
+import { Budget } from "../../generated/types";
 
 const { Title, Text } = Typography;
 
@@ -12,7 +12,7 @@ interface Props {
   loading: boolean;
 }
 
-const BudgetsCard: React.FC<Props> = props => (  
+const BudgetListCard: React.FC<Props> = props => (
   <Link to={`/budget/${props.item.id}`}>
     <Card
       title={
@@ -26,11 +26,11 @@ const BudgetsCard: React.FC<Props> = props => (
       }
       loading={props.loading}
       hoverable
-    >      
+    >
       <Text>{props.item.categories.length} Categories</Text>
       <br />
-      <Text>{props.item.requisitions.length} Requisitions</Text>    
-      <br />  
+      <Text>{props.item.requisitions.length} Requisitions</Text>
+      <br />
       <Text>
         <strong>Total Project Cost: </strong>
         {getProjectTotalCost(props.item.requisitions)}
@@ -39,4 +39,4 @@ const BudgetsCard: React.FC<Props> = props => (
   </Link>
 );
 
-export default BudgetsCard;
+export default BudgetListCard;

@@ -6,20 +6,18 @@ import { Helmet } from "react-helmet";
 import { BUDGET_QUERY } from "../../queries/Budget";
 import ErrorDisplay from "../../util/ErrorDisplay";
 import { Budget } from "../../generated/types";
-import BudgetsCard from "./BudgetsCard";
+import BudgetListCard from "./BudgetListCard";
 
 const { Title } = Typography;
 
-const Budgets: React.FC = () => {
+const BudgetList: React.FC = () => {
   const { loading, data, error } = useQuery(BUDGET_QUERY);
 
   if (error || (data && !data.budgets)) {
     return <ErrorDisplay error={error} />;
   }
 
-  const budgetData = loading
-    ? [{ archived: true }, { archived: true }, { archived: false }, { archived: false }]
-    : data.budgets;
+  const budgetData = loading ? [] : data.budgets;
 
   const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 
@@ -37,7 +35,7 @@ const Budgets: React.FC = () => {
         dataSource={budgetData}
         renderItem={(item: Budget) => (
           <List.Item>
-            <BudgetsCard item={item} loading={loading} />
+            <BudgetListCard item={item} loading={loading} />
           </List.Item>
         )}
       />
@@ -45,4 +43,4 @@ const Budgets: React.FC = () => {
   );
 };
 
-export default Budgets;
+export default BudgetList;

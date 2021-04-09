@@ -22,7 +22,7 @@ export const routes = [
   new Page("Projects", "/project"),
   new Page("Create Requisition", "/requisition"),
   new Page("Admin", "/admin", true),
-  new Page("Budgets", "/budgets"),
+  new Page("Budgets", "/budget"),
 ];
 
 interface Props {
@@ -54,7 +54,7 @@ const Navigation: React.FC<Props> = props => {
         onClose={() => setSidebarVisible(false)}
         visible={sidebarVisible}
       >
-        <Menu mode="vertical" style={{ borderRight: "None" }} selectable={false}>
+        <Menu mode="vertical" style={{ borderRight: "none" }} selectable={false}>
           {filteredRoutes.map((route: Page) => (
             <Menu.Item key={route.name}>
               <Link onClick={() => setSidebarVisible(false)} to={route.link}>

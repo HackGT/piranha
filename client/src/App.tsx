@@ -20,7 +20,7 @@ import NotFound from "./components/NotFound";
 import ErrorDisplay from "./util/ErrorDisplay";
 import ScrollToTop from "./util/ScrollToTop";
 import { User } from "./generated/types";
-import Budgets from "./components/budgets/Budgets";
+import BudgetList from "./components/budgetList/BudgetList";
 
 const { Header, Content, Footer } = Layout;
 
@@ -57,11 +57,11 @@ const App: React.FC = () => {
                   component={RequisitionDetail}
                 />
                 <Route exact path="/budget/:id" component={BudgetDetail} />
+                <Route exact path="/budget" component={BudgetList} />
                 <Route exact path="/project/:projectReference" component={ProjectDetail} />
                 <Route exact path="/project" component={ProjectList} />
                 <Route exact path="/requisition" component={RequisitionForm} />
                 <PrivateRoute exact path="/admin/:activeTab?" component={AdminHome} user={user} />
-                <Route exact path="/budgets" component={Budgets} />
                 <Route exact path="/" component={Home} />
                 <Route component={NotFound} />
               </Switch>
