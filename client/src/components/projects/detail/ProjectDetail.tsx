@@ -130,7 +130,6 @@ const ProjectDetail: React.FC = props => {
     sortedData = sortedData.filter(item =>
       Object.values(item)
         .join(" ")
-        .toLowerCase()
         .concat(item.createdBy.name)
         .toLowerCase()
         .includes(searchInput.toLowerCase())

@@ -23,6 +23,7 @@ export const PROJECT_DETAIL_QUERY = gql`
         referenceString
         projectRequisitionId
         headline
+        description
         status
         canEdit
         otherFees
