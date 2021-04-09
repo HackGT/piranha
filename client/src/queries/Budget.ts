@@ -16,6 +16,13 @@ export const BUDGET_INFO_FRAGMENT = gql`
     }
     requisitions {
       id
+      otherFees
+      items {
+        id
+        name
+        quantity
+        unitPrice
+      }
     }
   }
 `;
