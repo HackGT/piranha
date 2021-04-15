@@ -8,6 +8,7 @@ import BudgetDetailCard from "./BudgetDetailCard";
 import { Category } from "../../../generated/types";
 import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
 import ErrorDisplay from "../../displays/ErrorDisplay";
+import LineItemFormModal from "../../modal/formModals/LineItemFormModal";
 
 const BudgetDetail: React.FC = () => {
   const { id } = useParams<any>();
@@ -34,7 +35,11 @@ const BudgetDetail: React.FC = () => {
         dataSource={budgetData.categories}
         renderItem={(category: Category) => (
           <List.Item>
-            <BudgetDetailCard key={category.id} category={category} />
+            <BudgetDetailCard 
+              key={category.id}
+              category={category} 
+              modal={LineItemFormModal}
+            />
           </List.Item>
         )}
       />
