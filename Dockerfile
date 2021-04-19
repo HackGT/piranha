@@ -4,7 +4,11 @@ FROM node:12-alpine AS build
 WORKDIR /usr/src/piranha/
 COPY . /usr/src/piranha/
 
+WORKDIR /usr/src/piranha/client
 RUN yarn install && yarn build
+
+WORKDIR /usr/src/piranha/server
+RUN yarn install && yarn generate
 
 # Runtime container
 FROM node:12-alpine

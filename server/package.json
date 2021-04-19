@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "dev": "nodemon --watch 'src/**/*' -e ts,graphql --exec 'ts-node' src/app.ts",
+    "dev": "yarn generate && nodemon --watch 'src/**/*' -e ts,graphql --exec 'ts-node' src/app.ts",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "prisma-generate": "prisma format && prisma generate",
+    "generate": "prisma format && prisma generate && graphql-codegen",
     "start": "ts-node src/app.ts",
     "start-migrate": "yarn migrate:deploy && yarn start",
     "lint": "eslint ./ --fix; prettier ./ --write"
@@ -39,6 +39,9 @@
     "prisma": "^2.20.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.4",
+    "@graphql-codegen/typescript": "^1.22.0",
+    "@graphql-codegen/typescript-resolvers": "^1.19.1",
     "@hex-labs/eslint-config": "^1.1.1",
     "@hex-labs/prettier-config": "^1.1.1",
     "@hex-labs/tsconfig": "^1.1.1",

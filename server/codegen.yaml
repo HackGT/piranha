@@ -1,17 +1,17 @@
 overwrite: true
 schema:
-  - "./server/src/api.graphql"
+  - "./src/api.graphql"
   - "scalar Upload"
 config:
   scalars:
     ID: "number"
 generates:
-  client/src/generated/types.ts:
+  ../client/src/generated/types.ts:
     plugins:
       - "typescript"
     config:
       enumsAsTypes: true
-  server/src/generated/types.ts:
+  src/generated/types.ts:
     plugins:
       - "typescript"
       - "typescript-resolvers"
