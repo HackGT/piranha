@@ -49,6 +49,7 @@ model Budget {
   name         String
   categories   Category[]
   requisitions Requisition[]
+  archived     Boolean       @default(false)
 }
 
 model Category {

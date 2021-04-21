@@ -286,10 +286,12 @@ type Budget {
   name: String!
   categories: [Category!]!
   requisitions: [Requisition!]!
+  archived: Boolean!
 }
 
 input BudgetInput {
   name: String!
+  archived: Boolean
 }
 
 type OperatingLineItem {

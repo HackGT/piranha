@@ -4,6 +4,7 @@ export const BUDGET_INFO_FRAGMENT = gql`
   fragment BudgetInfoFragment on Budget {
     id
     name
+    archived
     categories {
       id
       name
@@ -27,6 +28,14 @@ export const BUDGET_INFO_FRAGMENT = gql`
   }
 `;
 
+export const BUDGET_INFO_FRAGMENT_MUTATION = gql`
+  fragment BudgetInfoFragmentMutation on Budget {
+    id
+    name
+    archived
+  }
+`;
+
 export const BUDGET_QUERY = gql`
   query budgets {
     budgets {
@@ -35,7 +44,7 @@ export const BUDGET_QUERY = gql`
   }
   ${BUDGET_INFO_FRAGMENT}
 `;
-
+// fix these to not return cateogries since we have it as null, add archived stuff
 export const BUDGET_DETAIL_QUERY = gql`
   query budgets($id: ID!) {
     budget(id: $id) {
@@ -48,17 +57,17 @@ export const BUDGET_DETAIL_QUERY = gql`
 export const CREATE_BUDGET_MUTATION = gql`
   mutation createBudget($data: BudgetInput!) {
     createBudget(data: $data) {
-      ...BudgetInfoFragment
+      ...BudgetInfoFragmentMutation
     }
   }
-  ${BUDGET_INFO_FRAGMENT}
+  ${BUDGET_INFO_FRAGMENT_MUTATION}
 `;
 
 export const UPDATE_BUDGET_MUTATION = gql`
   mutation updateBudget($data: BudgetInput!, $id: ID!) {
     updateBudget(data: $data, id: $id) {
-      ...BudgetInfoFragment
+      ...BudgetInfoFragmentMutation
     }
   }
-  ${BUDGET_INFO_FRAGMENT}
+  ${BUDGET_INFO_FRAGMENT_MUTATION}
 `;
