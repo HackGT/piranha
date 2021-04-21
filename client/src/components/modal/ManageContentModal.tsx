@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Form, message, Modal } from "antd";
 import { ApolloCache, DocumentNode, useMutation } from "@apollo/client";
+import { ConsoleSqlOutlined } from "@ant-design/icons";
 
 interface Props {
   visible: boolean;
@@ -21,17 +22,18 @@ const ManageContentModal: React.FC<Props> = props => {
       props.updateCache?.(cache, createMutationData);
     },
   });
-  const [updateMutation] = useMutation(props.updateMutation);
-
+  const [updateMutation] = useMutation(props.updateMutation);  
   useEffect(() => form.resetFields(), [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372
 
   const onSubmit = async () => {
     try {
       const values = await form.validateFields();
       const hide = message.loading("Saving...", 0);
-
+      if (props.initialValues && props.initialValues.budget) {
+        values.budget = props.initialValues.budget;
+      }
       try {
-        if (props.initialValues) {
+        if (props.initialValues && props.initialValues.id) {          
           await updateMutation({ variables: { data: values, id: props.initialValues.id } });
         } else {
           await createMutation({ variables: { data: values } });
@@ -55,7 +57,7 @@ const ManageContentModal: React.FC<Props> = props => {
     <>
       <Modal
         visible={props.visible}
-        title={props.initialValues ? `Manage ${props.name}` : `Create ${props.name}`}
+        title={(props.initialValues && props.initialValues.id) ? `Manage ${props.name}` : `Create ${props.name}`}
         okText={props.initialValues ? "Update" : "Create"}
         cancelText="Cancel"
         onCancel={props.closeModal}
