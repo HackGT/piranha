@@ -39,6 +39,8 @@ export const permissions = shield(
       createApproval: and(isAuthenticatedRule, canExpenseRule),
       createLineItem: and(isAuthenticatedRule, isExecRule),
       updateLineItem: and(isAuthenticatedRule, isExecRule),
+      createCategory: and(isAuthenticatedRule, isExecRule),
+      updateCategory: and(isAuthenticatedRule, isExecRule)
     },
   },
   {
