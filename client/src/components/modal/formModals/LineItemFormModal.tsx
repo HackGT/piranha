@@ -1,12 +1,13 @@
 import React from "react";
-import { Form, Input, Switch } from "antd";
+import { Form, Input, InputNumber, Switch } from "antd";
 import { ApolloCache } from "@apollo/client";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import {
   CREATE_LINE_ITEM_MUTATION,
-  UPDATE_LINE_ITEM_MUTATION
+  UPDATE_LINE_ITEM_MUTATION,
+  LINE_ITEM_INFO_FRAGMENT
 } from "../../../queries/LineItem";
 import { FormModalProps } from "../FormModalProps";
 // import QuestionIconLabel from "../../../util/QuestionIconLabel";
@@ -24,6 +25,14 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
     createMutation={CREATE_LINE_ITEM_MUTATION}
     updateMutation={UPDATE_LINE_ITEM_MUTATION}
     name="New Line Item"
+    updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
+      // @ts-ignore
+      const { lineItems } = cache.readQuery({ query: CREATE_LINE_ITEM_MUTATION });
+      cache.writeQuery({
+        query: CREATE_LINE_ITEM_MUTATION,
+        data: { lineItems: lineItems.concat([createMutationData.createLineItem])}
+      });
+    }}
   >
     {(initialValues: any) => (
       <>
@@ -42,7 +51,13 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
           label="Quantity"
           initialValue={initialValues ? initialValues.quantity : ""}
         >
-          <Input placeholder="100" />
+          <InputNumber
+              type="number"
+              min={0}
+              precision={0}
+              style={{ width: "100%" }}
+              placeholder="100"
+            />
         </Form.Item>
 
         <Form.Item
@@ -51,7 +66,13 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
           label="Unit Cost"
           initialValue={initialValues ? initialValues.unitCost : ""}
         >
-          <Input placeholder="24.99" />
+          <InputNumber
+              type="number"
+              min={0}
+              precision={2}
+              style={{ width: "100%" }}
+              placeholder="24.99"
+            />
         </Form.Item>
 
         {/* Check if we need this part below */}
