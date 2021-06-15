@@ -261,6 +261,7 @@ const createBudget = async function createBudget(parent: any, args: MutationCrea
   return await prisma.budget.create({
     data: {
       ...args.data,
+      archived: args.data.archived || false,
     },
   });
 };
@@ -307,6 +308,7 @@ const updateBudget = async function updateBudget(parent: any, args: MutationUpda
     },
     data: {
       ...args.data,
+      archived: args.data.archived || false,
     },
   });
 };
