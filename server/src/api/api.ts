@@ -40,7 +40,7 @@ export const permissions = shield(
       createLineItem: and(isAuthenticatedRule, isExecRule),
       updateLineItem: and(isAuthenticatedRule, isExecRule),
       createCategory: and(isAuthenticatedRule, isExecRule),
-      updateCategory: and(isAuthenticatedRule, isExecRule)
+      updateCategory: and(isAuthenticatedRule, isExecRule),
     },
   },
   {

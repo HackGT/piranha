@@ -280,7 +280,7 @@ const createCategory = async function createCategory(
         },
       },
     },
-    include: CATEGORY_INCLUDE
+    include: CATEGORY_INCLUDE,
   });
 };
 
@@ -300,7 +300,7 @@ const updateCategory = async function updateCategory(
         },
       },
     },
-    include: CATEGORY_INCLUDE
+    include: CATEGORY_INCLUDE,
   });
 };
 

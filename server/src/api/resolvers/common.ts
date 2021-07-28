@@ -68,8 +68,8 @@ export const PROJECT_INCLUDE: Prisma.ProjectInclude = {
 };
 
 export const CATEGORY_INCLUDE: Prisma.CategoryInclude = {
-  lineItems: true
-}
+  lineItems: true,
+};
 
 export const REQUISITION_INCLUDE: Prisma.RequisitionInclude = {
   budget: true,
