@@ -7,9 +7,8 @@ import { useQuery } from "@apollo/client";
 import BudgetDetailCard from "./BudgetDetailCard";
 import { Category } from "../../../generated/types";
 import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
-
 import ErrorDisplay from "../../displays/ErrorDisplay";
-
+import LineItemFormModal from "../../modal/formModals/LineItemFormModal";
 import CategoryFormModal from "../../modal/formModals/CategoryFormModal";
 
 export type ModalState = {
@@ -48,8 +47,8 @@ const BudgetDetail: React.FC = () => {
     <>
       <Title style={{ textAlign: "left" }} level={2}>
         {budgetData.name} Details
-      </Title>      
-      <Button style={{ marginRight: "10px" }} onClick={() => openModal({"budget": data.budget.id})}>
+      </Title>
+      <Button style={{ marginRight: "10px" }} onClick={() => openModal({ budget: data.budget.id })}>
         Add +
       </Button>
       <List
@@ -58,8 +57,11 @@ const BudgetDetail: React.FC = () => {
         dataSource={budgetData.categories}
         renderItem={(category: Category) => (
           <List.Item>
-            <BudgetDetailCard key={category.id} category={category} />            
-            <Button style={{ marginRight: "10px" }} onClick={() => openModal({"id": category.id, "budget": data.budget.id})}>
+            <BudgetDetailCard key={category.id} category={category} modal={LineItemFormModal} />
+            <Button
+              style={{ marginRight: "10px" }}
+              onClick={() => openModal({ id: category.id, budget: data.budget.id })}
+            >
               Edit
             </Button>
           </List.Item>
