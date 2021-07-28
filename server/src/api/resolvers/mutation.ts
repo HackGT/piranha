@@ -6,6 +6,7 @@ import { uploadFiles } from "../../util/googleUpload";
 import { sendSlackNotification } from "../../util/slack";
 import {
   APPROVAL_INCLUDE,
+  CATEGORY_INCLUDE,
   connectOrDisconnect,
   connectOrUndefined,
   PAYMENT_INCLUDE,
@@ -279,6 +280,7 @@ const createCategory = async function createCategory(
         },
       },
     },
+    include: CATEGORY_INCLUDE
   });
 };
 
@@ -298,6 +300,7 @@ const updateCategory = async function updateCategory(
         },
       },
     },
+    include: CATEGORY_INCLUDE
   });
 };
 
