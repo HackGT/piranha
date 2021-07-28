@@ -1,6 +1,11 @@
 import React from "react";
 
-import { ModalState } from "../admin/AdminContentList";
+export type ModalState = {
+  visible: boolean;
+  initialValues: any;
+  hiddenValues?: any;
+  refetchQueryVariables?: any;
+};
 
 export interface FormModalProps {
   modalState: ModalState;

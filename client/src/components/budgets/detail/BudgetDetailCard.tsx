@@ -1,26 +1,30 @@
+import { EditOutlined } from "@ant-design/icons";
 import { Button, Card, Table } from "antd";
 import React, { useState } from "react";
 
 import { Category } from "../../../generated/types";
-import { FormModalProps } from "../../modal/FormModalProps";
-
-export type ModalState = {
-  visible: boolean;
-  initialValues: any;
-}
+import { ModalState } from "../../modal/FormModalProps";
+import LineItemFormModal from "../../modal/formModals/LineItemFormModal";
 
 interface Props {
   category: Category;
-  modal: React.FC<FormModalProps>;
 }
 
 const BudgetDetailCard: React.FC<Props> = props => {
-  const lineItemsData = props.category.lineItems.map(item => ({
-    key: item.id,
-    name: item.name,
-    quantity: item.quantity,
-    unitCost: item.unitCost,
-  }));
+  const [modalState, setModalState] = useState({
+    visible: false,
+    initialValues: null,
+  } as ModalState);
+
+  const openModal = (values: any) => {
+    setModalState({
+      visible: true,
+      initialValues: values,
+      hiddenValues: {
+        category: props.category.id,
+      },
+    });
+  };
 
   const lineItemColumns = [
     {
@@ -38,34 +42,28 @@ const BudgetDetailCard: React.FC<Props> = props => {
       dataIndex: "unitCost",
       key: "unitCost",
     },
+    {
+      title: "Actions",
+      dataIndex: "",
+      key: "actions",
+      render: (record: any) => <EditOutlined onClick={() => openModal(record)}>Edit</EditOutlined>,
+    },
   ];
-
-  const [modalState, setModalState] = useState({
-    visible: false,
-    initialValues: null,
-  } as ModalState);
-
-  const openModal = (values: any) => {
-    setModalState({
-      visible: true,
-      initialValues: values,
-    });
-  };
-
-  
-  const Modal = props.modal;
-
-
 
   return (
     <Card title={props.category.name}>
-      <Table dataSource={lineItemsData} columns={lineItemColumns} pagination={false} />
-      
-      <Button onClick={() => openModal(null)}>
-        New Line Item
+      <Table
+        dataSource={props.category.lineItems}
+        columns={lineItemColumns}
+        pagination={false}
+        rowKey="id"
+      />
+
+      <Button style={{ marginTop: "10px" }} onClick={() => openModal(null)}>
+        Line Item +
       </Button>
 
-      <Modal modalState={modalState} setModalState={setModalState} />
+      <LineItemFormModal modalState={modalState} setModalState={setModalState} />
     </Card>
   );
 };

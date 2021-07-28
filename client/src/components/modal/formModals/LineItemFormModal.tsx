@@ -1,21 +1,17 @@
 import React from "react";
-import { Form, Input, InputNumber, Switch } from "antd";
-import { ApolloCache } from "@apollo/client";
+import { Form, Input, InputNumber } from "antd";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import {
-  CREATE_LINE_ITEM_MUTATION,
-  UPDATE_LINE_ITEM_MUTATION,
-  LINE_ITEM_INFO_FRAGMENT
-} from "../../../queries/LineItem";
+import { CREATE_LINE_ITEM_MUTATION, UPDATE_LINE_ITEM_MUTATION } from "../../../queries/LineItem";
 import { FormModalProps } from "../FormModalProps";
-// import QuestionIconLabel from "../../../util/QuestionIconLabel";
+import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
 
 const LineItemFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
     visible={props.modalState.visible}
     initialValues={props.modalState.initialValues}
+    hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
       props.setModalState({
         visible: false,
@@ -24,15 +20,10 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
     }
     createMutation={CREATE_LINE_ITEM_MUTATION}
     updateMutation={UPDATE_LINE_ITEM_MUTATION}
-    name="New Line Item"
-    updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-      // @ts-ignore
-      const { lineItems } = cache.readQuery({ query: CREATE_LINE_ITEM_MUTATION });
-      cache.writeQuery({
-        query: CREATE_LINE_ITEM_MUTATION,
-        data: { lineItems: lineItems.concat([createMutationData.createLineItem])}
-      });
-    }}
+    refetchQuery={[
+      { query: BUDGET_DETAIL_QUERY, variables: { id: props.modalState.hiddenValues?.category } },
+    ]}
+    name="Line Item"
   >
     {(initialValues: any) => (
       <>
@@ -52,12 +43,12 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
           initialValue={initialValues ? initialValues.quantity : ""}
         >
           <InputNumber
-              type="number"
-              min={0}
-              precision={0}
-              style={{ width: "100%" }}
-              placeholder="100"
-            />
+            type="number"
+            min={0}
+            precision={0}
+            style={{ width: "100%" }}
+            placeholder="100"
+          />
         </Form.Item>
 
         <Form.Item
@@ -67,26 +58,13 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
           initialValue={initialValues ? initialValues.unitCost : ""}
         >
           <InputNumber
-              type="number"
-              min={0}
-              precision={2}
-              style={{ width: "100%" }}
-              placeholder="24.99"
-            />
+            type="number"
+            min={0}
+            precision={2}
+            style={{ width: "100%" }}
+            placeholder="24.99"
+          />
         </Form.Item>
-
-        {/* Check if we need this part below */}
-        {initialValues && (
-          <Form.Item
-            name="isActive"
-            label="Active"
-            valuePropName="checked"
-            initialValue={initialValues.isActive}
-          >
-            <Switch />
-          </Form.Item>
-        )}
-        {/* Check if we need this part above */}
       </>
     )}
   </ManageContentModal>

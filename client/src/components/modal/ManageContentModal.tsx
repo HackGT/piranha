@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { Form, message, Modal } from "antd";
-import { ApolloCache, DocumentNode, useMutation } from "@apollo/client";
-import { ConsoleSqlOutlined } from "@ant-design/icons";
+import { ApolloCache, DocumentNode, PureQueryOptions, useMutation } from "@apollo/client";
 
 interface Props {
   visible: boolean;
   closeModal: () => void;
   initialValues?: any;
+  hiddenValues?: any;
   createMutation?: DocumentNode;
   updateMutation: DocumentNode;
+  refetchQuery?: PureQueryOptions[];
   name: string;
   updateCache?: (cache: ApolloCache<any>, createMutationData: any) => void;
 }
@@ -21,19 +22,20 @@ const ManageContentModal: React.FC<Props> = props => {
     update(cache, { data: createMutationData }) {
       props.updateCache?.(cache, createMutationData);
     },
+    refetchQueries: props.refetchQuery,
   });
-  const [updateMutation] = useMutation(props.updateMutation);  
+  const [updateMutation] = useMutation(props.updateMutation);
   useEffect(() => form.resetFields(), [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372
 
   const onSubmit = async () => {
     try {
-      const values = await form.validateFields();
+      let values = await form.validateFields();
+      values = { ...values, ...props.hiddenValues };
+
       const hide = message.loading("Saving...", 0);
-      if (props.initialValues && props.initialValues.budget) {
-        values.budget = props.initialValues.budget;
-      }
+
       try {
-        if (props.initialValues && props.initialValues.id) {          
+        if (props.initialValues) {
           await updateMutation({ variables: { data: values, id: props.initialValues.id } });
         } else {
           await createMutation({ variables: { data: values } });
@@ -57,7 +59,7 @@ const ManageContentModal: React.FC<Props> = props => {
     <>
       <Modal
         visible={props.visible}
-        title={(props.initialValues && props.initialValues.id) ? `Manage ${props.name}` : `Create ${props.name}`}
+        title={props.initialValues ? `Manage ${props.name}` : `Create ${props.name}`}
         okText={props.initialValues ? "Update" : "Create"}
         cancelText="Cancel"
         onCancel={props.closeModal}

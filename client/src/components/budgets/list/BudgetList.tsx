@@ -19,8 +19,6 @@ const BudgetList: React.FC = () => {
 
   const budgetData = loading ? [] : data.budgets;
 
-  const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
-
   return (
     <>
       <Helmet>
@@ -28,7 +26,7 @@ const BudgetList: React.FC = () => {
       </Helmet>
       <Title>{loading ? "Loading..." : "Budgets"}</Title>
       <List
-        grid={grid}
+        grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 }}
         dataSource={budgetData}
         renderItem={(item: Budget) => (
           <List.Item>

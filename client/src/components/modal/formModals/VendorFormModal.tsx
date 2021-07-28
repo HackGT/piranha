@@ -15,6 +15,7 @@ const VendorFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
     visible={props.modalState.visible}
     initialValues={props.modalState.initialValues}
+    hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
       props.setModalState({
         visible: false,

@@ -3,16 +3,11 @@ import { Button, List, Typography, Input } from "antd";
 import { DocumentNode, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
-import { FormModalProps } from "../modal/FormModalProps";
+import { FormModalProps, ModalState } from "../modal/FormModalProps";
 import ErrorDisplay from "../displays/ErrorDisplay";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
-
-export type ModalState = {
-  visible: boolean;
-  initialValues: any;
-};
 
 interface Props {
   query: DocumentNode;
