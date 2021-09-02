@@ -1,11 +1,27 @@
-name: Auto approve Dependabot PRs
-on: pull_request
+name: "Dependabot Automerge - Action"
+
+on:
+  pull_request:
 
 jobs:
-  AutoApprove:
-    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+  worker:
     runs-on: ubuntu-latest
+
+    if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: hmarr/auto-approve-action@7782c7e
+      - name: 'Wait for status checks'
+        id: waitforstatuschecks
+        uses: WyriHaximus/github-action-wait-for-status@v1.2.0
         with:
-          github-token: "${{ secrets.GHTOKEN }}"
+          ignoreActions: worker,WIP
+          checkInterval: 300
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Automerge'
+        uses: pascalgn/automerge-action@v0.11.0
+        if: steps.waitforstatuschecks.outputs.status == 'success'
+        env:
+          MERGE_LABELS: "update"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_DELETE_BRANCH: true
