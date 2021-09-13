@@ -34,7 +34,7 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
-    "passport-oauth2": "^1.5.0",
+    "passport-ground-truth": "^1.0.3",
     "path": "^0.12.7",
     "prisma": "^2.20.1"
   },
