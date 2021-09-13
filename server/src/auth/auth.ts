@@ -71,6 +71,16 @@ passport.use(
       });
 
       if (!user) {
+        if (profile.member) {
+          done(
+            new Error(
+              "Sorry, you must be a HexLabs member to access this site. Please ask an admin to make you a member through Ground Truth."
+            ),
+            undefined
+          );
+          return;
+        }
+
         user = await prisma.user.create({
           data: {
             name: profile.name,
