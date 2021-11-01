@@ -141,7 +141,7 @@ const RequisitionForm: React.FC<Props> = props => {
           unitPrice: item.unitPrice,
           notes: item.notes,
           lineItem: item.lineItem ? item.lineItem[1] : undefined, // Get id of line item, index 0 is category,
-          vendor: item.vendor || undefined,
+          vendor: (isReimbursement ? item.vendor : values.vendor) || undefined, // Map vendor to items based on reimbursement
         })),
       status: requisitionStatus,
       files: values.files,
