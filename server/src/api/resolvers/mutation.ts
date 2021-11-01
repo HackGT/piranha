@@ -76,11 +76,11 @@ const createRequisition = async function createRequisition(
   const requisition = await prisma.requisition.create({
     data: {
       ...data,
-      isReimbursement: data.isReimbursement || undefined,
+      isReimbursement: data.isReimbursement ?? undefined,
       projectRequisitionId: aggregate.max.projectRequisitionId + 1,
       fundingSource: connectOrUndefined(data.fundingSource),
       budget: connectOrUndefined(data.budget),
-      project: { connect: { id: data.project || undefined } },
+      project: { connect: { id: data.project ?? undefined } },
       createdBy: { connect: { id: context.user.id } },
       items: { create: createItems },
       files: undefined,
@@ -191,7 +191,7 @@ const updateRequisition = async function updateRequisition(
     },
     data: {
       ...data,
-      isReimbursement: data.isReimbursement || undefined,
+      isReimbursement: data.isReimbursement ?? undefined,
       fundingSource: connectOrUndefined(data.fundingSource),
       budget: connectOrUndefined(data.budget),
       project: connectOrUndefined(data.project),
@@ -212,7 +212,7 @@ const createProject = async function createProject(parent: any, args: MutationCr
   return await prisma.project.create({
     data: {
       ...args.data,
-      archived: args.data.archived || false,
+      archived: args.data.archived ?? false,
       leads: {
         connect: args.data.leads.map(lead => ({ id: lead })),
       },
@@ -228,7 +228,7 @@ const updateProject = async function updateProject(parent: any, args: MutationUp
     },
     data: {
       ...args.data,
-      archived: args.data.archived || undefined,
+      archived: args.data.archived ?? undefined,
       leads: {
         connect: args.data.leads.map(lead => ({ id: lead })),
       },
@@ -241,7 +241,7 @@ const createVendor = async function createVendor(parent: any, args: MutationCrea
   return await prisma.vendor.create({
     data: {
       ...args.data,
-      isActive: args.data.isActive || true,
+      isActive: args.data.isActive ?? undefined,
     },
   });
 };
@@ -253,7 +253,7 @@ const updateVendor = async function updateVendor(parent: any, args: MutationUpda
     },
     data: {
       ...args.data,
-      isActive: args.data.isActive || undefined,
+      isActive: args.data.isActive ?? undefined,
     },
   });
 };
@@ -262,7 +262,7 @@ const createBudget = async function createBudget(parent: any, args: MutationCrea
   return await prisma.budget.create({
     data: {
       ...args.data,
-      archived: args.data.archived || false,
+      archived: args.data.archived ?? undefined,
     },
   });
 };
@@ -311,7 +311,7 @@ const updateBudget = async function updateBudget(parent: any, args: MutationUpda
     },
     data: {
       ...args.data,
-      archived: args.data.archived || false,
+      archived: args.data.archived ?? undefined,
     },
   });
 };
@@ -323,8 +323,8 @@ const createPaymentMethod = async function createPaymentMethod(
   return await prisma.paymentMethod.create({
     data: {
       ...args.data,
-      isActive: args.data.isActive || true,
-      isDirectPayment: args.data.isActive || false,
+      isActive: args.data.isActive ?? undefined,
+      isDirectPayment: args.data.isActive ?? undefined,
     },
   });
 };
@@ -339,8 +339,8 @@ const updatePaymentMethod = async function updatePaymentMethod(
     },
     data: {
       ...args.data,
-      isActive: args.data.isActive || undefined,
-      isDirectPayment: args.data.isActive || undefined,
+      isActive: args.data.isActive ?? undefined,
+      isDirectPayment: args.data.isActive ?? undefined,
     },
   });
 };
