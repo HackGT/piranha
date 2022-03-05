@@ -71,7 +71,7 @@ passport.use(
       });
 
       if (!user) {
-        if (profile.member) {
+        if (!profile.email.endsWith("@hexlabs.org")) {
           done(
             new Error(
               "Sorry, you must be a HexLabs member to access this site. Please ask an admin to make you a member through Ground Truth."
