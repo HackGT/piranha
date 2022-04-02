@@ -230,7 +230,7 @@ const updateProject = async function updateProject(parent: any, args: MutationUp
       ...args.data,
       archived: args.data.archived ?? undefined,
       leads: {
-        connect: args.data.leads.map(lead => ({ id: lead })),
+        set: args.data.leads.map(lead => ({ id: lead })),
       },
     },
     include: PROJECT_INCLUDE,

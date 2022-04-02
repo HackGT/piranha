@@ -18,16 +18,17 @@ export const isProjectLead = (user: any, requisition: any) => {
 // PERMISSION METHODS FOR GRAPHQL
 export const canEdit = async (parent: any, args: any, context: { user: User }) => {
   // Do the following below hacks, since the permission function is run once before and once after each resolver
-  if (Object.keys(args).length === 0) {
-    return true;
-  }
-
   const currentRequisition = await prisma.requisition.findUnique({
     where: {
-      id: args.id,
+      id: parent?.id || args?.id,
     },
     include: {
       createdBy: true,
+      project: {
+        include: {
+          leads: true,
+        },
+      },
     },
   });
 
