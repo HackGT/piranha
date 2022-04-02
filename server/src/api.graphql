@@ -16,7 +16,7 @@ type Query {
   requisitions: [Requisition]
   paymentMethods(isActive: Boolean): [PaymentMethod]
   budget(id: ID!): Budget
-  budgets: [Budget]
+  budgets(archived: Boolean): [Budget]
 }
 
 type Mutation {

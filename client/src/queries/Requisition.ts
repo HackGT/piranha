@@ -13,7 +13,7 @@ export const REQUISITION_FORM_QUERY = gql`
       name
     }
 
-    budgets {
+    budgets(archived: false) {
       id
       name
       categories {

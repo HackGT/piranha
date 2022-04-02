@@ -7,9 +7,11 @@ import {
   QueryBudgetArgs,
   QueryPaymentMethodsArgs,
   QueryProjectArgs,
+  QueryProjectsArgs,
   QueryRequisitionArgs,
   QueryVendorArgs,
   QueryVendorsArgs,
+  QueryBudgetsArgs,
 } from "../../generated/types";
 
 const user = async function user(parent: any, args: any, context: { user: User }) {
@@ -37,8 +39,11 @@ const project = async function project(parent: any, args: QueryProjectArgs) {
   });
 };
 
-const projects = async function projects() {
+const projects = async function projects(parent: any, args: QueryProjectsArgs) {
   return await prisma.project.findMany({
+    where: {
+      archived: args.archived ?? undefined,
+    },
     include: PROJECT_INCLUDE,
   });
 };
@@ -52,7 +57,7 @@ const vendor = async function vendor(parent: any, args: QueryVendorArgs) {
 const vendors = async function vendors(parent: any, args: QueryVendorsArgs) {
   return await prisma.vendor.findMany({
     where: {
-      isActive: args.isActive || undefined,
+      isActive: args.isActive ?? undefined,
     },
   });
 };
@@ -84,7 +89,7 @@ const requisitions = async function requisitions(parent: any, args: any, context
 const paymentMethods = async function paymentMethods(parent: any, args: QueryPaymentMethodsArgs) {
   return await prisma.paymentMethod.findMany({
     where: {
-      isActive: args.isActive || undefined,
+      isActive: args.isActive ?? undefined,
     },
   });
 };
@@ -96,8 +101,11 @@ const budget = async function budget(parent: any, args: QueryBudgetArgs) {
   });
 };
 
-const budgets = async function budgets() {
+const budgets = async function budgets(parent: any, args: QueryBudgetsArgs) {
   return await prisma.budget.findMany({
+    where: {
+      archived: args.archived ?? undefined,
+    },
     include: BUDGET_INCLUDE,
   });
 };
