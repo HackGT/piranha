@@ -32,7 +32,7 @@
     "graphql-upload": "^11.0.0",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "passport": "^0.4.1",
     "passport-ground-truth": "^1.0.3",
     "path": "^0.12.7",
