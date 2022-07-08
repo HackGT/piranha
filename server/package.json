@@ -30,7 +30,7 @@
     "graphql-middleware": "^6.0.7",
     "graphql-shield": "^7.5.0",
     "graphql-upload": "^11.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
