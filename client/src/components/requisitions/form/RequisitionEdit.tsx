@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Spin } from "antd";
 import moment from "moment";
@@ -31,7 +31,7 @@ const RequisitionEdit: React.FC = () => {
   }
 
   if (!data.requisition.canEdit) {
-    return <Redirect to={`/project/${projectReference}/requisition/${requisitionReference}`} />;
+    return <Navigate to={`/project/${projectReference}/requisition/${requisitionReference}`} />;
   }
 
   const rekData = data.requisition;

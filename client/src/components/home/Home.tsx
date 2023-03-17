@@ -31,7 +31,7 @@ export function pickRandomElement<T>(arr: T[]): T {
 }
 
 const Home: React.FC = () => {
-  const randomPhrase = useState(pickRandomElement(funPhrases));
+  const [randomPhrase, setRandomPhrase] = useState(pickRandomElement(funPhrases));
 
   const { loading, data, error } = useQuery(OPEN_REQUISITIONS_QUERY);
 
@@ -47,6 +47,7 @@ const Home: React.FC = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>Piranha - Home</title>
       </Helmet>

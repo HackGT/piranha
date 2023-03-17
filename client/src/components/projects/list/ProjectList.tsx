@@ -25,6 +25,7 @@ const ProjectList: React.FC = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>Piranha - Projects</title>
       </Helmet>

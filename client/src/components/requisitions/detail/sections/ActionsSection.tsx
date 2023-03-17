@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Popconfirm, Tooltip, Typography } from "antd";
 import { useMutation } from "@apollo/client";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaShieldAlt } from "react-icons/fa";
 
 import { UPDATE_REQUISITION_MUTATION } from "../../../../queries/Requisition";
@@ -14,7 +14,7 @@ const ActionsSection: React.FC<RequisitionSectionProps> = props => {
   const { data, loading } = props;
 
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
@@ -24,7 +24,7 @@ const ActionsSection: React.FC<RequisitionSectionProps> = props => {
 
   const handleEdit = () => {
     if (data.canEdit) {
-      history.push(`${location.pathname.replace(/\/+$/, "")}/edit`);
+      navigate(`${location.pathname.replace(/\/+$/, "")}/edit`);
     }
   };
 

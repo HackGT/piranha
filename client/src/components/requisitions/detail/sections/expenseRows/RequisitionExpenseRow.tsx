@@ -18,7 +18,7 @@ interface Props {
   buttonText: string;
 }
 
-const RequisitionExpenseRow: React.FC<Props> = props => {
+const RequisitionExpenseRow: React.FC<React.PropsWithChildren<Props>> = props => {
   const [form] = Form.useForm();
 
   return (

@@ -43,6 +43,7 @@ const ProjectDetail: React.FC = props => {
   const { projectReference } = useParams<any>();
   let [year, shortCode] = (projectReference || "").split("-"); // eslint-disable-line prefer-const
 
+  // @ts-ignore
   year = parseInt(year) || 0;
 
   const { loading, data, error } = useQuery(PROJECT_DETAIL_QUERY, {
@@ -194,6 +195,7 @@ const ProjectDetail: React.FC = props => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>{data && `Piranha - ${data.project.name}`}</title>
       </Helmet>

@@ -58,7 +58,8 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
           initialValue={initialValues ? initialValues.reimbursementInstructions : ""}
         >
           <TextArea
-            autoSize={{ minRows: 4 }}
+            // @ts-ignore
+            autoSize={{ minRows: 2, maxRows: 6 }}
             placeholder="Visit www.docusign.com/form and fill out the reimbursement form. After completing, send it to the Director of Finance."
           />
         </Form.Item>

@@ -20,7 +20,7 @@ const { TextArea } = Input;
 interface FieldData {
   name: number;
   key: number;
-  fieldKey: number;
+  fieldKey?: number;
 }
 
 interface Props {
@@ -55,12 +55,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
   >
     <Row gutter={[8, 0]}>
       <Col xs={24} sm={12}>
-        <Form.Item
-          name={[props.field.name, "name"]}
-          fieldKey={[props.field.fieldKey, "name"]}
-          rules={[FORM_RULES.requiredRule]}
-          label="Name"
-        >
+        <Form.Item name={[props.field.name, "name"]} rules={[FORM_RULES.requiredRule]} label="Name">
           <Input placeholder="Sparkly crayons" />
         </Form.Item>
       </Col>
@@ -68,7 +63,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
       <Col xs={24} sm={12}>
         <Form.Item
           name={[props.field.name, "link"]}
-          fieldKey={[props.field.fieldKey, "link"]}
           rules={[FORM_RULES.urlRule]}
           label={
             <QuestionIconLabel label="Link" helpText="The link to this item (if applicable)" />
@@ -83,7 +77,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
       <Col xs={24} sm={12}>
         <Form.Item
           name={[props.field.name, "quantity"]}
-          fieldKey={[props.field.fieldKey, "quantity"]}
           rules={[FORM_RULES.requiredRule]}
           label="Quantity"
         >
@@ -100,7 +93,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
       <Col xs={24} sm={12}>
         <Form.Item
           name={[props.field.name, "unitPrice"]}
-          fieldKey={[props.field.fieldKey, "unitPrice"]}
           rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
           label="Unit Price"
           normalize={(value: any) => (value ? parseFloat(value) : null)}
@@ -114,7 +106,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
       <Col xs={24} sm={12}>
         <Form.Item
           name={[props.field.name, "lineItem"]}
-          fieldKey={[props.field.fieldKey, "lineItem"]}
           rules={[FORM_RULES.requiredRule]}
           label={
             <QuestionIconLabel
@@ -136,7 +127,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
         <Col xs={24} sm={12}>
           <Form.Item
             name={[props.field.name, "vendor"]}
-            fieldKey={[props.field.fieldKey, "vendor"]}
             rules={[FORM_RULES.requiredRule]}
             label={
               <QuestionIconLabel
@@ -160,7 +150,6 @@ const RequisitionItemCard: React.FC<Props> = props => (
       <Col span={24}>
         <Form.Item
           name={[props.field.name, "notes"]}
-          fieldKey={[props.field.fieldKey, "notes"]}
           label={
             <QuestionIconLabel
               label="Notes"

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { Col, Pagination, Row, Tag, Typography } from "antd";
 import { Helmet } from "react-helmet";
@@ -30,7 +30,7 @@ export interface RequisitionSectionProps {
 
 const RequisitionDetail: React.FC = () => {
   const { projectReference, requisitionReference } = useParams<any>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { year, shortCode, projectRequisitionId } = parseRequisitionParams(
     projectReference,
@@ -53,6 +53,7 @@ const RequisitionDetail: React.FC = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>{rekData.referenceString && `Piranha - ${rekData.referenceString}`}</title>
       </Helmet>
@@ -94,9 +95,7 @@ const RequisitionDetail: React.FC = () => {
         pageSize={1}
         defaultCurrent={projectRequisitionId}
         total={loading ? projectRequisitionId : rekData.project.requisitions.length}
-        onChange={(page: number) =>
-          history.push(`/project/${projectReference}/requisition/${page}`)
-        }
+        onChange={(page: number) => navigate(`/project/${projectReference}/requisition/${page}`)}
         style={{ textAlign: "center", marginTop: "25px" }}
         simple
       />

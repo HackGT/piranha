@@ -174,8 +174,8 @@ export function useScreenWidth() {
 }
 
 export const parseRequisitionParams = (
-  projectReference: string | null,
-  requisitionReference: string | null
+  projectReference: string | null | undefined,
+  requisitionReference: string | null | undefined
 ) => {
   const [yearString, shortCode] = (projectReference || "").split("-");
   const year = parseInt(yearString || "");

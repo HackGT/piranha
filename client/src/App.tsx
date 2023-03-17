@@ -1,8 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import { HeartOutlined } from "@ant-design/icons";
 import { Layout, Spin } from "antd";
-import { useQuery } from "@apollo/client";
+import axios from "axios";
+import { initializeApp } from "firebase/app";
+import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
+import { useLogin, LoadingScreen, apiUrl, Service } from "@hex-labs/core";
 
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
@@ -13,28 +16,64 @@ import RequisitionDetail from "./components/requisitions/detail/RequisitionDetai
 import ProjectList from "./components/projects/list/ProjectList";
 import RequisitionEdit from "./components/requisitions/form/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
-import { USER_INFO_QUERY } from "./queries/User";
 import PrivateRoute from "./components/navigation/PrivateRoute";
 import NotFoundDisplay from "./components/displays/NotFoundDisplay";
-import ErrorDisplay from "./components/displays/ErrorDisplay";
 import ScrollToTop from "./util/ScrollToTop";
-import { User } from "./generated/types";
 import BudgetList from "./components/budgets/list/BudgetList";
 import "./App.css";
 
 const { Header, Content, Footer } = Layout;
 
-const App: React.FC = () => {
-  const { loading, data, error } = useQuery(USER_INFO_QUERY);
+// Initialized the Firebase app through the credentials provided
+export const app = initializeApp({
+  apiKey: "AIzaSyCsukUZtMkI5FD_etGfefO4Sr7fHkZM7Rg",
+  authDomain: "auth.hexlabs.org",
+});
+// Sets the Firebase persistence to in memory since we use cookies for session
+// management. These cookies are set by the backend on login/logout.
+setPersistence(getAuth(app), inMemoryPersistence);
 
-  if (error || (data && !data.user)) {
-    return <ErrorDisplay error={error} />;
+// By default sends axios requests with user session cookies so that the backend
+// can verify the user's identity.
+axios.defaults.withCredentials = true;
+
+const App: React.FC = () => {
+  const [loading, loggedIn] = useLogin(app);
+  const [userDataLoading, setUserDataLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const response = await axios.get(apiUrl(Service.FINANCE, "/user/check"));
+      setUser(response.data);
+      setUserDataLoading(false);
+    };
+
+    if (loggedIn) {
+      getUserData();
+    } else {
+      setUser(null);
+    }
+  }, [loggedIn]);
+
+  // If loading, show a loading screen
+  if (loading) {
+    return <LoadingScreen />;
   }
 
-  const user: User = data && data.user;
+  // If the user is not logged in, redirect to the login frontend with a redirect
+  // param so that the user can login and come back to the page they were on.
+  if (!loggedIn) {
+    window.location.href = `https://login.hexlabs.org?redirect=${window.location.href}`;
+    return <LoadingScreen />;
+  }
+
+  if (userDataLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <Layout className="App" style={{ minHeight: "100vh" }}>
         <Header style={{ padding: "0px 30px" }}>
@@ -45,26 +84,45 @@ const App: React.FC = () => {
             {loading ? (
               <Spin style={{ position: "absolute", top: "48%", left: "48%" }} />
             ) : (
-              <Switch>
+              <Routes>
                 <Route
-                  exact
                   path="/project/:projectReference/requisition/:requisitionReference/edit"
-                  component={RequisitionEdit}
+                  element={<RequisitionEdit />}
                 />
                 <Route
-                  exact
                   path="/project/:projectReference/requisition/:requisitionReference"
-                  component={RequisitionDetail}
+                  element={<RequisitionDetail />}
                 />
-                <PrivateRoute exact path="/budget/:id" component={BudgetDetail} user={user} />
-                <PrivateRoute exact path="/budget" component={BudgetList} user={user} />
-                <Route exact path="/project/:projectReference" component={ProjectDetail} />
-                <Route exact path="/project" component={ProjectList} />
-                <Route exact path="/requisition" component={RequisitionForm} />
-                <PrivateRoute exact path="/admin/:activeTab?" component={AdminHome} user={user} />
-                <Route exact path="/" component={Home} />
-                <Route component={NotFoundDisplay} />
-              </Switch>
+                <Route
+                  path="/budget/:id"
+                  element={
+                    <PrivateRoute user={user}>
+                      <BudgetDetail />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/budget"
+                  element={
+                    <PrivateRoute user={user}>
+                      <BudgetList />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="/project/:projectReference" element={<ProjectDetail />} />
+                <Route path="/project" element={<ProjectList />} />
+                <Route path="/requisition" element={<RequisitionForm />} />
+                <Route
+                  path="/admin/:activeTab?"
+                  element={
+                    <PrivateRoute user={user}>
+                      <AdminHome />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="/" element={<Home />} />
+                <Route element={<NotFoundDisplay />} />
+              </Routes>
             )}
           </div>
         </Content>
@@ -74,7 +132,7 @@ const App: React.FC = () => {
           {" by the HackGT Team"}
         </Footer>
       </Layout>
-    </Router>
+    </>
   );
 };
 

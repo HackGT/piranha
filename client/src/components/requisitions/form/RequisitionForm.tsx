@@ -14,7 +14,7 @@ import {
   Upload,
 } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons/lib";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import { Helmet } from "react-helmet";
 
@@ -43,7 +43,7 @@ interface Props {
 
 const RequisitionForm: React.FC<Props> = props => {
   const [form] = Form.useForm();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [runningTotal, setRunningTotal] = useState(getTotalCost(props.requisitionData, true));
   const [selectedBudget, setSelectedBudget] = useState<string | undefined>(
     props.requisitionData?.budget
@@ -166,7 +166,7 @@ const RequisitionForm: React.FC<Props> = props => {
 
       hide();
       message.success(text, 2);
-      history.push(
+      navigate(
         `/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`
       );
     } catch (err) {
@@ -259,6 +259,7 @@ const RequisitionForm: React.FC<Props> = props => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>
           {props.editMode ? "Piranha - Edit Requisition" : "Piranha - Create Requisition"}

@@ -22,6 +22,7 @@ const ReimbursementInstructionsSection: React.FC<RequisitionSectionProps> = prop
       <Title level={3} style={{ marginTop: "30px" }}>
         Reimbursement Instructions
       </Title>
+      {/* @ts-ignore */}
       <Linkify>
         <Text style={{ whiteSpace: "pre-line" }}>
           {data.fundingSource.reimbursementInstructions}

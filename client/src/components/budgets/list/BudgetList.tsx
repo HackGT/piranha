@@ -21,6 +21,7 @@ const BudgetList: React.FC = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>Piranha - Budgets</title>
       </Helmet>

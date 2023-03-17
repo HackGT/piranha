@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, Tag, Typography } from "antd";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import AdminContentList from "./AdminContentList";
 import { PROJECT_LIST_QUERY } from "../../queries/Project";
@@ -21,12 +21,12 @@ const { TabPane } = Tabs;
 
 const AdminHome: React.FC = () => {
   const { activeTab } = useParams<any>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const tabKeys = ["projects", "vendors", "payment-methods", "users", "budgets"];
 
-  if (!tabKeys.includes(activeTab)) {
-    history.replace(`/admin/${tabKeys[0]}`);
+  if (!tabKeys.includes(activeTab ?? "")) {
+    navigate(`/admin/${tabKeys[0]}`);
   }
 
   const getUserTag = (item: any) => {
@@ -49,7 +49,7 @@ const AdminHome: React.FC = () => {
       <Tabs
         activeKey={activeTab}
         defaultActiveKey="projects"
-        onTabClick={key => history.push(`/admin/${key}`)}
+        onTabClick={key => navigate(`/admin/${key}`)}
       >
         <TabPane tab="Projects" key={tabKeys[0]}>
           <AdminContentList

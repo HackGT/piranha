@@ -52,6 +52,7 @@ const AdminContentList: React.FC<Props> = props => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Helmet>
         <title>{`Piranha - Admin - ${props.title}`}</title>
       </Helmet>

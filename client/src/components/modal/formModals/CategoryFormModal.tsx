@@ -26,16 +26,14 @@ const CategoryFormModal: React.FC<FormModalProps> = props => (
     name="Category"
   >
     {(initialValues: any) => (
-      <>
-        <Form.Item
-          name="name"
-          rules={[FORM_RULES.requiredRule]}
-          label="Name"
-          initialValue={initialValues && initialValues.name}
-        >
-          <Input placeholder="Johnny" />
-        </Form.Item>
-      </>
+      <Form.Item
+        name="name"
+        rules={[FORM_RULES.requiredRule]}
+        label="Name"
+        initialValue={initialValues && initialValues.name}
+      >
+        <Input placeholder="Johnny" />
+      </Form.Item>
     )}
   </ManageContentModal>
 );

@@ -12,6 +12,7 @@ interface Props {
   refetchQuery?: PureQueryOptions[];
   name: string;
   updateCache?: (cache: ApolloCache<any>, createMutationData: any) => void;
+  children?: any;
 }
 
 const ManageContentModal: React.FC<Props> = props => {
@@ -56,22 +57,20 @@ const ManageContentModal: React.FC<Props> = props => {
   };
 
   return (
-    <>
-      <Modal
-        visible={props.visible}
-        title={props.initialValues ? `Manage ${props.name}` : `Create ${props.name}`}
-        okText={props.initialValues ? "Update" : "Create"}
-        cancelText="Cancel"
-        onCancel={props.closeModal}
-        onOk={onSubmit}
-        bodyStyle={{ paddingBottom: 0 }}
-      >
-        <Form form={form} layout="vertical" autoComplete="off">
-          {/* @ts-ignore */}
-          {props.children(props.initialValues)}
-        </Form>
-      </Modal>
-    </>
+    <Modal
+      visible={props.visible}
+      title={props.initialValues ? `Manage ${props.name}` : `Create ${props.name}`}
+      okText={props.initialValues ? "Update" : "Create"}
+      cancelText="Cancel"
+      onCancel={props.closeModal}
+      onOk={onSubmit}
+      bodyStyle={{ paddingBottom: 0 }}
+    >
+      <Form form={form} layout="vertical" autoComplete="off">
+        {/* @ts-ignore */}
+        {props.children(props.initialValues)}
+      </Form>
+    </Modal>
   );
 };
 

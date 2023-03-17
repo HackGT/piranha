@@ -1,17 +1,17 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-function PrivateRoute({ component: Component, user, ...rest }: any): any {
-  if (user && user.canViewAdminPanel) {
-    return <Route {...rest} render={(props: any) => <Component {...props} />} />;
+interface Props {
+  user: any;
+  children: JSX.Element;
+}
+
+const PrivateRoute: React.FC<Props> = props => {
+  if (props.user && props.user.canViewAdminPanel) {
+    return props.children;
   }
 
-  return (
-    <Route
-      {...rest}
-      render={(props: any) => <Redirect to={{ pathname: "/", state: { from: props.location } }} />}
-    />
-  );
-}
+  return <Navigate to="/" />;
+};
 
 export default PrivateRoute;
