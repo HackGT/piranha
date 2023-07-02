@@ -1,23 +1,22 @@
 import React from "react";
 import { List, Typography } from "antd";
-import { useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { BUDGET_QUERY } from "../../../queries/Budget";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import { Budget } from "../../../generated/types";
 import BudgetListCard from "./BudgetListCard";
 
 const { Title } = Typography;
 
 const BudgetList: React.FC = () => {
-  const { loading, data, error } = useQuery(BUDGET_QUERY);
+  const [{ loading, data, error }] = useAxios(apiUrl(Service.FINANCE, "/budgets"));
 
-  if (error || (data && !data.budgets)) {
-    return <ErrorDisplay error={error} />;
+  const budgetData = loading ? [] : data;
+
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
-
-  const budgetData = loading ? [] : data.budgets;
 
   return (
     <>

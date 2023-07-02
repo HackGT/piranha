@@ -6,7 +6,12 @@ import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "../FormModalProps";
 
-const LineItemFormModal: React.FC<FormModalProps> = props => (
+interface Props {
+  budgetId?: number;
+  categoryId?: number;
+}
+
+const LineItemFormModal: React.FC<FormModalProps & Props> = props => (
   <ManageContentModal
     open={props.modalState.open}
     initialValues={props.modalState.initialValues}
@@ -17,7 +22,10 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    resourceUrl={apiUrl(Service.FINANCE, "/budgets")}
+    resourceUrl={apiUrl(
+      Service.FINANCE,
+      `/budgets/${props.budgetId}/categories/${props.categoryId}/line-items`
+    )}
     refetch={props.refetch}
     name="Line Item"
   >

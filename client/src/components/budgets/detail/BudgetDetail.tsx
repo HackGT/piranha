@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { Breadcrumb, Button, List } from "antd";
 import Title from "antd/lib/typography/Title";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
 import { HomeOutlined } from "@ant-design/icons";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
 import BudgetDetailCard from "./BudgetDetailCard";
 import { Category } from "../../../generated/types";
-import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import CategoryFormModal from "../../modal/formModals/CategoryFormModal";
 import { ModalState } from "../../modal/FormModalProps";
 
 const BudgetDetail: React.FC = () => {
-  const { id } = useParams<any>();
+  const budgetId = parseInt(useParams<any>().id ?? "");
 
   const [modalState, setModalState] = useState({
     open: false,
@@ -25,21 +24,19 @@ const BudgetDetail: React.FC = () => {
       open: true,
       initialValues: values,
       hiddenValues: {
-        budget: id,
+        budget: budgetId,
       },
     });
   };
+  const [{ loading, data, error }, refetch] = useAxios(
+    apiUrl(Service.FINANCE, `/budgets/${budgetId}`)
+  );
 
-  const { loading, data, error } = useQuery(BUDGET_DETAIL_QUERY, {
-    variables: { id },
-    fetchPolicy: "network-only", // Never cache in case budget updates
-  });
-
-  if (error || (data && !data.budget)) {
-    return <ErrorDisplay error={error} />;
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
 
-  const budgetData = loading ? {} : data.budget;
+  const budgetData = loading ? {} : data;
 
   return (
     <>
@@ -50,7 +47,7 @@ const BudgetDetail: React.FC = () => {
           </Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to={`/budget/${id}`}>{data?.budget?.name || "Loading..."}</Link>
+          <Link to={`/budget/${budgetId}`}>{data?.name || "Loading..."}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
 
@@ -66,7 +63,12 @@ const BudgetDetail: React.FC = () => {
         dataSource={budgetData.categories}
         renderItem={(category: Category) => (
           <List.Item>
-            <BudgetDetailCard key={category.id} category={category} />
+            <BudgetDetailCard
+              key={category.id}
+              budgetId={budgetId}
+              category={category}
+              refetch={refetch}
+            />
             <Button style={{ marginTop: "10px" }} onClick={() => openModal(category)}>
               Edit
             </Button>
@@ -74,7 +76,12 @@ const BudgetDetail: React.FC = () => {
         )}
       />
 
-      <CategoryFormModal modalState={modalState} setModalState={setModalState} />
+      <CategoryFormModal
+        modalState={modalState}
+        setModalState={setModalState}
+        refetch={refetch}
+        budgetId={budgetId}
+      />
     </>
   );
 };

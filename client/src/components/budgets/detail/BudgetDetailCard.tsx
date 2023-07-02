@@ -1,13 +1,16 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Button, Card, Table } from "antd";
 import React, { useState } from "react";
+import { RefetchFunction } from "axios-hooks";
 
 import { Category } from "../../../generated/types";
 import { ModalState } from "../../modal/FormModalProps";
 import LineItemFormModal from "../../modal/formModals/LineItemFormModal";
 
 interface Props {
+  budgetId?: number;
   category: Category;
+  refetch: RefetchFunction<any, any>;
 }
 
 const BudgetDetailCard: React.FC<Props> = props => {
@@ -63,7 +66,13 @@ const BudgetDetailCard: React.FC<Props> = props => {
         Line Item +
       </Button>
 
-      <LineItemFormModal modalState={modalState} setModalState={setModalState} />
+      <LineItemFormModal
+        budgetId={props.budgetId}
+        categoryId={props.category.id}
+        modalState={modalState}
+        setModalState={setModalState}
+        refetch={props.refetch}
+      />
     </Card>
   );
 };
