@@ -1,20 +1,23 @@
 import React from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Form, Select } from "antd";
+import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../../queries/PaymentMethod";
-import ErrorDisplay from "../../../../displays/ErrorDisplay";
 import { FORM_RULES } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 import { UPDATE_REQUISITION_MUTATION } from "../../../../../queries/Requisition";
 
 const SelectFundingSourceRow: React.FC<RequisitionExpenseSectionProps> = props => {
-  const { loading, data, error } = useQuery(PAYMENT_METHOD_EXPENSE_QUERY);
+  const [{ loading, data: paymentMethods, error }] = useAxios(
+    apiUrl(Service.FINANCE, "/payment-methods?isActive=true")
+  );
+
   const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    return <ErrorScreen error={error} />;
   }
 
   const onFinish = async (values: any) => {
@@ -30,7 +33,7 @@ const SelectFundingSourceRow: React.FC<RequisitionExpenseSectionProps> = props =
 
   const paymentMethodOptions = loading
     ? []
-    : data.paymentMethods.map((paymentMethod: any) => ({
+    : paymentMethods.map((paymentMethod: any) => ({
         label: paymentMethod.name,
         value: paymentMethod.id,
       }));

@@ -1,21 +1,23 @@
 import React from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { DatePicker, Form, Input, Select } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
+import { ErrorScreen, Service, apiUrl } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { PAYMENT_METHOD_EXPENSE_QUERY } from "../../../../../queries/PaymentMethod";
-import ErrorDisplay from "../../../../displays/ErrorDisplay";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
 import { CREATE_PAYMENT_MUTATION } from "../../../../../queries/Payment";
 import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
 
 const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = props => {
-  const { loading, data, error } = useQuery(PAYMENT_METHOD_EXPENSE_QUERY);
+  const [{ loading, data: paymentMethods, error }] = useAxios(
+    apiUrl(Service.FINANCE, "/payment-methods?isActive=true")
+  );
   const [createPayment] = useMutation(CREATE_PAYMENT_MUTATION);
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    return <ErrorScreen error={error} />;
   }
 
   const totalAlreadyPaid =
@@ -46,7 +48,7 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = props => {
 
   const paymentMethodOptions = loading
     ? []
-    : data.paymentMethods.map((paymentMethod: any) => ({
+    : paymentMethods.map((paymentMethod: any) => ({
         label: paymentMethod.name,
         value: paymentMethod.id,
       }));
