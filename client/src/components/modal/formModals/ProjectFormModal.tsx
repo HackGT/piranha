@@ -28,12 +28,12 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
 
   return (
     <ManageContentModal
-      open={props.modalState.visible}
+      open={props.modalState.open}
       initialValues={props.modalState.initialValues}
       hiddenValues={props.modalState.hiddenValues}
       closeModal={() =>
         props.setModalState({
-          visible: false,
+          open: false,
           initialValues: props.modalState.initialValues,
         })
       }

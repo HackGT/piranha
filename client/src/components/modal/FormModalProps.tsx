@@ -2,7 +2,7 @@ import { RefetchFunction } from "axios-hooks";
 import React from "react";
 
 export type ModalState = {
-  visible: boolean;
+  open: boolean;
   initialValues: any;
   hiddenValues?: any;
 };

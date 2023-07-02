@@ -12,13 +12,13 @@ interface Props {
 
 const BudgetDetailCard: React.FC<Props> = props => {
   const [modalState, setModalState] = useState({
-    visible: false,
+    open: false,
     initialValues: null,
   } as ModalState);
 
   const openModal = (values: any) => {
     setModalState({
-      visible: true,
+      open: true,
       initialValues: values,
       hiddenValues: {
         category: props.category.id,

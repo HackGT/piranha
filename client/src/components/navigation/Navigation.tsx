@@ -30,7 +30,7 @@ interface Props {
 }
 
 const Navigation: React.FC<Props> = props => {
-  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -51,13 +51,13 @@ const Navigation: React.FC<Props> = props => {
         title="Menu"
         placement="left"
         closable
-        onClose={() => setSidebarVisible(false)}
-        visible={sidebarVisible}
+        onClose={() => setSidebarOpen(false)}
+        open={sidebarOpen}
       >
         <Menu mode="vertical" style={{ borderRight: "none" }} selectable={false}>
           {filteredRoutes.map((route: Page) => (
             <Menu.Item key={route.name}>
-              <Link onClick={() => setSidebarVisible(false)} to={route.link}>
+              <Link onClick={() => setSidebarOpen(false)} to={route.link}>
                 {route.name}
               </Link>
             </Menu.Item>
@@ -85,7 +85,7 @@ const Navigation: React.FC<Props> = props => {
           style={{ textAlign: "right" }}
           icon={<MenuOutlined />}
           type="link"
-          onClick={() => setSidebarVisible(true)}
+          onClick={() => setSidebarOpen(true)}
         />
       ) : (
         <Menu theme="dark" mode="horizontal" selectable={false}>

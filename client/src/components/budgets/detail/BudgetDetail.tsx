@@ -16,13 +16,13 @@ const BudgetDetail: React.FC = () => {
   const { id } = useParams<any>();
 
   const [modalState, setModalState] = useState({
-    visible: false,
+    open: false,
     initialValues: null,
   } as ModalState);
 
   const openModal = (values: any) => {
     setModalState({
-      visible: true,
+      open: true,
       initialValues: values,
       hiddenValues: {
         budget: id,

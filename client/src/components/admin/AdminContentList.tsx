@@ -22,7 +22,7 @@ interface Props {
 
 const AdminContentList: React.FC<Props> = props => {
   const [modalState, setModalState] = useState({
-    visible: false,
+    open: false,
     initialValues: null,
   } as ModalState);
   const [searchText, setSearchText] = useState("");
@@ -30,7 +30,7 @@ const AdminContentList: React.FC<Props> = props => {
 
   const openModal = (values: any) => {
     setModalState({
-      visible: true,
+      open: true,
       initialValues: values,
     });
   };
