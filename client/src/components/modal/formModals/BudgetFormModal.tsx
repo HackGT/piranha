@@ -1,19 +1,14 @@
 import React from "react";
 import { Form, Input, Switch } from "antd";
-import { ApolloCache } from "@apollo/client";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import {
-  CREATE_BUDGET_MUTATION,
-  UPDATE_BUDGET_MUTATION,
-  BUDGET_QUERY,
-} from "../../../queries/Budget";
 import { FormModalProps } from "../FormModalProps";
 
 const BudgetFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
-    visible={props.modalState.visible}
+    open={props.modalState.visible}
     initialValues={props.modalState.initialValues}
     hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
@@ -22,17 +17,9 @@ const BudgetFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    createMutation={CREATE_BUDGET_MUTATION}
-    updateMutation={UPDATE_BUDGET_MUTATION}
+    resourceUrl={apiUrl(Service.FINANCE, "/budgets")}
+    refetch={props.refetch}
     name="Budget"
-    updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-      // @ts-ignore
-      const { budgets } = cache.readQuery({ query: BUDGET_QUERY });
-      cache.writeQuery({
-        query: BUDGET_QUERY,
-        data: { budgets: budgets.concat([createMutationData.createBudget]) },
-      });
-    }}
   >
     {(initialValues: any) => (
       <>

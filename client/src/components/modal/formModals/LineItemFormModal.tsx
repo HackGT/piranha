@@ -1,15 +1,14 @@
 import React from "react";
 import { Form, Input, InputNumber } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_LINE_ITEM_MUTATION, UPDATE_LINE_ITEM_MUTATION } from "../../../queries/LineItem";
 import { FormModalProps } from "../FormModalProps";
-import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
 
 const LineItemFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
-    visible={props.modalState.visible}
+    open={props.modalState.visible}
     initialValues={props.modalState.initialValues}
     hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
@@ -18,11 +17,8 @@ const LineItemFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    createMutation={CREATE_LINE_ITEM_MUTATION}
-    updateMutation={UPDATE_LINE_ITEM_MUTATION}
-    refetchQuery={[
-      { query: BUDGET_DETAIL_QUERY, variables: { id: props.modalState.hiddenValues?.category } },
-    ]}
+    resourceUrl={apiUrl(Service.FINANCE, "/budgets")}
+    refetch={props.refetch}
     name="Line Item"
   >
     {(initialValues: any) => (

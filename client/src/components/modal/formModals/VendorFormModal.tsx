@@ -1,19 +1,14 @@
 import React from "react";
 import { Form, Input, Switch } from "antd";
-import { ApolloCache } from "@apollo/client";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import {
-  CREATE_VENDOR_MUTATION,
-  UPDATE_VENDOR_MUTATION,
-  VENDOR_LIST_QUERY,
-} from "../../../queries/Vendor";
 import { FormModalProps } from "../FormModalProps";
 
 const VendorFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
-    visible={props.modalState.visible}
+    open={props.modalState.visible}
     initialValues={props.modalState.initialValues}
     hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
@@ -22,17 +17,9 @@ const VendorFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    createMutation={CREATE_VENDOR_MUTATION}
-    updateMutation={UPDATE_VENDOR_MUTATION}
+    resourceUrl={apiUrl(Service.FINANCE, "/vendors")}
+    refetch={props.refetch}
     name="Vendor"
-    updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-      // @ts-ignore
-      const { vendors } = cache.readQuery({ query: VENDOR_LIST_QUERY });
-      cache.writeQuery({
-        query: VENDOR_LIST_QUERY,
-        data: { vendors: vendors.concat([createMutationData.createVendor]) },
-      });
-    }}
   >
     {(initialValues: any) => (
       <>

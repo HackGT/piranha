@@ -1,21 +1,19 @@
 import React from "react";
 import { Form, Input, InputNumber, Select, Switch } from "antd";
-import { ApolloCache, useQuery } from "@apollo/client";
+import { apiUrl, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
 import { FORM_RULES } from "../../../util/util";
-import {
-  CREATE_PROJECT_MUTATION,
-  PROJECT_LIST_QUERY,
-  UPDATE_PROJECT_MUTATION,
-} from "../../../queries/Project";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "../FormModalProps";
-import { ALL_USERS_QUERY } from "../../../queries/User";
 import ErrorDisplay from "../../displays/ErrorDisplay";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 
 const ProjectFormModal: React.FC<FormModalProps> = props => {
-  const { loading, data, error } = useQuery(ALL_USERS_QUERY);
+  const [{ loading, data: members, error }] = useAxios({
+    url: apiUrl(Service.USERS, "/users/actions/retrieve-members"),
+    method: "POST",
+  });
 
   if (error) {
     return <ErrorDisplay error={error} />;
@@ -23,14 +21,14 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
 
   const leadOptions = loading
     ? []
-    : data.users.map((user: any) => ({
-        label: `${user.name} [${user.email}]`,
-        value: user.id,
+    : members.map((member: any) => ({
+        label: `${member.name.first} ${member.name.last} [${member.email}]`,
+        value: member.userId,
       }));
 
   return (
     <ManageContentModal
-      visible={props.modalState.visible}
+      open={props.modalState.visible}
       initialValues={props.modalState.initialValues}
       hiddenValues={props.modalState.hiddenValues}
       closeModal={() =>
@@ -39,17 +37,9 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
           initialValues: props.modalState.initialValues,
         })
       }
-      createMutation={CREATE_PROJECT_MUTATION}
-      updateMutation={UPDATE_PROJECT_MUTATION}
+      resourceUrl={apiUrl(Service.FINANCE, "/projects")}
+      refetch={props.refetch}
       name="Project"
-      updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-        // @ts-ignore
-        const { projects } = cache.readQuery({ query: PROJECT_LIST_QUERY });
-        cache.writeQuery({
-          query: PROJECT_LIST_QUERY,
-          data: { projects: projects.concat([createMutationData.createProject]) },
-        });
-      }}
     >
       {(initialValues: any) => (
         <>
@@ -93,7 +83,7 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
             rules={[FORM_RULES.requiredRule]}
             label="Leads"
             initialValue={
-              initialValues ? initialValues.leads.map((user: any) => user.id) : undefined
+              initialValues ? initialValues.leads.map((user: any) => user.userId) : undefined
             }
           >
             <Select

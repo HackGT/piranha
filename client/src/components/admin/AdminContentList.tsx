@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Button, List, Typography, Input } from "antd";
-import { DocumentNode, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
 import { FormModalProps, ModalState } from "../modal/FormModalProps";
-import ErrorDisplay from "../displays/ErrorDisplay";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
 
 interface Props {
-  query: DocumentNode;
+  dataUrl: string;
   title: string;
   tag: (item: any) => JSX.Element;
   sortData: (data: any) => any;
@@ -26,8 +26,7 @@ const AdminContentList: React.FC<Props> = props => {
     initialValues: null,
   } as ModalState);
   const [searchText, setSearchText] = useState("");
-
-  const { loading, data, error } = useQuery(props.query);
+  const [{ loading, data, error }, refetch] = useAxios(apiUrl(Service.FINANCE, props.dataUrl));
 
   const openModal = (values: any) => {
     setModalState({
@@ -37,7 +36,7 @@ const AdminContentList: React.FC<Props> = props => {
   };
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    return <ErrorScreen error={error} />;
   }
 
   const updatedData = data
@@ -83,7 +82,7 @@ const AdminContentList: React.FC<Props> = props => {
           </List.Item>
         )}
       />
-      <Modal modalState={modalState} setModalState={setModalState} />
+      <Modal modalState={modalState} setModalState={setModalState} refetch={refetch} />
     </>
   );
 };

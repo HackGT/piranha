@@ -1,15 +1,14 @@
 import React from "react";
 import { Form, Input } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import { CREATE_CATEGORY_MUTATION, UPDATE_CATEGORY_MUTATION } from "../../../queries/Category";
 import { FormModalProps } from "../FormModalProps";
-import { BUDGET_DETAIL_QUERY } from "../../../queries/Budget";
 
 const CategoryFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
-    visible={props.modalState.visible}
+    open={props.modalState.visible}
     initialValues={props.modalState.initialValues}
     hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
@@ -18,11 +17,8 @@ const CategoryFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    createMutation={CREATE_CATEGORY_MUTATION}
-    updateMutation={UPDATE_CATEGORY_MUTATION}
-    refetchQuery={[
-      { query: BUDGET_DETAIL_QUERY, variables: { id: props.modalState.hiddenValues?.budget } },
-    ]}
+    resourceUrl={apiUrl(Service.FINANCE, "/budgets")}
+    refetch={props.refetch}
     name="Category"
   >
     {(initialValues: any) => (

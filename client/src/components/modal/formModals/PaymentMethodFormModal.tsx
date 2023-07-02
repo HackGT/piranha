@@ -1,14 +1,9 @@
 import React from "react";
 import { Form, Input, Switch } from "antd";
-import { ApolloCache } from "@apollo/client";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
-import {
-  CREATE_PAYMENT_METHOD_MUTATION,
-  UPDATE_PAYMENT_METHOD_MUTATION,
-  PAYMENT_METHOD_LIST_QUERY,
-} from "../../../queries/PaymentMethod";
 import { FormModalProps } from "../FormModalProps";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 
@@ -16,7 +11,7 @@ const { TextArea } = Input;
 
 const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
   <ManageContentModal
-    visible={props.modalState.visible}
+    open={props.modalState.visible}
     initialValues={props.modalState.initialValues}
     hiddenValues={props.modalState.hiddenValues}
     closeModal={() =>
@@ -25,17 +20,9 @@ const PaymentMethodFormModal: React.FC<FormModalProps> = props => (
         initialValues: props.modalState.initialValues,
       })
     }
-    createMutation={CREATE_PAYMENT_METHOD_MUTATION}
-    updateMutation={UPDATE_PAYMENT_METHOD_MUTATION}
+    resourceUrl={apiUrl(Service.FINANCE, "/payment-methods")}
+    refetch={props.refetch}
     name="Payment Method"
-    updateCache={(cache: ApolloCache<any>, createMutationData: any) => {
-      // @ts-ignore
-      const { paymentMethods } = cache.readQuery({ query: PAYMENT_METHOD_LIST_QUERY });
-      cache.writeQuery({
-        query: PAYMENT_METHOD_LIST_QUERY,
-        data: { paymentMethods: paymentMethods.concat([createMutationData.createPaymentMethod]) },
-      });
-    }}
   >
     {(initialValues: any) => (
       <>

@@ -1,32 +1,25 @@
 import React, { useEffect } from "react";
 import { Form, message, Modal } from "antd";
-import { ApolloCache, DocumentNode, PureQueryOptions, useMutation } from "@apollo/client";
+import axios from "axios";
+import { RefetchFunction } from "axios-hooks";
 
 interface Props {
-  visible: boolean;
+  open: boolean;
   closeModal: () => void;
   initialValues?: any;
   hiddenValues?: any;
-  createMutation?: DocumentNode;
-  updateMutation: DocumentNode;
-  refetchQuery?: PureQueryOptions[];
+  resourceUrl: string;
   name: string;
-  updateCache?: (cache: ApolloCache<any>, createMutationData: any) => void;
   children?: any;
+  refetch: RefetchFunction<any, any>;
 }
 
 const ManageContentModal: React.FC<Props> = props => {
   const [form] = Form.useForm();
 
-  // For types without create option (ex. users), default to using update mutation, since this will not be called anyways
-  const [createMutation] = useMutation(props.createMutation || props.updateMutation, {
-    update(cache, { data: createMutationData }) {
-      props.updateCache?.(cache, createMutationData);
-    },
-    refetchQueries: props.refetchQuery,
-  });
-  const [updateMutation] = useMutation(props.updateMutation);
-  useEffect(() => form.resetFields(), [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372
+  useEffect(() => {
+    form.resetFields();
+  }, [form, props.initialValues]); // github.com/ant-design/ant-design/issues/22372
 
   const onSubmit = async () => {
     try {
@@ -37,11 +30,12 @@ const ManageContentModal: React.FC<Props> = props => {
 
       try {
         if (props.initialValues) {
-          await updateMutation({ variables: { data: values, id: props.initialValues.id } });
+          await axios.put(`${props.resourceUrl}/${props.initialValues.id}`, values);
         } else {
-          await createMutation({ variables: { data: values } });
+          await axios.post(props.resourceUrl, values);
         }
 
+        props.refetch();
         hide();
         props.closeModal();
         message.success("Successfully updated", 2);
@@ -58,13 +52,14 @@ const ManageContentModal: React.FC<Props> = props => {
 
   return (
     <Modal
-      visible={props.visible}
+      open={props.open}
       title={props.initialValues ? `Manage ${props.name}` : `Create ${props.name}`}
       okText={props.initialValues ? "Update" : "Create"}
       cancelText="Cancel"
       onCancel={props.closeModal}
       onOk={onSubmit}
       bodyStyle={{ paddingBottom: 0 }}
+      forceRender // https://stackoverflow.com/q/61056421
     >
       <Form form={form} layout="vertical" autoComplete="off">
         {/* @ts-ignore */}
