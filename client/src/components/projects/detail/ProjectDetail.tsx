@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
 import { Typography, Table, Tag, Button, Switch, Input } from "antd";
 import { Breakpoint } from "antd/es/_util/responsiveObserve";
 import { Helmet } from "react-helmet";
+import { apiUrl, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { PROJECT_DETAIL_QUERY } from "../../../queries/Project";
 import {
   formatPrice,
   getTotalCost,
@@ -15,10 +15,8 @@ import {
   useScreenWidth,
   StatusToStep,
 } from "../../../util/util";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import { ReimbursementTag } from "../../../util/CustomTags";
 import ProjectBreadcrumb from "./ProjectBreadcrumb";
-import NotFoundDisplay from "../../displays/NotFoundDisplay";
 import { Requisition } from "../../../generated/types";
 import "./index.css";
 
@@ -43,20 +41,11 @@ const ProjectDetail: React.FC = props => {
   const { projectReference } = useParams<any>();
   let [year, shortCode] = (projectReference || "").split("-"); // eslint-disable-line prefer-const
 
-  // @ts-ignore
-  year = parseInt(year) || 0;
+  const [{ loading, data, error }] = useAxios(
+    apiUrl(Service.FINANCE, `/projects/${projectReference}`)
+  );
 
-  const { loading, data, error } = useQuery(PROJECT_DETAIL_QUERY, {
-    variables: { year, shortCode },
-    fetchPolicy: "network-only", // Never cache in case requisition status updates
-  });
-
-  if (error) {
-    return <ErrorDisplay error={error} />;
-  }
-  if (data && !data.project) {
-    return <NotFoundDisplay />;
-  }
+  console.log(data);
 
   const columns = [
     {
@@ -123,7 +112,7 @@ const ProjectDetail: React.FC = props => {
   let sortedData: Requisition[] = [];
 
   if (data) {
-    sortedData = data.project.requisitions.concat();
+    sortedData = data.requisitions.concat();
     sortedData = sortedData.sort(
       (first, second) => first.projectRequisitionId - second.projectRequisitionId
     );
@@ -197,10 +186,10 @@ const ProjectDetail: React.FC = props => {
     <>
       {/* @ts-ignore */}
       <Helmet>
-        <title>{data && `Piranha - ${data.project.name}`}</title>
+        <title>{data && `Piranha - ${data.name}`}</title>
       </Helmet>
-      <ProjectBreadcrumb secondItem={loading ? shortCode : data.project.name} />
-      <Title level={2}>{data ? data.project.name : "Loading..."}</Title>
+      <ProjectBreadcrumb secondItem={loading ? shortCode : data.name} />
+      <Title level={2}>{data ? data.name : "Loading..."}</Title>
       <Search
         placeholder="Search"
         style={{ width: "250px", marginBottom: "15px" }}

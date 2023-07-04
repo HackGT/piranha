@@ -1,25 +1,24 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
 import { List, Typography } from "antd";
 import { Helmet } from "react-helmet";
+import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { PROJECT_LIST_QUERY } from "../../../queries/Project";
 import ProjectListCard from "./ProjectListCard";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import { Project } from "../../../generated/types";
 
 const { Title } = Typography;
 
 const ProjectList: React.FC = () => {
-  const { loading, data, error } = useQuery(PROJECT_LIST_QUERY);
+  const [{ loading, data, error }] = useAxios(apiUrl(Service.FINANCE, "/projects"));
 
-  if (error || (data && !data.projects)) {
-    return <ErrorDisplay error={error} />;
+  if (error) {
+    return <ErrorScreen error={error} />;
   }
 
   const projectData = loading
     ? [{ archived: true }, { archived: true }, { archived: false }, { archived: false }]
-    : data.projects;
+    : data;
 
   const grid = { gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 };
 
