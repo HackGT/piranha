@@ -26,7 +26,7 @@ export const routes = [
 ];
 
 interface Props {
-  user: User;
+  user: any;
 }
 
 const Navigation: React.FC<Props> = props => {
@@ -41,9 +41,7 @@ const Navigation: React.FC<Props> = props => {
     };
   });
 
-  const filteredRoutes = routes.filter(
-    (page: Page) => !page.privateRoute || (props.user && props.user.canViewAdminPanel)
-  );
+  const filteredRoutes = routes.filter((page: Page) => !page.privateRoute || props.user.roles.exec);
 
   return (
     <div style={{ direction: "rtl" }}>

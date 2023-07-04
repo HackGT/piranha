@@ -7,7 +7,7 @@ interface Props {
 }
 
 const PrivateRoute: React.FC<Props> = props => {
-  if (props.user && props.user.canViewAdminPanel) {
+  if (props.user.roles.exec) {
     return props.children;
   }
 
