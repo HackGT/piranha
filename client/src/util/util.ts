@@ -1,7 +1,6 @@
 import { PresetColorType } from "antd/es/_util/colors";
 import React, { useEffect, useState } from "react";
 import { Rule, RuleObject } from "antd/es/form";
-import { StoreValue } from "@apollo/client";
 
 import { Requisition, RequisitionStatus } from "../generated/types";
 import { RequisitionFormData } from "../types/types";
@@ -195,7 +194,7 @@ export const FORM_RULES = {
   } as Rule,
   moneyRule: {
     // Checks if entered value is greater than 0
-    validator: (rule: RuleObject, value: StoreValue) => {
+    validator: (rule: RuleObject, value: any) => {
       if (!value || parseFloat(value as string) > 0) {
         return Promise.resolve();
       }

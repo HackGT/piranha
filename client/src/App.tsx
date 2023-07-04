@@ -5,7 +5,7 @@ import { Layout, Spin } from "antd";
 import axios from "axios";
 import { initializeApp } from "firebase/app";
 import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
-import { useLogin, LoadingScreen, apiUrl, Service } from "@hex-labs/core";
+import { useLogin, LoadingScreen, apiUrl, Service, NotFoundScreen } from "@hex-labs/core";
 
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
@@ -17,7 +17,6 @@ import ProjectList from "./components/projects/list/ProjectList";
 import RequisitionEdit from "./components/requisitions/form/RequisitionEdit";
 import AdminHome from "./components/admin/AdminHome";
 import PrivateRoute from "./components/navigation/PrivateRoute";
-import NotFoundDisplay from "./components/displays/NotFoundDisplay";
 import ScrollToTop from "./util/ScrollToTop";
 import BudgetList from "./components/budgets/list/BudgetList";
 import "./App.css";
@@ -121,7 +120,7 @@ const App: React.FC = () => {
                   }
                 />
                 <Route path="/" element={<Home />} />
-                <Route element={<NotFoundDisplay />} />
+                <Route element={<NotFoundScreen />} />
               </Routes>
             )}
           </div>
