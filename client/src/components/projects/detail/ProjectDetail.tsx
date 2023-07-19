@@ -99,7 +99,8 @@ const ProjectDetail: React.FC = props => {
     },
     {
       title: "Created By",
-      render: (record: any) => ("isChild" in record ? null : record.createdBy.name),
+      render: (record: any) =>
+        "isChild" in record ? null : `${record.createdBy.name.first} ${record.createdBy.name.last}`,
     },
     {
       title: "Total Cost",

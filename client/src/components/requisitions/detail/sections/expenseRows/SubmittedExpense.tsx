@@ -1,18 +1,14 @@
 import React from "react";
 import { Collapse, Form, Input, message } from "antd";
-import { useMutation } from "@apollo/client";
+import axios from "axios";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { FORM_RULES } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION } from "../../../../../queries/Approval";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 import { RequisitionStatus } from "../../../../../generated/types";
 
 const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
-  const [updateRequisitionAndCreateApproval] = useMutation(
-    UPDATE_REQUISITION_AND_CREATE_APPROVAL_MUTATION
-  );
-
   const onFinish = async (values: any, isApproving: boolean) => {
     if (isApproving) {
       // eslint-disable-next-line no-restricted-syntax
@@ -40,15 +36,31 @@ const SubmittedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
 
     const approvalData = {
       isApproving,
-      requisition: props.requisition.id,
       ...values,
     };
 
-    await saveExpenseData(updateRequisitionAndCreateApproval, {
-      id: props.requisition.id,
-      requisitionData,
-      approvalData,
-    });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await Promise.all([
+        axios.patch(
+          apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}`),
+          requisitionData
+        ),
+        axios.post(
+          apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}/actions/create-approval`),
+          approvalData
+        ),
+      ]);
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   return (

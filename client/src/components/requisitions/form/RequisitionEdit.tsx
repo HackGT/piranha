@@ -1,72 +1,62 @@
 import React from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { Spin } from "antd";
 import moment from "moment";
+import { apiUrl, ErrorScreen, LoadingScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { parseRequisitionParams } from "../../../util/util";
-import { REQUISITION_DETAIL_QUERY } from "../../../queries/Requisition";
 import RequisitionForm from "./RequisitionForm";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import { RequisitionFormData } from "../../../types/types";
 
 const RequisitionEdit: React.FC = () => {
   const { projectReference, requisitionReference } = useParams<any>();
 
-  const { year, shortCode, projectRequisitionId } = parseRequisitionParams(
-    projectReference,
-    requisitionReference
+  const [{ loading, data, error }] = useAxios(
+    apiUrl(Service.FINANCE, `/requisitions/${projectReference}-${requisitionReference}`),
+    {
+      useCache: false,
+    }
   );
 
-  const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
-    variables: { year, shortCode, projectRequisitionId },
-  });
-
-  if (error || (data && !data.requisition)) {
-    return <ErrorDisplay error={error} />;
-  }
-
   if (loading) {
-    return <Spin style={{ position: "absolute", top: "48%", left: "48%" }} />;
+    return <LoadingScreen />;
   }
 
-  if (!data.requisition.canEdit) {
+  if (error) {
+    return <ErrorScreen error={error} />;
+  }
+
+  if (!data.canEdit) {
     return <Navigate to={`/project/${projectReference}/requisition/${requisitionReference}`} />;
   }
 
-  const rekData = data.requisition;
-
   const requisitionFormData: RequisitionFormData = {
-    headline: rekData.headline,
-    project: rekData.project.id,
-    description: rekData.description,
-    vendor:
-      rekData.items.length === 0 || !rekData.items[0].vendor ? null : rekData.items[0].vendor.id,
-    budget: rekData.budget ? rekData.budget.id : null,
-    paymentRequiredBy: rekData.paymentRequiredBy ? moment(rekData.paymentRequiredBy) : null,
-    otherFees: rekData.otherFees,
-    isReimbursement: rekData.isReimbursement,
+    headline: data.headline,
+    project: data.project.id,
+    description: data.description,
+    vendor: data.items.length === 0 || !data.items[0].vendor ? null : data.items[0].vendor.id,
+    budget: data.budget ? data.budget.id : null,
+    paymentRequiredBy: data.paymentRequiredBy ? moment(data.paymentRequiredBy) : null,
+    otherFees: data.otherFees,
+    isReimbursement: data.isReimbursement,
     items:
-      rekData.items.length === 0
+      data.items.length === 0
         ? [{}]
-        : rekData.items.map((item: any) => ({
+        : data.items.map((item: any) => ({
             ...item,
             lineItem: item.lineItem && [item.lineItem.category.id, item.lineItem.id],
             vendor: item.vendor && item.vendor.id,
           })),
-    status: rekData.status,
-    files: rekData.files.map((file: any) => ({
+    status: data.status,
+    files: data.files.map((file: any) => ({
       ...file,
       status: "done",
       key: file.id,
       uid: file.id,
     })), // https://github.com/ant-design/ant-design/issues/4120
-    purchaseDate: rekData.purchaseDate ? moment(rekData.purchaseDate) : null,
+    purchaseDate: data.purchaseDate ? moment(data.purchaseDate) : null,
   };
 
-  return (
-    <RequisitionForm requisitionData={requisitionFormData} requisitionId={rekData.id} editMode />
-  );
+  return <RequisitionForm requisitionData={requisitionFormData} requisitionId={data.id} editMode />;
 };
 
 export default RequisitionEdit;

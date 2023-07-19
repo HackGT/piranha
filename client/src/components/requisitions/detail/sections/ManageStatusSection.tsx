@@ -1,5 +1,6 @@
 import React from "react";
-import { message, Typography } from "antd";
+import { Typography } from "antd";
+import { RefetchFunction } from "axios-hooks";
 
 import CancelledExpense from "./expenseRows/CancelledExpense";
 import SubmittedExpense from "./expenseRows/SubmittedExpense";
@@ -16,23 +17,14 @@ const { Title } = Typography;
 
 export interface RequisitionExpenseSectionProps {
   requisition: Requisition;
+  refetch: RefetchFunction<any, any>;
 }
 
-export const saveExpenseData = async (mutation: any, variables: any) => {
-  const hide = message.loading("Saving...", 0);
+interface Props {
+  refetch: RefetchFunction<any, any>;
+}
 
-  try {
-    await mutation({ variables });
-    hide();
-    message.success("Successful!", 2);
-  } catch (err) {
-    hide();
-    message.error("Error saving", 2);
-    console.error(JSON.parse(JSON.stringify(err)));
-  }
-};
-
-const ManageStatusSection: React.FC<RequisitionSectionProps> = props => {
+const ManageStatusSection: React.FC<RequisitionSectionProps & Props> = props => {
   const { data } = props;
 
   const content = (() => {
@@ -42,24 +34,24 @@ const ManageStatusSection: React.FC<RequisitionSectionProps> = props => {
 
     switch (data.status) {
       case "CANCELLED":
-        return <CancelledExpense requisition={data} />;
+        return <CancelledExpense requisition={data} refetch={props.refetch} />;
       case "SUBMITTED":
-        return <SubmittedExpense requisition={data} />;
+        return <SubmittedExpense requisition={data} refetch={props.refetch} />;
 
       case "READY_TO_ORDER":
-        return <ReadyToOrderExpense requisition={data} />;
+        return <ReadyToOrderExpense requisition={data} refetch={props.refetch} />;
       case "ORDERED":
       case "PARTIALLY_RECEIVED":
-        return <OrderedExpense requisition={data} />;
+        return <OrderedExpense requisition={data} refetch={props.refetch} />;
       case "RECEIVED":
-        return <ReceivedExpense requisition={data} />;
+        return <ReceivedExpense requisition={data} refetch={props.refetch} />;
 
       case "READY_FOR_REIMBURSEMENT":
-        return <ReadyForReimbursementExpense requisition={data} />;
+        return <ReadyForReimbursementExpense requisition={data} refetch={props.refetch} />;
       case "AWAITING_INFORMATION":
-        return <AwaitingInformationExpense requisition={data} />;
+        return <AwaitingInformationExpense requisition={data} refetch={props.refetch} />;
       case "REIMBURSEMENT_IN_PROGRESS":
-        return <ReimbursementInProgressExpense requisition={data} />;
+        return <ReimbursementInProgressExpense requisition={data} refetch={props.refetch} />;
 
       case "DRAFT":
       case "PENDING_CHANGES":

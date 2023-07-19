@@ -6,7 +6,7 @@ import SelectFundingSourceRow from "./SelectFundingSourceRow";
 
 const ReadyForReimbursementExpense: React.FC<RequisitionExpenseSectionProps> = props => (
   <Collapse>
-    <SelectFundingSourceRow requisition={props.requisition} />
+    <SelectFundingSourceRow requisition={props.requisition} refetch={props.refetch} />
   </Collapse>
 );
 

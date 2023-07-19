@@ -116,7 +116,7 @@ const ItemsTableSection: React.FC<RequisitionSectionProps> = props => {
   // Duplicates the rows so that items with notes have an extra row
   const rows = loading
     ? []
-    : data.items.flatMap(item => {
+    : data.items.flatMap((item: any) => {
         if (item.notes || item.lineItem || (props.data.isReimbursement && item.vendor)) {
           return [
             { ...item, isDetailsRow: false },

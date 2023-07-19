@@ -1,20 +1,18 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { DatePicker, Form, Input, Select } from "antd";
+import { DatePicker, Form, Input, Select, message } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
 import { ErrorScreen, Service, apiUrl } from "@hex-labs/core";
 import useAxios from "axios-hooks";
+import axios from "axios";
 
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { CREATE_PAYMENT_MUTATION } from "../../../../../queries/Payment";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 
 const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = props => {
   const [{ loading, data: paymentMethods, error }] = useAxios(
     apiUrl(Service.FINANCE, "/payment-methods?isActive=true")
   );
-  const [createPayment] = useMutation(CREATE_PAYMENT_MUTATION);
 
   if (error) {
     return <ErrorScreen error={error} />;
@@ -34,14 +32,28 @@ const CreatePaymentRow: React.FC<RequisitionExpenseSectionProps> = props => {
   }
 
   const onFinish = async (values: any, form: FormInstance) => {
-    const mutationData = {
+    const paymentData = {
       amount: values.amount,
       fundingSource: values.fundingSource,
       date: values.date.format("YYYY-MM-DD"),
-      requisition: props.requisition.id,
     };
 
-    await saveExpenseData(createPayment, { data: mutationData });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await axios.post(
+        apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}/actions/create-payment`),
+        paymentData
+      );
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
 
     form.resetFields();
   };

@@ -1,22 +1,24 @@
 import React from "react";
-import { Button, Popconfirm, Tooltip, Typography } from "antd";
-import { useMutation } from "@apollo/client";
+import { Button, Popconfirm, Tooltip, Typography, message } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaShieldAlt } from "react-icons/fa";
+import { apiUrl, Service } from "@hex-labs/core";
+import axios from "axios";
+import { RefetchFunction } from "axios-hooks";
 
-import { UPDATE_REQUISITION_MUTATION } from "../../../../queries/Requisition";
-import { saveExpenseData } from "./ManageStatusSection";
 import { RequisitionSectionProps } from "../RequisitionDetail";
 
 const { Title } = Typography;
 
-const ActionsSection: React.FC<RequisitionSectionProps> = props => {
+interface Props {
+  refetch: RefetchFunction<any, any>;
+}
+
+const ActionsSection: React.FC<RequisitionSectionProps & Props> = props => {
   const { data, loading } = props;
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
 
   if (loading || ["CLOSED", "CANCELLED"].includes(data.status)) {
     return null;
@@ -29,13 +31,25 @@ const ActionsSection: React.FC<RequisitionSectionProps> = props => {
   };
 
   const handleCancel = async () => {
-    const mutationData = {
+    const requisitionData = {
       headline: data.headline,
       project: data.project.id,
       status: "CANCELLED",
     };
 
-    await saveExpenseData(updateRequisition, { id: data.id, data: mutationData });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await axios.patch(apiUrl(Service.FINANCE, `/requisitions/${data.id}`), requisitionData);
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error cancelling requisition", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   return (

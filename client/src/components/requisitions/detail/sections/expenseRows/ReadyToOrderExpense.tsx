@@ -1,25 +1,38 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { Collapse, DatePicker, Form, Input } from "antd";
+import { Collapse, DatePicker, Form, Input, message } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
+import axios from "axios";
 
 import { FORM_RULES } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import { UPDATE_REQUISITION_MUTATION } from "../../../../../queries/Requisition";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 import CreatePaymentRow from "./CreatePaymentRow";
 import QuestionIconLabel from "../../../../../util/QuestionIconLabel";
 
 const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = props => {
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-
   const onFinish = async (values: any) => {
-    const mutationData = {
+    const requisitionData = {
       status: "ORDERED",
       shippingLocation: values.shippingLocation,
       orderDate: values.orderDate.format("YYYY-MM-DD"),
     };
 
-    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await axios.patch(
+        apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}`),
+        requisitionData
+      );
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   return (
@@ -47,7 +60,7 @@ const ReadyToOrderExpense: React.FC<RequisitionExpenseSectionProps> = props => {
           <Input placeholder="Storage Unit" />
         </Form.Item>
       </RequisitionExpenseRow>
-      <CreatePaymentRow requisition={props.requisition} />
+      <CreatePaymentRow requisition={props.requisition} refetch={props.refetch} />
     </Collapse>
   );
 };

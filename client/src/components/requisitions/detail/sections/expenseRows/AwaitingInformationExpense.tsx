@@ -1,22 +1,17 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
 import { Collapse, DatePicker, Form, Input, message, Select } from "antd";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import axios from "axios";
 
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../../../util/util";
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION } from "../../../../../queries/Payment";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import ErrorDisplay from "../../../../displays/ErrorDisplay";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 import SelectFundingSourceRow from "./SelectFundingSourceRow";
 
 const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = props => {
-  const [updateRequisitionAndCreatePayment] = useMutation(
-    UPDATE_REQUISITION_AND_CREATE_PAYMENT_MUTATION
-  );
-
   if (!props.requisition.fundingSource) {
     const error = new Error("No funding source provided. Please contact an admin.");
-    return <ErrorDisplay error={error} />;
+    return <ErrorScreen error={error} />;
   }
 
   const { isDirectPayment } = props.requisition.fundingSource;
@@ -35,14 +30,30 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = pro
       amount: parseFloat(values.amount.replace(/,/g, "")),
       fundingSource: props.requisition.fundingSource.id,
       date: values.date.format("YYYY-MM-DD"),
-      requisition: props.requisition.id,
     };
 
-    await saveExpenseData(updateRequisitionAndCreatePayment, {
-      id: props.requisition.id,
-      requisitionData,
-      paymentData,
-    });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await Promise.all([
+        axios.patch(
+          apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}`),
+          requisitionData
+        ),
+        axios.post(
+          apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}/actions/create-payment`),
+          paymentData
+        ),
+      ]);
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   const paymentMethod = [
@@ -90,7 +101,7 @@ const AwaitingInformationExpense: React.FC<RequisitionExpenseSectionProps> = pro
           <DatePicker format="MMM-D-YYYY" style={{ width: "100%" }} />
         </Form.Item>
       </RequisitionExpenseRow>
-      <SelectFundingSourceRow requisition={props.requisition} />
+      <SelectFundingSourceRow requisition={props.requisition} refetch={props.refetch} />
     </Collapse>
   );
 };

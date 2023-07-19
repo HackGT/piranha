@@ -1,13 +1,12 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
 import { Col, Pagination, Row, Tag, Typography } from "antd";
 import { Helmet } from "react-helmet";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { REQUISITION_DETAIL_QUERY } from "../../../queries/Requisition";
 import { parseRequisitionParams } from "../../../util/util";
 import ItemsTableSection from "./sections/ItemsTableSection";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import ManageStatusSection from "./sections/ManageStatusSection";
 import { RequisitionTag } from "../../../util/CustomTags";
 import ActionsSection from "./sections/ActionsSection";
@@ -17,14 +16,13 @@ import StatusStepsSection from "./sections/StatusStepsSection";
 import UploadedFilesSection from "./sections/UploadedFilesSection";
 import ReimbursementInstructionsSection from "./sections/ReimbursementInstructionsSection";
 import ProjectBreadcrumb from "../../projects/detail/ProjectBreadcrumb";
-import "./index.css";
-import NotFoundDisplay from "../../displays/NotFoundDisplay";
 import { Requisition } from "../../../generated/types";
+import "./index.css";
 
 const { Text, Title } = Typography;
 
 export interface RequisitionSectionProps {
-  data: Requisition;
+  data: any;
   loading?: boolean;
 }
 
@@ -37,19 +35,25 @@ const RequisitionDetail: React.FC = () => {
     requisitionReference
   );
 
-  const { loading, data, error } = useQuery(REQUISITION_DETAIL_QUERY, {
-    variables: { year, shortCode, projectRequisitionId },
-  });
+  const [{ loading, data, error }, refetch] = useAxios(
+    {
+      url: apiUrl(Service.FINANCE, `/requisitions/${projectReference}-${requisitionReference}`),
+    },
+    {
+      useCache: false,
+    }
+  );
 
   if (error) {
-    return <ErrorDisplay error={error} />;
-  }
-  if (data && !data.requisition) {
-    return <NotFoundDisplay />;
+    return <ErrorScreen error={error} />;
   }
 
+  // if (data && !data.requisition) {
+  //   return <NotFoundDisplay />;
+  // }
+
   // @ts-ignore
-  const rekData: Requisition = loading ? {} : (data.requisition as Requisition);
+  const rekData: Requisition = loading ? {} : (data as Requisition);
 
   return (
     <>
@@ -72,7 +76,7 @@ const RequisitionDetail: React.FC = () => {
           <Text style={{ display: "block", whiteSpace: "pre-line" }}>{rekData.description}</Text>
         </Col>
         <Col xs={24} sm={24} md={9} lg={9} xl={9}>
-          <ActionsSection data={rekData} loading={loading} />
+          <ActionsSection data={rekData} loading={loading} refetch={refetch} />
         </Col>
       </Row>
 
@@ -89,7 +93,7 @@ const RequisitionDetail: React.FC = () => {
       <StatusStepsSection data={rekData} loading={loading} />
       <ReimbursementInstructionsSection data={rekData} />
       <PaymentsTableSection data={rekData} />
-      <ManageStatusSection data={rekData} />
+      <ManageStatusSection data={rekData} refetch={refetch} />
 
       <Pagination
         pageSize={1}

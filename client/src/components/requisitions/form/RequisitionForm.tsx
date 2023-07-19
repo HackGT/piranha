@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
 import {
   Button,
   DatePicker,
@@ -17,16 +16,12 @@ import { PlusOutlined, UploadOutlined } from "@ant-design/icons/lib";
 import { useNavigate } from "react-router-dom";
 import { RcFile } from "antd/es/upload";
 import { Helmet } from "react-helmet";
+import { apiUrl, Service, ErrorScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
+import axios from "axios";
 
 import RequisitionItemCard from "./RequisitionItemCard";
-import {
-  CREATE_REQUISITION_MUTATION,
-  UPDATE_REQUISITION_MUTATION,
-  REQUISITION_FORM_QUERY,
-  OPEN_REQUISITIONS_QUERY,
-} from "../../../queries/Requisition";
 import { FORM_RULES, formatPrice, getTotalCost } from "../../../util/util";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 import { RequisitionItem, RequisitionStatus } from "../../../generated/types";
 import { RequisitionFormData } from "../../../types/types";
@@ -52,59 +47,63 @@ const RequisitionForm: React.FC<Props> = props => {
     props.requisitionData?.isReimbursement || false
   );
 
-  const { loading, data, error } = useQuery(REQUISITION_FORM_QUERY, {
-    fetchPolicy: "network-only",
+  const [{ loading: projectsLoading, data: projectsData, error: projectsError }] = useAxios({
+    url: apiUrl(Service.FINANCE, "/projects"),
+    method: "GET",
+    params: {
+      archived: false,
+    },
   });
-
-  // This updates the cache so the requisition appears on the users home page after creation
-  const [createRequisition] = useMutation(CREATE_REQUISITION_MUTATION, {
-    update(cache, { data: createMutationData }) {
-      try {
-        // @ts-ignore
-        const { requisitions } = cache.readQuery({ query: OPEN_REQUISITIONS_QUERY });
-        cache.writeQuery({
-          query: OPEN_REQUISITIONS_QUERY,
-          data: {
-            requisitions: requisitions.concat([createMutationData.createRequisition.requisition]),
-          },
-        });
-      } catch {
-        // Home screen hasn't been loaded yet
-      }
+  const [{ loading: vendorsLoading, data: vendorsData, error: vendorsError }] = useAxios({
+    url: apiUrl(Service.FINANCE, "/vendors"),
+    method: "GET",
+    params: {
+      isActive: true,
+    },
+  });
+  const [{ loading: budgetsLoading, data: budgetsData, error: budgetsError }] = useAxios({
+    url: apiUrl(Service.FINANCE, "/budgets"),
+    method: "GET",
+    params: {
+      archived: false,
     },
   });
 
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-
-  if (error) {
-    return <ErrorDisplay error={error} />;
+  if (projectsError) {
+    return <ErrorScreen error={projectsError} />;
+  }
+  if (vendorsError) {
+    return <ErrorScreen error={vendorsError} />;
+  }
+  if (budgetsError) {
+    return <ErrorScreen error={budgetsError} />;
   }
 
-  const projectOptions = loading
+  const projectOptions = projectsLoading
     ? []
-    : data.projects.map((project: any) => ({
+    : projectsData.map((project: any) => ({
         label: project.name,
         value: project.id,
       }));
 
-  const vendorOptions = loading
+  const vendorOptions = vendorsLoading
     ? []
-    : data.vendors.map((vendor: any) => ({
+    : vendorsData.map((vendor: any) => ({
         label: vendor.name,
         value: vendor.id,
       }));
 
-  const budgetOptions = loading
+  const budgetOptions = budgetsLoading
     ? []
-    : data.budgets.map((budget: any) => ({
+    : budgetsData.map((budget: any) => ({
         label: budget.name,
         value: budget.id,
       }));
 
   const lineItemOptions =
-    loading || !selectedBudget
+    budgetsLoading || !selectedBudget
       ? []
-      : data.budgets.find((budget: any) => budget.id === selectedBudget).categories;
+      : budgetsData.find((budget: any) => budget.id === selectedBudget).categories;
 
   // Determines if requisition is submitting for review or just editing to save changes by an admin
   const submittalMode =
@@ -122,6 +121,40 @@ const RequisitionForm: React.FC<Props> = props => {
   vendorOptions.sort((a: any, b: any) => a.label.localeCompare(b.label)); // Sorts vendors alphabetically
 
   const saveDataToServer = async (values: any, requisitionStatus: RequisitionStatus) => {
+    const hide = message.loading("Saving requisition...", 0);
+
+    // Setup initial file upload data with old files
+    let fileUploadData = values.files.filter((file: any) => !file.originFileObj);
+
+    // Handle file uploads
+    try {
+      const multipartFormData = new FormData();
+      for (const file of values.files) {
+        if (file.originFileObj) {
+          multipartFormData.append("files", file.originFileObj, file.name);
+        }
+      }
+
+      if (multipartFormData.has("files")) {
+        const result = await axios.post(
+          apiUrl(Service.FILES, "/files/upload-finance"),
+          multipartFormData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        fileUploadData = fileUploadData.concat(result.data);
+        console.log(result);
+      }
+    } catch (err: any) {
+      hide();
+      message.error("Error uploading files", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+      return;
+    }
+
     const mutationData: RequisitionFormData = {
       headline: values.headline,
       project: values.project,
@@ -144,35 +177,32 @@ const RequisitionForm: React.FC<Props> = props => {
           vendor: (isReimbursement ? item.vendor : values.vendor) || undefined, // Map vendor to items based on reimbursement
         })),
       status: requisitionStatus,
-      files: values.files,
+      files: fileUploadData,
       purchaseDate: values.purchaseDate ? values.purchaseDate.format("YYYY-MM-DD") : undefined,
     };
 
-    const hide = message.loading("Saving requisition...", 0);
-
     try {
-      let rekData, text;
+      let result, text;
       if (props.editMode) {
-        const result = await updateRequisition({
-          variables: { data: mutationData, id: props.requisitionId },
-        });
+        result = await axios.patch(
+          apiUrl(Service.FINANCE, `/requisitions/${props.requisitionId}`),
+          mutationData
+        );
         text = "Successfully updated";
-        rekData = result.data.updateRequisition;
       } else {
-        const result = await createRequisition({ variables: { data: mutationData } });
+        result = await axios.post(apiUrl(Service.FINANCE, "/requisitions"), mutationData);
         text = "Successfully created";
-        rekData = result.data.createRequisition;
       }
 
+      console.log(result);
       hide();
       message.success(text, 2);
       navigate(
-        `/project/${rekData.project.referenceString}/requisition/${rekData.projectRequisitionId}`
+        `/project/${result.data.project.referenceString}/requisition/${result.data.projectRequisitionId}`
       );
     } catch (err) {
       hide();
       message.error("Error saving", 2);
-      console.error(err);
       console.error(JSON.parse(JSON.stringify(err)));
     }
   };
@@ -246,8 +276,8 @@ const RequisitionForm: React.FC<Props> = props => {
   };
 
   const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "application/pdf", "text/plain"]; // Has backend validation as well
-  const MAX_FILE_SIZE = 1024 * 1024 * 6; // 6 MB
-  const FILE_ERROR_STRING = "Please upload a png, jpeg, or pdf file less than 6 MB";
+  const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5 MB
+  const FILE_ERROR_STRING = "Please upload a png, jpeg, or pdf file less than 5 MB";
 
   const checkFileUpload = (file: RcFile, fileList: RcFile[]) => {
     if (!ACCEPTED_FILE_TYPES.includes(file.type) || file.size > MAX_FILE_SIZE) {
@@ -289,7 +319,7 @@ const RequisitionForm: React.FC<Props> = props => {
                 options={projectOptions}
                 showSearch
                 optionFilterProp="label"
-                loading={loading}
+                loading={projectsLoading}
               />
             </Form.Item>
           </Col>
@@ -308,6 +338,7 @@ const RequisitionForm: React.FC<Props> = props => {
               }
             >
               <TextArea
+                // @ts-ignore
                 autoSize={{ minRows: 2 }}
                 placeholder="This will help spice up our venue, and add the pizzazz that will draw students from around the world!"
               />
@@ -331,7 +362,7 @@ const RequisitionForm: React.FC<Props> = props => {
                 options={budgetOptions}
                 showSearch
                 optionFilterProp="label"
-                loading={loading}
+                loading={budgetsLoading}
                 onChange={onBudgetChange}
               />
             </Form.Item>
@@ -397,7 +428,7 @@ const RequisitionForm: React.FC<Props> = props => {
                   options={vendorOptions}
                   showSearch
                   optionFilterProp="label"
-                  loading={loading}
+                  loading={vendorsLoading}
                   onChange={onVendorChange}
                 />
               </Form.Item>
@@ -435,7 +466,7 @@ const RequisitionForm: React.FC<Props> = props => {
                       lineItemOptions={lineItemOptions}
                       vendorOptions={vendorOptions}
                       isReimbursement={isReimbursement}
-                      loading={loading}
+                      loading={vendorsLoading}
                     />
                   </Col>
                 </Row>

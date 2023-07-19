@@ -1,20 +1,33 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { Collapse } from "antd";
+import { Collapse, message } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
+import axios from "axios";
 
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
-import { UPDATE_REQUISITION_MUTATION } from "../../../../../queries/Requisition";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 
 const ReimbursementInProgressExpense: React.FC<RequisitionExpenseSectionProps> = props => {
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-
   const onFinish = async () => {
-    const mutationData = {
+    const requisitionData = {
       status: "CLOSED",
     };
 
-    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await axios.patch(
+        apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}`),
+        requisitionData
+      );
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   return (

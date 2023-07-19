@@ -158,6 +158,7 @@ const RequisitionItemCard: React.FC<Props> = props => (
           }
         >
           <TextArea
+            // @ts-ignore
             autoSize={{ minRows: 2 }}
             placeholder="This item forms a part of the cute dog drawing contest."
           />

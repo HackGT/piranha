@@ -3,8 +3,6 @@ import { Drawer, Menu, Button, Typography } from "antd";
 import { MenuOutlined } from "@ant-design/icons/lib";
 import { Link } from "react-router-dom";
 
-import { User } from "../../generated/types";
-
 class Page {
   name: string;
   link: string;

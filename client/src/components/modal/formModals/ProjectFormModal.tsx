@@ -1,12 +1,11 @@
 import React from "react";
 import { Form, Input, InputNumber, Select, Switch } from "antd";
-import { apiUrl, Service } from "@hex-labs/core";
+import { apiUrl, ErrorScreen, Service } from "@hex-labs/core";
 import useAxios from "axios-hooks";
 
 import { FORM_RULES } from "../../../util/util";
 import ManageContentModal from "../ManageContentModal";
 import { FormModalProps } from "../FormModalProps";
-import ErrorDisplay from "../../displays/ErrorDisplay";
 import QuestionIconLabel from "../../../util/QuestionIconLabel";
 
 const ProjectFormModal: React.FC<FormModalProps> = props => {
@@ -16,15 +15,32 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
   });
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    return <ErrorScreen error={error} />;
   }
 
-  const leadOptions = loading
-    ? []
-    : members.map((member: any) => ({
-        label: `${member.name.first} ${member.name.last} [${member.email}]`,
-        value: member.userId,
-      }));
+  // This workaround is necessary since ex-leads may not be members anymore, but we still want
+  // to be able to include their name and email in the list of options
+  const getLeadOptions = (currentLeads: any[]) => {
+    if (loading) {
+      return [];
+    }
+
+    const existingMembers = members.map((member: any) => ({
+      label: `${member.name.first} ${member.name.last} [${member.email}]`,
+      value: member.userId,
+    }));
+
+    for (const lead of currentLeads) {
+      if (!existingMembers.find((member: any) => member.value === lead.userId)) {
+        existingMembers.push({
+          label: `${lead.name.first} ${lead.name.last} [${lead.email}]`,
+          value: lead.userId,
+        });
+      }
+    }
+
+    return existingMembers;
+  };
 
   return (
     <ManageContentModal
@@ -88,7 +104,7 @@ const ProjectFormModal: React.FC<FormModalProps> = props => {
           >
             <Select
               mode="multiple"
-              options={leadOptions}
+              options={getLeadOptions(initialValues ? initialValues.leads : [])}
               optionFilterProp="label"
               loading={loading}
               placeholder="Choose yer captains"

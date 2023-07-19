@@ -3,12 +3,10 @@ import { Card, List, Skeleton, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons/lib";
 import { Link } from "react-router-dom";
 
-import { Project, User } from "../../../generated/types";
-
 const { Title, Text } = Typography;
 
 interface Props {
-  item: Project;
+  item: any;
   loading: boolean;
 }
 
@@ -35,11 +33,11 @@ const ProjectListCard: React.FC<Props> = props => (
       </Text>
       <List
         dataSource={props.item.leads}
-        renderItem={(lead: User) => (
+        renderItem={(lead: any) => (
           <List.Item>
             <Text>
               <UserOutlined style={{ marginRight: "5px" }} />
-              {lead.name}
+              {lead.name.first} {lead.name.last}
             </Text>
           </List.Item>
         )}

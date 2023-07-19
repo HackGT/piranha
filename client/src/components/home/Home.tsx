@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { ConfigProvider, Empty, List, Typography, Button } from "antd";
-import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { apiUrl, Service, LoadingScreen, ErrorScreen } from "@hex-labs/core";
+import useAxios from "axios-hooks";
 
-import { OPEN_REQUISITIONS_QUERY } from "../../queries/Requisition";
 import HomeRequisitionCard from "./HomeRequisitionCard";
-import ErrorDisplay from "../displays/ErrorDisplay";
 import { Requisition } from "../../generated/types";
 
 const { Title, Text } = Typography;
@@ -32,18 +31,15 @@ export function pickRandomElement<T>(arr: T[]): T {
 
 const Home: React.FC = () => {
   const [randomPhrase, setRandomPhrase] = useState(pickRandomElement(funPhrases));
+  const [{ loading, data, error }] = useAxios(apiUrl(Service.FINANCE, "/requisitions"));
 
-  const { loading, data, error } = useQuery(OPEN_REQUISITIONS_QUERY);
-
-  if (error || (data && !data.requisitions)) {
-    return <ErrorDisplay error={error} />;
+  if (loading) {
+    return <LoadingScreen />;
   }
 
-  const emptyRek = {
-    items: [],
-  };
-
-  const rekData = loading ? [emptyRek, emptyRek] : data.requisitions;
+  if (error) {
+    return <ErrorScreen error={error} />;
+  }
 
   return (
     <>
@@ -67,7 +63,7 @@ const Home: React.FC = () => {
       >
         <List
           grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5 }}
-          dataSource={rekData}
+          dataSource={data}
           renderItem={(rek: Requisition) => (
             <List.Item>
               <Link

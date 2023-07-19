@@ -1,5 +1,6 @@
 import React from "react";
 import { List, Typography } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
 
 import { RequisitionSectionProps } from "../RequisitionDetail";
 import { File } from "../../../../generated/types";
@@ -21,10 +22,10 @@ const UploadedFilesSection: React.FC<RequisitionSectionProps> = props => {
       <List
         dataSource={data.files}
         style={{ marginBottom: "10px" }}
-        renderItem={(item: File) => (
+        renderItem={(file: File) => (
           <List.Item>
-            <Link href={item.signedUrl} target="_blank">
-              {item.name}
+            <Link href={apiUrl(Service.FILES, `/files/${file.id}/view`)} target="_blank">
+              {file.name}
             </Link>
           </List.Item>
         )}

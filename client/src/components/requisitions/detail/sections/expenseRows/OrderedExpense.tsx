@@ -1,16 +1,14 @@
 import React from "react";
-import { Checkbox, Collapse, Form } from "antd";
-import { useMutation } from "@apollo/client";
+import { Checkbox, Collapse, Form, message } from "antd";
+import { apiUrl, Service } from "@hex-labs/core";
+import axios from "axios";
 
 import RequisitionExpenseRow from "./RequisitionExpenseRow";
-import { UPDATE_REQUISITION_MUTATION } from "../../../../../queries/Requisition";
-import { RequisitionExpenseSectionProps, saveExpenseData } from "../ManageStatusSection";
+import { RequisitionExpenseSectionProps } from "../ManageStatusSection";
 import CreatePaymentRow from "./CreatePaymentRow";
 import { RequisitionItem } from "../../../../../generated/types";
 
 const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
-  const [updateRequisition] = useMutation(UPDATE_REQUISITION_MUTATION);
-
   const onFinish = async (values: any) => {
     const numReceived = Object.values(values).reduce(
       (prev: number, curr: any) => prev + (curr ? 1 : 0),
@@ -27,7 +25,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
       status = "PARTIALLY_RECEIVED";
     }
 
-    const mutationData = {
+    const requisitionData = {
       items: props.requisition.items.map((item: RequisitionItem) => ({
         name: item.name,
         link: item.link,
@@ -41,7 +39,22 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
       status,
     };
 
-    await saveExpenseData(updateRequisition, { id: props.requisition.id, data: mutationData });
+    const hide = message.loading("Saving...", 0);
+
+    try {
+      await axios.patch(
+        apiUrl(Service.FINANCE, `/requisitions/${props.requisition.id}`),
+        requisitionData
+      );
+
+      hide();
+      message.success("Successful!", 2);
+      props.refetch();
+    } catch (err) {
+      hide();
+      message.error("Error saving", 2);
+      console.error(JSON.parse(JSON.stringify(err)));
+    }
   };
 
   return (
@@ -66,7 +79,7 @@ const OrderedExpense: React.FC<RequisitionExpenseSectionProps> = props => {
           </Form.Item>
         ))}
       </RequisitionExpenseRow>
-      <CreatePaymentRow requisition={props.requisition} />
+      <CreatePaymentRow requisition={props.requisition} refetch={props.refetch} />
     </Collapse>
   );
 };
