@@ -5,7 +5,14 @@ import { Layout, Spin } from "antd";
 import axios from "axios";
 import { initializeApp } from "firebase/app";
 import { setPersistence, getAuth, inMemoryPersistence } from "firebase/auth";
-import { useLogin, LoadingScreen, apiUrl, Service, NotFoundScreen } from "@hex-labs/core";
+import {
+  useLogin,
+  LoadingScreen,
+  apiUrl,
+  Service,
+  NotFoundScreen,
+  ErrorScreen,
+} from "@hex-labs/core";
 
 import Navigation from "./components/navigation/Navigation";
 import Home from "./components/home/Home";
@@ -39,13 +46,19 @@ axios.defaults.withCredentials = true;
 const App: React.FC = () => {
   const [loading, loggedIn] = useLogin(app);
   const [userDataLoading, setUserDataLoading] = useState(true);
+  const [userDataError, setUserDataError] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const getUserData = async () => {
-      const response = await axios.get(apiUrl(Service.FINANCE, "/user/check"));
-      setUser(response.data);
-      setUserDataLoading(false);
+      try {
+        const response = await axios.get(apiUrl(Service.FINANCE, "/user/check"));
+        setUser(response.data);
+      } catch (err: any) {
+        setUserDataError(err);
+      } finally {
+        setUserDataLoading(false);
+      }
     };
 
     if (loggedIn) {
@@ -69,6 +82,9 @@ const App: React.FC = () => {
 
   if (userDataLoading) {
     return <LoadingScreen />;
+  }
+  if (userDataError) {
+    return <ErrorScreen error={userDataError} />;
   }
 
   return (
