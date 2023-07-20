@@ -407,7 +407,7 @@ const RequisitionForm: React.FC<Props> = props => {
               label={
                 <QuestionIconLabel
                   label="Is this a Reimbursement?"
-                  helpText="Select yes if you have paid for this requisition already. Otherwise, HackGT will pay for and order the items."
+                  helpText="Select yes if you have paid for this requisition already. Otherwise, HexLabs will pay for and order the items."
                 />
               }
             >

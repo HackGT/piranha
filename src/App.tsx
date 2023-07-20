@@ -144,7 +144,7 @@ const App: React.FC = () => {
         <Footer style={{ textAlign: "center" }}>
           {"Made with "}
           <HeartOutlined />
-          {" by the HackGT Team"}
+          {" by the HexLabs Team"}
         </Footer>
       </Layout>
     </>

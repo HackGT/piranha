@@ -1,6 +1,7 @@
 # Development Overview
 
-Piranha is an application to help HackGT manage our internal financial processes ("sinking our teeth in") so to speak.
+Piranha is an application to help HexLabs manage our internal financial processes ("sinking our
+teeth in") so to speak.
 
 ## Architecture
 
@@ -34,10 +35,11 @@ Piranha is an application to help HackGT manage our internal financial processes
 
 #### Environment Variables
 
-Once you have the backend dependencies installed,
-configure the backend environment variables by copying [.env.example](.env.example) to a new file called `.env` and filling in the variables.
+Once you have the backend dependencies installed, configure the backend environment variables by
+copying [.env.example](.env.example) to a new file called `.env` and filling in the variables.
 
-To setup google file upload, add your Google service account credentials to a file called `google-application-key.json` in the config directory.
+To setup google file upload, add your Google service account credentials to a file called
+`google-application-key.json` in the config directory.
 
 #### Client
 
@@ -48,15 +50,19 @@ To setup google file upload, add your Google service account credentials to a fi
 
 ### Typings
 
-First, this will generate TypeScript typings and a new Prisma client from your Prisma schema (`schema.prisma`). Then, it will also generate TypeScript typings based on your GraphQL schema (`api.graphql`) via GraphQL Code Generator.
+First, this will generate TypeScript typings and a new Prisma client from your Prisma schema
+(`schema.prisma`). Then, it will also generate TypeScript typings based on your GraphQL schema
+(`api.graphql`) via GraphQL Code Generator.
 
 1. `yarn generate`
 
-Note, anytime either of these schemas are changed, you will need to rerun `yarn generate` to generate new typings.
+Note, anytime either of these schemas are changed, you will need to rerun `yarn generate` to
+generate new typings.
 
 ### Migrations
 
-After changing the Prisma schema (`schema.prisma`), run the following commands in the server folder to migrate the database and generate a new Prisma client.
+After changing the Prisma schema (`schema.prisma`), run the following commands in the server folder
+to migrate the database and generate a new Prisma client.
 
 1. `yarn migrate:dev`
 2. `yarn generate`
