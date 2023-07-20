@@ -124,7 +124,9 @@ const RequisitionForm: React.FC<Props> = props => {
     const hide = message.loading("Saving requisition...", 0);
 
     // Setup initial file upload data with old files
-    let fileUploadData = values.files.filter((file: any) => !file.originFileObj);
+    let fileUploadData = values.files
+      ? values.files.filter((file: any) => !file.originFileObj)
+      : [];
 
     // Handle file uploads
     try {
@@ -146,7 +148,6 @@ const RequisitionForm: React.FC<Props> = props => {
           }
         );
         fileUploadData = fileUploadData.concat(result.data);
-        console.log(result);
       }
     } catch (err: any) {
       hide();
