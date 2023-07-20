@@ -76,7 +76,9 @@ const ActionsSection: React.FC<RequisitionSectionProps & Props> = props => {
           disabled={!data.canCancel}
         >
           <Button className="action-button" danger disabled={!data.canCancel}>
-            <FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.25em" }} />
+            <FaShieldAlt
+              style={{ verticalAlign: "-0.125em", marginRight: "0.25em", display: "inline" }}
+            />
             Cancel
           </Button>
         </Popconfirm>

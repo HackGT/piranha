@@ -45,7 +45,9 @@ const RequisitionExpenseRow: React.FC<React.PropsWithChildren<Props>> = props =>
         {props.children}
         <Form.Item style={{ marginBottom: 0 }}>
           <Button type="primary" htmlType="submit">
-            <FaShieldAlt style={{ verticalAlign: "-0.125em", marginRight: "0.5em" }} />
+            <FaShieldAlt
+              style={{ verticalAlign: "-0.125em", marginRight: "0.5em", display: "inline" }}
+            />
             {props.buttonText}
           </Button>
         </Form.Item>
