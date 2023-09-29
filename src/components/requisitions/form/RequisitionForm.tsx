@@ -390,7 +390,7 @@ const RequisitionForm: React.FC<Props> = props => {
             <Form.Item
               name="otherFees"
               rules={[FORM_RULES.requiredRule, FORM_RULES.moneyRule]}
-              normalize={(value: any) => (value ? parseFloat(value).toFixed(2) : null)}
+              normalize={(value: any) => (value ? parseFloat(value).toFixed(2) : 0)}
               label={
                 <QuestionIconLabel
                   label="Other Fees"
@@ -398,7 +398,7 @@ const RequisitionForm: React.FC<Props> = props => {
                 />
               }
             >
-              <InputNumber prefix="$" precision={2} type="number" step={0.01} placeholder="68.72" style={{"width": "40%"}} />
+              <InputNumber prefix="$" type="number" precision={2} step={0.01} placeholder="68.72" style={{"width": "40%"}}/>
             </Form.Item>
           </Col>
           <Col {...halfLayout}>
