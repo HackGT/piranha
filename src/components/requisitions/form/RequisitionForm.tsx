@@ -165,7 +165,7 @@ const RequisitionForm: React.FC<Props> = props => {
       paymentRequiredBy: values.paymentRequiredBy
         ? values.paymentRequiredBy.format("YYYY-MM-DD")
         : undefined,
-      otherFees: values.otherFees,
+      otherFees: parseFloat(values.otherFees),
       isReimbursement: values.isReimbursement,
       items: values.items
         .filter((item: any) => Object.keys(item).length !== 0)

@@ -36,7 +36,7 @@ const RequisitionEdit: React.FC = () => {
     vendor: data.items.length === 0 || !data.items[0].vendor ? null : data.items[0].vendor.id,
     budget: data.budget ? data.budget.id : null,
     paymentRequiredBy: data.paymentRequiredBy ? moment(data.paymentRequiredBy) : null,
-    otherFees: data.otherFees,
+    otherFees: parseFloat(data.otherFees),
     isReimbursement: data.isReimbursement,
     items:
       data.items.length === 0
