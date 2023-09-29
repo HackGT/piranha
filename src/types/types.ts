@@ -17,7 +17,7 @@ export type RequisitionFormData = {
   vendor?: string | undefined;
   budget: string | undefined;
   paymentRequiredBy: moment.Moment | null;
-  otherFees: string;
+  otherFees: Number;
   isReimbursement: boolean;
   items: RequisitionItem[];
   status: RequisitionStatus;

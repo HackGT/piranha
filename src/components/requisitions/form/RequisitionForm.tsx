@@ -398,7 +398,7 @@ const RequisitionForm: React.FC<Props> = props => {
                 />
               }
             >
-              <InputNumber prefix="$" type="number" precision={2} step={0.01} placeholder="68.72" style={{"width": "40%"}}/>
+              <InputNumber prefix="$" type="number" precision={2} step={0.01} placeholder="68.72" style={{"width": "100%"}}/>
             </Form.Item>
           </Col>
           <Col {...halfLayout}>
