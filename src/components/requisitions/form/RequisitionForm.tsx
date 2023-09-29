@@ -173,7 +173,7 @@ const RequisitionForm: React.FC<Props> = props => {
           name: item.name,
           link: item.link,
           quantity: item.quantity,
-          unitPrice: item.unitPrice,
+          unitPrice: parseFloat(item.unitPrice),
           notes: item.notes,
           lineItem: item.lineItem ? item.lineItem[1] : undefined, // Get id of line item, index 0 is category,
           vendor: (isReimbursement ? item.vendor : values.vendor) || undefined, // Map vendor to items based on reimbursement
